@@ -1,65 +1,95 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { useState } from "react";
+import { RiMenu5Fill, RiSearchLine } from "react-icons/ri";
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	const [menuIsActive, setMenuIsActive] = useState(false);
+	return (
+		<>
+			<Head>
+				<title>Home - CareerFinder</title>
+			</Head>
+			<header className='relative px-6 py-6'>
+				<div className='container flex items-center justify-between mx-auto'>
+					<a href='' className='inline-block'>
+						<h1 className='text-2xl font-extrabold tracking-normal text-gray-900 uppercase'>
+							CareerFinder
+						</h1>
+					</a>
+					<button className='w-14 h-14 hover:scale-110 hover:shadow-xl place-items-center grid text-3xl text-white transition-all transform bg-black rounded-full shadow-lg'>
+						<RiMenu5Fill />
+					</button>
+				</div>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+				{menuIsActive && (
+					<nav className='place-items-center absolute top-0 bottom-0 left-0 right-0 grid h-screen bg-black'>
+						<button
+							type='button'
+							className='top-5 right-10 absolute text-5xl text-white'
+						>
+							X
+						</button>
+						<ul className='space-y-10'>
+							<li>
+								<a
+									href='#'
+									className='hover:text-gray-300 hover:border-b-4 text-5xl font-semibold text-white border-gray-300'
+								>
+									Home
+								</a>
+							</li>
+							<li>
+								<a
+									href='#'
+									className='hover:text-gray-300 hover:border-b-4 text-5xl font-semibold text-white border-gray-300'
+								>
+									About
+								</a>
+							</li>
+						</ul>
+					</nav>
+				)}
+			</header>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+			<main className='container px-6 pb-10'>
+				<article className='my-14'>
+					<h2 className='text-4xl font-bold'>Excepteur sint occaecat.</h2>
+					<p className='mt-5'>
+						Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+						Maxime numquam accusamus doloremque eum hic impedit odit quae
+						dignissimos illum iste!
+					</p>
+				</article>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+				<section className='py-7 rounded-xl flex flex-col px-6 bg-white shadow-lg'>
+					<article className='space-y-3'>
+						<p className='text-sm font-bold uppercase'>Featured story</p>
+						<h3 className='text-2xl font-bold'>
+							John Doe - Freelance Web Developer
+						</h3>
+						<p>
+							Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+						</p>
+					</article>
+					<a
+						href='#'
+						className='py-4 mt-5 font-medium text-center text-white bg-black rounded-lg'
+					>
+						Learn More
+					</a>
+				</section>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+				<h2 className='mt-20 text-4xl font-bold'>Career finder.</h2>
+				<div className='flex items-center justify-between mt-5'>
+					<p className='font-bold uppercase'>Category</p>
+					<button
+						type='button'
+						className='place-items-center grid w-10 h-10 text-xl text-white bg-black rounded-full shadow-md'
+					>
+						<RiSearchLine />
+					</button>
+				</div>
+			</main>
+		</>
+	);
 }
