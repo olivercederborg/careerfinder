@@ -1,0 +1,10 @@
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+}
+.Filter-item__input[type="checkbox"]:checked + .Filter-item {
+	background-color: #000;
+	color: white;
+	border-color: black;
+}
