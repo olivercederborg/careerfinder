@@ -7,7 +7,6 @@ import { careers } from "../careers";
 
 export default function Home() {
 	const [menuIsActive, setMenuIsActive] = useState(false);
-	console.log(careers);
 	return (
 		<>
 			<Head>
@@ -148,7 +147,6 @@ export default function Home() {
 								name='sort-by'
 								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5'
 							>
-								<span className='absolute'>icon</span>
 								<option value='salary'>Salary</option>
 								<option value='test'>Popularity</option>
 							</select>
