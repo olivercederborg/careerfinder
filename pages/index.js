@@ -69,7 +69,7 @@ export default function Home() {
 						Sequi, dolore.
 					</p>
 
-					<div className='flex items-center mt-10 space-x-5'>
+					<div className='md:justify-start flex items-center justify-between mt-10 space-x-5'>
 						<p className='font-bold uppercase'>Category</p>
 						<button
 							type='button'
