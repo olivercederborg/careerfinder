@@ -11,11 +11,17 @@ export default function Home() {
 		<>
 			<Head>
 				<title>Home - CareerFinder</title>
+
+				<link rel='preconnect' href='https://fonts.gstatic.com' />
+				<link
+					href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'
+					rel='stylesheet'
+				/>
 			</Head>
 			<header className='relative px-6 py-6'>
 				<div className='flex items-center justify-between mx-auto'>
 					<a href='' className='inline-block'>
-						<h1 className='text-2xl font-extrabold tracking-normal text-gray-900 uppercase'>
+						<h1 className='text-xl font-bold tracking-normal text-gray-900 uppercase'>
 							CareerFinder
 						</h1>
 					</a>
@@ -70,7 +76,7 @@ export default function Home() {
 					</p>
 
 					<div className='md:justify-start flex items-center justify-between mt-10 space-x-5'>
-						<p className='font-bold uppercase'>Category</p>
+						<p className='text-lg font-bold uppercase'>Category</p>
 						<button
 							type='button'
 							className='place-items-center rounded-xl grid w-10 h-10 text-xl text-white bg-black shadow-md'
@@ -138,14 +144,14 @@ export default function Home() {
 				</form>
 
 				<div className='md:justify-start flex flex-col justify-between px-6 mt-12'>
-					<p className='font-bold uppercase'>Sort by</p>
+					<p className='text-lg font-bold uppercase'>Sort by</p>
 
 					<div className='border-b-[1px] flex items-center pb-6 mt-3 space-x-3'>
 						<div className='sorting-dropdown'>
 							<select
 								id='sort-by'
 								name='sort-by'
-								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5'
+								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5 text-base'
 							>
 								<option value='salary'>Salary</option>
 								<option value='test'>Popularity</option>
@@ -156,7 +162,7 @@ export default function Home() {
 							<select
 								id='sort-mode'
 								name='sort-mode'
-								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5'
+								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5 text-base'
 							>
 								<option value='test'>High to Low</option>
 								<option value='salary'>Low to High</option>
