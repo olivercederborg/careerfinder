@@ -1,9 +1,13 @@
 import Head from "next/head";
 import { useState } from "react";
-import { RiMenu5Fill, RiSearchLine } from "react-icons/ri";
+import { RiMenu5Fill, RiSearchLine, RiShuffleFill } from "react-icons/ri";
+import { BsFillLightningFill, BsArrowRightShort } from "react-icons/bs";
+
+import { careers } from "../careers";
 
 export default function Home() {
 	const [menuIsActive, setMenuIsActive] = useState(false);
+	console.log(careers);
 	return (
 		<>
 			<Head>
@@ -53,51 +57,16 @@ export default function Home() {
 
 			<main className='pb-10'>
 				<div className='px-6'>
-					<img
-						src='https://images.unsplash.com/photo-1523287562758-66c7fc58967f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80'
-						alt='Career path'
-						className='rounded-lg shadow-xl'
-					/>
-					<div className='md:flex-row md:my-32 md:items-start flex flex-col gap-6'>
-						<article className='mb-14 md:my-0 md:w-1/2 mt-8'>
-							<h2 className='text-4xl font-bold'>
-								Excepteur sint occaecat.
-							</h2>
-							<p className='mt-5'>
-								Lorem, ipsum dolor sit amet consectetur adipisicing
-								elit. Maxime numquam accusamus doloremque eum hic
-								impedit odit quae dignissimos illum iste!
-							</p>
-						</article>
-
-						<section className='py-7 rounded-xl md:w-1/2 flex flex-col px-6 bg-white shadow-lg'>
-							<article className='space-y-3'>
-								<p className='text-sm font-bold uppercase'>
-									Featured story
-								</p>
-								<h3 className='text-2xl font-bold'>
-									John Doe - Freelance Web Developer
-								</h3>
-								<p>
-									Lorem ipsum dolor, sit amet consectetur adipisicing
-									elit.
-								</p>
-							</article>
-							<a
-								href='#'
-								className='py-4 mt-5 font-medium text-center text-white bg-black rounded-lg'
-							>
-								Learn More
-							</a>
-						</section>
-					</div>
-
 					<h2 className='mt-16 text-4xl font-bold'>Career Finder.</h2>
+					<button className='rounded-xl shadow-yellow inline-flex items-center justify-center w-full py-4 mt-5 mb-2 font-semibold text-white bg-yellow-500'>
+						Random Career
+						<RiShuffleFill className='ml-2 text-xl' />
+					</button>
 					<div className='flex items-center justify-between mt-5'>
 						<p className='font-bold uppercase'>Category</p>
 						<button
 							type='button'
-							className='place-items-center grid w-10 h-10 text-xl text-white bg-black rounded-full shadow-md'
+							className='place-items-center rounded-xl grid w-10 h-10 text-xl text-white bg-black shadow-md'
 						>
 							<RiSearchLine />
 						</button>
@@ -115,8 +84,8 @@ export default function Home() {
 						value='design'
 					/>
 					<label
-						for='design'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='design'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						design
 					</label>
@@ -128,8 +97,8 @@ export default function Home() {
 						value='marketing'
 					/>
 					<label
-						for='marketing'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='marketing'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						marketing
 					</label>
@@ -141,8 +110,8 @@ export default function Home() {
 						value='programming'
 					/>
 					<label
-						for='programming'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='programming'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						programming
 					</label>
@@ -154,8 +123,8 @@ export default function Home() {
 						value='something'
 					/>
 					<label
-						for='something'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='something'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						something
 					</label>
@@ -167,8 +136,8 @@ export default function Home() {
 						value='design'
 					/>
 					<label
-						for='design'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='design'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						design
 					</label>
@@ -180,25 +149,62 @@ export default function Home() {
 						value='design'
 					/>
 					<label
-						for='design'
-						className='Filter-item px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 rounded-full'
+						htmlFor='design'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
 					>
 						design
 					</label>
 				</form>
 
-				<section className='md:grid-cols-2 grid grid-cols-1 px-6 mt-8'>
-					<a href='#' className='py-7 rounded-xl px-6 bg-white shadow-lg'>
-						<h3 className='text-2xl font-bold'>Web Developer</h3>
-						<div className='flex mt-4 space-x-2'>
-							<span className='px-3 py-1 text-sm font-medium bg-gray-200 rounded-full'>
-								design
-							</span>
-							<span className='px-3 py-1 text-sm font-medium bg-gray-200 rounded-full'>
-								programming
-							</span>
-						</div>
-					</a>
+				<section className='md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1 gap-10 px-6 mt-8'>
+					{careers.map((career, i) => (
+						<a
+							href='#'
+							className='rounded-xl group hover:bg-black overflow-hidden transition-all duration-200 ease-in-out bg-white shadow-lg'
+							key={i}
+						>
+							<img
+								src={career.image}
+								alt=''
+								className='h-[200px] object-cover w-full group-hover:h-[146px] transition-all duration-200 ease-in-out'
+							/>
+
+							<section className='pb-7 group-hover:text-white px-6 pt-6 transition-all duration-200 ease-in-out'>
+								<h3 className='inline-flex items-center text-2xl font-bold'>
+									{career.name}
+									{career.hot && (
+										<BsFillLightningFill className='ml-2 text-2xl text-yellow-400' />
+									)}
+								</h3>
+
+								<div className='flex mt-4 space-x-2'>
+									<span className='px-3 py-[6px] text-sm font-medium bg-black text-white rounded-lg group-hover:bg-white group-hover:text-black transition-all duration-200 ease-in-out'>
+										{career.category}
+									</span>
+								</div>
+
+								<div className='grid grid-cols-2 mt-5'>
+									<div className='flex flex-col'>
+										<p className='text-base'>Avg. Salary</p>
+										<p className='mt-1 text-lg font-bold'>
+											{career.salary}
+										</p>
+									</div>
+									<div className='flex flex-col'>
+										<p className='text-base'>Time</p>
+										<p className='mt-1 text-lg font-bold'>
+											{career.time}
+										</p>
+									</div>
+								</div>
+							</section>
+
+							<p className='place-items-center transform h-0 group-hover:h-14 border-opacity-[0.15] flex justify-center items-center border-t-2 border-white font-semibold text-white transition-all duration-200 ease-in-out'>
+								View Career
+								<BsArrowRightShort className='ml-1 text-[28px]' />
+							</p>
+						</a>
+					))}
 				</section>
 			</main>
 		</>
