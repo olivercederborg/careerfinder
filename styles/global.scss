@@ -8,3 +8,31 @@
 	color: white;
 	border-color: #000000;
 }
+.sorting-dropdown {
+	appearance: none;
+	outline: 0;
+	box-shadow: none;
+	border: 0 !important;
+	background-image: none;
+	position: relative;
+	overflow: hidden;
+	border-radius: 12px;
+}
+.sorting-dropdown::after {
+	content: "\25BC";
+	position: absolute;
+	display: grid;
+	place-items: center;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	font-size: 12px;
+	padding: 0 0.75rem;
+	background: #000;
+	color: white;
+	cursor: pointer;
+	pointer-events: none;
+	-webkit-transition: 0.25s all ease;
+	-o-transition: 0.25s all ease;
+	transition: 0.25s all ease;
+}

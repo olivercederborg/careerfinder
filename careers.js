@@ -25,5 +25,14 @@ export const careers = [
 		hot: true,
 		image:
 			"https://images.unsplash.com/photo-1573496799822-b0557c9e2f41?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
+	},
+	{
+		name: "Airline Pilot",
+		salary: "$44k",
+		time: "12 Months",
+		category: "transport",
+		hot: false,
+		image:
+			"https://images.unsplash.com/photo-1524087497080-748556d9282b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1490&q=80"
 	}
 ];

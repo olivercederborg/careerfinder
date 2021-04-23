@@ -55,14 +55,22 @@ export default function Home() {
 				)}
 			</header>
 
-			<main className='pb-10'>
-				<div className='px-6'>
-					<h2 className='mt-16 text-4xl font-bold'>Career Finder.</h2>
-					<button className='rounded-xl shadow-yellow inline-flex items-center justify-center w-full py-4 mt-5 mb-2 font-semibold text-white bg-yellow-500'>
-						Random Career
-						<RiShuffleFill className='ml-2 text-xl' />
+			<main className='pb-32'>
+				<div className='bottom-8 fixed z-10 w-screen px-6'>
+					<button className='rounded-xl shadow-yellow inline-flex items-center justify-center w-full py-4 font-semibold text-center text-white bg-yellow-500'>
+						Draw Random Career
+						<RiShuffleFill className='ml-3 text-xl' />
 					</button>
-					<div className='flex items-center justify-between mt-5'>
+				</div>
+				<div className='relative px-6'>
+					<h2 className=' mt-6 text-4xl font-bold'>Career finder.</h2>
+					<p className='mt-4'>
+						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo
+						fugit nemo incidunt vero numquam eius eaque ipsa blanditiis.
+						Sequi, dolore.
+					</p>
+
+					<div className='flex items-center mt-10 space-x-5'>
 						<p className='font-bold uppercase'>Category</p>
 						<button
 							type='button'
@@ -85,7 +93,7 @@ export default function Home() {
 					/>
 					<label
 						htmlFor='design'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
 					>
 						design
 					</label>
@@ -98,7 +106,7 @@ export default function Home() {
 					/>
 					<label
 						htmlFor='marketing'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
 					>
 						marketing
 					</label>
@@ -111,7 +119,7 @@ export default function Home() {
 					/>
 					<label
 						htmlFor='programming'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
 					>
 						programming
 					</label>
@@ -124,39 +132,42 @@ export default function Home() {
 					/>
 					<label
 						htmlFor='something'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
+						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
 					>
 						something
 					</label>
-					<input
-						id='design'
-						name='design'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='design'
-					/>
-					<label
-						htmlFor='design'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
-					>
-						design
-					</label>
-					<input
-						id='design'
-						name='design'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='design'
-					/>
-					<label
-						htmlFor='design'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300'
-					>
-						design
-					</label>
 				</form>
 
-				<section className='md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1 gap-10 px-6 mt-8'>
+				<div className='md:justify-start flex flex-col justify-between px-6 mt-12'>
+					<p className='font-bold uppercase'>Sort by</p>
+
+					<div className='border-b-[1px] flex items-center pb-6 mt-3 space-x-3'>
+						<div className='sorting-dropdown'>
+							<select
+								id='sort-by'
+								name='sort-by'
+								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5'
+							>
+								<span className='absolute'>icon</span>
+								<option value='salary'>Salary</option>
+								<option value='test'>Popularity</option>
+							</select>
+						</div>
+
+						<div className='sorting-dropdown'>
+							<select
+								id='sort-mode'
+								name='sort-mode'
+								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5'
+							>
+								<option value='test'>High to Low</option>
+								<option value='salary'>Low to High</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<section className='md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid grid-cols-1 gap-10 px-6 mt-8'>
 					{careers.map((career, i) => (
 						<a
 							href='#'
