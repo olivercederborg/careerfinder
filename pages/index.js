@@ -1,12 +1,11 @@
 import Head from "next/head";
-import { useState } from "react";
-import { RiMenu5Fill, RiSearchLine, RiShuffleFill } from "react-icons/ri";
+import { RiSearchLine, RiShuffleFill } from "react-icons/ri";
 import { BsFillLightningFill, BsArrowRightShort } from "react-icons/bs";
 
 import { careers } from "../careers";
+import Navbar from "../components/Navbar";
 
 export default function Home() {
-	const [menuIsActive, setMenuIsActive] = useState(false);
 	return (
 		<>
 			<Head>
@@ -18,47 +17,8 @@ export default function Home() {
 					rel='stylesheet'
 				/>
 			</Head>
-			<header className='relative px-6 py-6'>
-				<div className='flex items-center justify-between mx-auto'>
-					<a href='' className='inline-block'>
-						<h1 className='text-xl font-bold tracking-normal text-gray-900 uppercase'>
-							CareerFinder
-						</h1>
-					</a>
-					<button className='w-14 h-14 hover:scale-110 hover:shadow-xl place-items-center grid text-3xl text-white transition-all transform bg-black rounded-full shadow-lg'>
-						<RiMenu5Fill />
-					</button>
-				</div>
 
-				{menuIsActive && (
-					<nav className='place-items-center absolute top-0 bottom-0 left-0 right-0 grid h-screen bg-black'>
-						<button
-							type='button'
-							className='top-5 right-10 absolute text-5xl text-white'
-						>
-							X
-						</button>
-						<ul className='space-y-10'>
-							<li>
-								<a
-									href='#'
-									className='hover:text-gray-300 hover:border-b-4 text-5xl font-semibold text-white border-gray-300'
-								>
-									Home
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='hover:text-gray-300 hover:border-b-4 text-5xl font-semibold text-white border-gray-300'
-								>
-									About
-								</a>
-							</li>
-						</ul>
-					</nav>
-				)}
-			</header>
+			<Navbar />
 
 			<main className='pb-32'>
 				<div className='bottom-8 fixed z-10 w-screen px-6'>
@@ -180,7 +140,7 @@ export default function Home() {
 						>
 							<img
 								src={career.image}
-								alt=''
+								alt={career.name}
 								className='h-[200px] object-cover w-full group-hover:h-[146px] transition-all duration-200 ease-in-out'
 							/>
 
@@ -188,7 +148,7 @@ export default function Home() {
 								<h3 className='inline-flex items-center text-2xl font-bold'>
 									{career.name}
 									{career.hot && (
-										<BsFillLightningFill className='ml-2 text-2xl text-yellow-400' />
+										<BsFillLightningFill className='filter drop-shadow-lightning ml-2 text-2xl text-yellow-400' />
 									)}
 								</h3>
 
