@@ -6,7 +6,9 @@ export const careers = [
 		category: "programming",
 		hot: true,
 		image:
-			"https://images.unsplash.com/photo-1602992708529-c9fdb12905c9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
+			"https://images.unsplash.com/photo-1602992708529-c9fdb12905c9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+		description:
+			"This video is the first one of a series of encrypted screenplays and lyrics informing a video called Morpher. This video is at the center of my practice and this script will be the raw material of its development."
 	},
 	{
 		name: "Financial Advisor",
