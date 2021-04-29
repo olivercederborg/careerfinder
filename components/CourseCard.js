@@ -6,14 +6,24 @@ export default function CourseCard({ name, free, paid, courses }) {
 
 	return (
 		<section className='rounded-xl w-full mt-4 shadow-lg'>
-			<div className='flex p-6 pb-5 space-x-4'>
-				<div className='place-items-center rounded-[10px] grid w-11 h-11 text-xl text-white bg-black shadow-md'>
+			<div className=' flex items-center p-6 pb-5 space-x-4'>
+				<div
+					className={`place-items-center grid text-white bg-black shadow-md ${
+						isExpanded
+							? "w-8 h-8 text-base rounded-[8px]"
+							: "w-11 h-11 text-xl rounded-[10px]"
+					}`}
+				>
 					{free + paid}
 				</div>
 
 				<div>
 					<h4 className='text-base font-semibold'>{name}</h4>
-					<p className='text-gray-main text-sm font-normal'>
+					<p
+						className={`text-gray-main text-sm font-normal ${
+							isExpanded ? "hidden" : "inline-block"
+						}`}
+					>
 						{free} Free &bull; {paid} Paid
 					</p>
 				</div>
@@ -24,17 +34,17 @@ export default function CourseCard({ name, free, paid, courses }) {
 					isExpanded ? "flex" : "hidden"
 				}`}
 			>
-				{courses.map((course) => (
+				{courses.map((course, i) => (
 					<a
-						key={course.name}
 						href='#'
+						key={i}
 						className='hover:bg-gray-50 flex items-center justify-between p-6 bg-white'
 					>
-						<div className='flex items-center justify-start space-x-4'>
+						<div className='flex justify-start space-x-4'>
 							<img
-								src='https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg'
-								alt=''
-								className='rounded-[10px] object-cover w-11 h-11 text-xl text-white bg-black shadow-md'
+								src={course.publisherLogo}
+								alt={`${course.name} by ${course.publisher}`}
+								className={`rounded-[10px] object-cover w-11 h-11 text-xl text-white bg-black shadow-md`}
 							/>
 
 							<div>
@@ -58,8 +68,11 @@ export default function CourseCard({ name, free, paid, courses }) {
 				onClick={() => setIsExpanded(!isExpanded)}
 			>
 				{isExpanded
-					? ["Hide Courses", <BsCaretUpFill className='ml-2' />]
-					: ["Show Courses", <BsCaretDownFill className='ml-2' />]}
+					? ["Hide Courses", <BsCaretUpFill key={name} className='ml-2' />]
+					: [
+							"Show Courses",
+							<BsCaretDownFill key={name} className='ml-2' />
+					  ]}
 			</div>
 		</section>
 	);
