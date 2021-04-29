@@ -124,7 +124,7 @@ const Career = () => {
 					<img
 						src={career.imageTwo}
 						alt=''
-						className='mt-8 rounded-xl h-[300px] object-cover w-full'
+						className='mt-8 rounded-xl h-[300px] object-cover w-full hidden md:block'
 					/>
 				</article>
 
@@ -172,9 +172,6 @@ const Career = () => {
 						);
 					})}
 
-					{/* <button className='rounded-xl md:w-auto hover:bg-black hover:text-white hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium transition-all duration-200 ease-in-out transform border-2 border-black'>
-						View all 7 courses
-					</button> */}
 					<button className='rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black'>
 						View all 7 courses
 					</button>
