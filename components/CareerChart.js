@@ -40,22 +40,47 @@ const data = {
 };
 
 const options = {
-	legend: {
-		display: false
-	},
-	tooltips: {
-		callbacks: {
-			label: function (tooltipItem) {
-				return tooltipItem.yLabel;
+	maintainAspectRatio: false,
+	plugins: {
+		legend: {
+			display: false
+		},
+		tooltip: {
+			backgroundColor: "#fff",
+			titleColor: "#000",
+			bodyColor: "#000",
+			titleAlign: "center",
+			bodyAlign: "center",
+			cornerRadius: 6,
+			displayColors: false,
+			padding: 12,
+			borderWidth: 1,
+			borderColor: "#dedede",
+			titleFont: {
+				size: 15
+			},
+			bodyFont: {
+				size: 14
+			},
+			callbacks: {
+				title: function (context) {
+					return "$" + context[0].formattedValue;
+				},
+				label: function (context) {
+					return context.label;
+				}
 			}
 		}
-	}
+	},
+	tooltips: {}
 };
 
 export default function CareerChart() {
 	return (
 		<>
-			<Line data={data} options={options} height='400' className='' />
+			<div className='h-[500px] md:h-[400px] overflow-hidden'>
+				<Line data={data} options={options} className='h-full' />
+			</div>
 		</>
 	);
 }
