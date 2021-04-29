@@ -8,7 +8,7 @@ export const careers = [
 		image:
 			"https://images.unsplash.com/photo-1602992708529-c9fdb12905c9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
 		description:
-			"This video is the first one of a series of encrypted screenplays and lyrics informing a video called Morpher. This video is at the center of my practice and this script will be the raw material of its development."
+			"Web developers design and create websites. They are responsible for the look of the site. They are also responsible for the site's technical aspects, such as its performance and capacity, which are measures of a website's speed and how much traffic the site can handle."
 	},
 	{
 		name: "Financial Advisor",
