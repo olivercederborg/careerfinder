@@ -105,14 +105,14 @@ const Career = () => {
 
 			<Navbar />
 
-			<main className='xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12 grid justify-between grid-cols-1'>
+			<main className='xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12 grid items-start grid-cols-1'>
 				<img
 					src={career.image}
 					alt={career.name}
 					className='max-h-[450px] object-cover md:col-span-12 w-full'
 				/>
 
-				<article className='mt-7 md:mt-12 md:col-span-6 px-6'>
+				<article className='mt-7 md:mt-12 md:col-span-6 self-start px-6'>
 					<h2 className='inline-flex items-center text-3xl font-semibold'>
 						{career.name}
 						{career.hot && (
