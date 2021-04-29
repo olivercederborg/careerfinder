@@ -109,7 +109,7 @@ const Career = () => {
 				<img
 					src={career.image}
 					alt={career.name}
-					className='max-h-[600px] object-cover md:col-span-12 w-full'
+					className='max-h-[450px] object-cover md:col-span-12 w-full'
 				/>
 
 				<article className='mt-7 md:mt-12 md:col-span-6 px-6'>
@@ -130,18 +130,22 @@ const Career = () => {
 						sectionNavIsTop && "mx-0 rounded-none"
 					}`}
 				>
-					<a href='#' className='text-gray-main py-6 font-medium'>
+					<a href='#courses' className='text-gray-main py-6 font-medium'>
 						Courses
 					</a>
-					<a href='#' className='text-gray-main py-6 font-medium'>
+					<a href='#potential' className='text-gray-main py-6 font-medium'>
 						Potential
 					</a>
-					<a href='#' className='text-gray-main py-6 font-medium'>
+					<a href='#jobs' className='text-gray-main py-6 font-medium'>
 						Jobs
 					</a>
 				</nav>
 
-				<section className='md:col-span-6 px-6 my-12 font-semibold'>
+				<section
+					id='courses'
+					className='md:col-span-6 px-6 my-12 font-semibold'
+					style={{ scrollMargin: "100px 0 0 0" }}
+				>
 					<h3 className='mb-8 text-3xl'>Courses</h3>
 
 					{courses.map((course, i) => {
@@ -164,7 +168,11 @@ const Career = () => {
 					})}
 				</section>
 
-				<section className='md:col-span-6 px-6 my-12 font-semibold'>
+				<section
+					id='potential'
+					className='md:col-span-6 px-6 my-12 font-semibold'
+					style={{ scrollMargin: "100px 0 0 0" }}
+				>
 					<h3 className='mb-8 text-3xl'>Earning Potential</h3>
 
 					<div className='rounded-2xl flex justify-between p-2 mb-8 bg-white shadow-lg'>
@@ -182,7 +190,11 @@ const Career = () => {
 					<CareerChart />
 				</section>
 
-				<section className='md:col-span-6 px-6 my-12 font-semibold'>
+				<section
+					id='jobs'
+					className='md:col-span-6 px-6 my-12 font-semibold'
+					style={{ scrollMargin: "100px 0 0 0" }}
+				>
 					<h3 className='mb-8 text-3xl'>Jobs Available</h3>
 
 					<div className='relative flex flex-col justify-center'>
