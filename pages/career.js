@@ -5,24 +5,73 @@ import { BsFillLightningFill, BsCaretDownFill } from "react-icons/bs";
 import { careers } from "../careers";
 import Navbar from "../components/Navbar";
 import CareerChart from "../components/CareerChart";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import CourseCard from "../components/CourseCard";
 
-const reactCourses = [
+const courses = [
 	{
-		name: "React Introduction",
-		publisher: "Codecademy",
-		cost: "free"
+		title: "HTML/CSS",
+		courses: [
+			{
+				name: "The Basics of Web Development",
+				publisher: "Codecademy",
+				publisherLogo:
+					"https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+				cost: "free"
+			},
+			{
+				name: "HTML/CSS In-depth Course",
+				publisher: "Udemy",
+				publisherLogo:
+					"https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+				cost: "$50"
+			}
+		]
 	},
 	{
-		name: "React Crash Course",
-		publisher: "Codecademy",
-		cost: "$100"
+		title: "JavaScript",
+		courses: [
+			{
+				name: "The Basics of Web Development",
+				publisher: "Codecademy",
+				publisherLogo:
+					"https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+				cost: "free"
+			},
+			{
+				name: "HTML/CSS In-depth Course",
+				publisher: "Udemy",
+				publisherLogo:
+					"https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+				cost: "$50"
+			}
+		]
 	},
 	{
-		name: "Ultimate React Course",
-		publisher: "Codecademy",
-		cost: "$200"
+		title: "React.js",
+		courses: [
+			{
+				name: "React.js Introduction",
+				publisher: "Codecademy",
+				publisherLogo:
+					"https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+				cost: "free"
+			},
+			{
+				name: "React.js Crash Course",
+				publisher: "Codecademy",
+				publisherLogo:
+					"https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+				cost: "$50"
+			},
+			{
+				name: "React.js & Firebase Course",
+				publisher: "Udemy",
+				publisherLogo:
+					"https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+				cost: "$100"
+			}
+		]
 	}
 ];
 
@@ -95,25 +144,37 @@ const Career = () => {
 				<section className='md:col-span-6 px-6 my-12 font-semibold'>
 					<h3 className='mb-8 text-3xl'>Courses</h3>
 
-					<CourseCard
-						name='React.js'
-						free={4}
-						paid={5}
-						courses={reactCourses}
-					/>
+					{courses.map((course, i) => {
+						let freeCourses = course.courses.filter(
+							(item) => item.cost === "free"
+						);
+
+						let paidCourses = course.courses.filter(
+							(item) => item.cost !== "free"
+						);
+						return (
+							<CourseCard
+								key={i}
+								name={course.title}
+								free={freeCourses.length}
+								paid={paidCourses.length}
+								courses={course.courses}
+							/>
+						);
+					})}
 				</section>
 
 				<section className='md:col-span-6 px-6 my-12 font-semibold'>
 					<h3 className='mb-8 text-3xl'>Earning Potential</h3>
 
 					<div className='rounded-2xl flex justify-between p-2 mb-8 bg-white shadow-lg'>
-						<button className='px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out'>
+						<button className='px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out text-sm'>
 							1 year
 						</button>
-						<button className='px-4 py-[6px] bg-black text-white rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out'>
+						<button className='px-4 py-[6px] bg-black text-white rounded-[10px] hover:bg-black hover:bg-opacity-40 text-sm hover:text-white transition-all duration-200 ease-in-out'>
 							2 years
 						</button>
-						<button className='px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out'>
+						<button className='px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all text-sm duration-200 ease-in-out'>
 							All time
 						</button>
 					</div>
