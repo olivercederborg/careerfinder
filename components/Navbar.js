@@ -4,7 +4,7 @@ import { RiMenu5Fill } from "react-icons/ri";
 export default function Navbar() {
 	const [menuIsActive, setMenuIsActive] = useState(false);
 	return (
-		<header className='relative px-6 py-6'>
+		<header className='xl:container xl:px-0 relative px-6 py-6 mx-auto'>
 			<div className='flex items-center justify-between mx-auto'>
 				<a href='' className='inline-block'>
 					<h1 className='text-xl font-bold tracking-normal text-gray-900 uppercase'>
