@@ -148,7 +148,7 @@ const Career = () => {
 
 				<section
 					id='courses'
-					className='md:col-span-6 px-6 my-12 font-semibold'
+					className='md:col-span-6 flex flex-col items-start px-6 my-12 font-semibold'
 					style={{ scrollMargin: "100px 0 0 0" }}
 				>
 					<h3 className='mb-8 text-3xl'>Courses</h3>
@@ -171,6 +171,13 @@ const Career = () => {
 							/>
 						);
 					})}
+
+					{/* <button className='rounded-xl md:w-auto hover:bg-black hover:text-white hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium transition-all duration-200 ease-in-out transform border-2 border-black'>
+						View all 7 courses
+					</button> */}
+					<button className='rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black'>
+						View all 7 courses
+					</button>
 				</section>
 
 				<section
