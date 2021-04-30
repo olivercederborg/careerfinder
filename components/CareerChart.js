@@ -41,6 +41,9 @@ const data = {
 
 const options = {
 	maintainAspectRatio: false,
+	animation: {
+		duration: 0
+	},
 	plugins: {
 		legend: {
 			display: false
