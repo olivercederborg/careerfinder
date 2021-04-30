@@ -173,7 +173,7 @@ const Career = () => {
 					})}
 
 					<button className='rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black'>
-						View all 7 courses
+						View all 5 courses
 					</button>
 				</section>
 
