@@ -94,7 +94,7 @@ const Career = () => {
 	return (
 		<>
 			<Head>
-				<title>Home - CareerFinder</title>
+				<title>{career.name} - CareerFinder</title>
 
 				<link rel='preconnect' href='https://fonts.gstatic.com' />
 				<link
@@ -211,7 +211,7 @@ const Career = () => {
 						<input
 							type='search'
 							placeholder='Search for a country'
-							className='rounded-xl pl-14 w-full px-6 py-4 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black shadow-slight'
+							className='rounded-xl pl-14 w-full px-6 py-4 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black shadow-slight bg-white appearance-none'
 						/>
 					</div>
 
