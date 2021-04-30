@@ -17,7 +17,7 @@ const data = {
 	],
 	datasets: [
 		{
-			label: "Potential Salary",
+			label: "Salary",
 			data: [
 				80000,
 				85000,
