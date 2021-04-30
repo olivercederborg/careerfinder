@@ -112,7 +112,7 @@ const Career = () => {
 					className='max-h-[450px] object-cover md:col-span-12 w-full xl:rounded-xl'
 				/>
 
-				<article className='mt-7 md:mt-12 md:col-span-6 px-6'>
+				<article className='mt-7 md:mt-12 md:col-span-6 3xl:col-span-4 px-6'>
 					<h2 className='inline-flex items-center text-3xl font-semibold'>
 						{career.name}
 						{career.hot && (
@@ -148,7 +148,7 @@ const Career = () => {
 
 				<section
 					id='courses'
-					className='md:col-span-6 flex flex-col items-start px-6 my-12 font-semibold'
+					className='md:col-span-6 3xl:col-span-4 flex flex-col items-start px-6 my-12 font-semibold'
 					style={{ scrollMargin: "100px 0 0 0" }}
 				>
 					<h3 className='mb-8 text-3xl'>Courses</h3>
@@ -179,12 +179,12 @@ const Career = () => {
 
 				<section
 					id='potential'
-					className='md:col-span-6 px-6 my-12 font-semibold'
+					className='md:col-span-6 3xl:col-span-4 flex flex-col px-6 my-12 font-semibold'
 					style={{ scrollMargin: "100px 0 0 0" }}
 				>
 					<h3 className='mb-8 text-3xl'>Earning Potential</h3>
 
-					<div className='rounded-2xl flex justify-between p-2 mb-8 bg-white shadow-lg'>
+					<div className='rounded-2xl md:inline-flex md:self-start flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg'>
 						<button className='px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out text-sm'>
 							1 year
 						</button>
@@ -201,7 +201,7 @@ const Career = () => {
 
 				<section
 					id='jobs'
-					className='md:col-span-6 px-6 my-12 font-semibold'
+					className='md:col-span-6 3xl:col-span-4 px-6 my-12 font-semibold'
 					style={{ scrollMargin: "100px 0 0 0" }}
 				>
 					<h3 className='mb-8 text-3xl'>Jobs Available</h3>
