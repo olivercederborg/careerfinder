@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { RiSearchLine, RiShuffleFill } from "react-icons/ri";
+import { FiChevronDown } from "react-icons/fi";
 import { BsFillLightningFill, BsArrowRightShort } from "react-icons/bs";
 
 import { careers } from "../careers";
@@ -20,21 +21,37 @@ export default function Home() {
 
 			<Navbar />
 
-			<main className='pb-32'>
-				<div className='bottom-8 fixed z-10 w-screen px-6'>
+			<header className='bg-hero-image py-80 relative text-center bg-black bg-center bg-no-repeat bg-cover'>
+				<article className='bg-opacity-70 absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-center bg-black'>
+					<div className='xl:container xl:px-0 xl:mx-auto md:mt-0 px-6 -mt-32'>
+						<h2 className='md:text-5xl text-4xl font-semibold text-white'>
+							Start a New Career in Six Months.
+						</h2>
+						<p className='mt-5 text-white'>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit.
+							<br />
+							Optio est, molestias iure repellendus inventore repudiandae
+							delectus aliquid ea voluptate deleniti.
+						</p>
+						<button className='rounded-xl hover:-translate-y-1 hover:shadow-lg md:w-auto self-center w-full px-12 py-4 mt-12 font-medium text-black transition-all duration-200 ease-in-out transform bg-white border-2 border-white'>
+							Generate Random Career
+						</button>
+					</div>
+					<button className='rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out'>
+						Or Browse Careers
+						<FiChevronDown className='mt-2 text-5xl transform' />
+					</button>
+				</article>
+			</header>
+
+			<main className='xl:container pb-32 mx-auto mt-16'>
+				<div className='bottom-8 fixed z-10 hidden w-screen px-6'>
 					<button className='rounded-xl shadow-yellow inline-flex items-center justify-center w-full py-4 font-semibold text-center text-white bg-yellow-500'>
 						Draw Random Career
 						<RiShuffleFill className='ml-3 text-xl' />
 					</button>
 				</div>
-				<div className='relative px-6'>
-					<h2 className=' mt-6 text-4xl font-bold'>Career finder.</h2>
-					<p className='mt-4'>
-						Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo
-						fugit nemo incidunt vero numquam eius eaque ipsa blanditiis.
-						Sequi, dolore.
-					</p>
-
+				<div className='xl:px-0 relative px-6'>
 					<div className='md:justify-start flex items-center justify-between mt-10 space-x-5'>
 						<p className='text-lg font-bold uppercase'>Category</p>
 						<button
@@ -47,7 +64,7 @@ export default function Home() {
 				</div>
 				<form
 					action=''
-					className='no-scrollbar flex px-6 mt-4 overflow-x-scroll'
+					className='no-scrollbar xl:px-0 flex px-6 mt-4 overflow-x-scroll'
 				>
 					<input
 						id='design'
@@ -103,7 +120,7 @@ export default function Home() {
 					</label>
 				</form>
 
-				<div className='md:justify-start flex flex-col justify-between px-6 mt-12'>
+				<div className='md:justify-start xl:px-0 flex flex-col justify-between px-6 mt-12'>
 					<p className='text-lg font-bold uppercase'>Sort by</p>
 
 					<div className='border-b-[1px] flex items-center pb-6 mt-3 space-x-3'>
@@ -131,7 +148,7 @@ export default function Home() {
 					</div>
 				</div>
 
-				<section className='md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid grid-cols-1 gap-10 px-6 mt-8'>
+				<section className='md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8'>
 					{careers.map((career, i) => (
 						<a
 							href='#'
@@ -141,7 +158,7 @@ export default function Home() {
 							<img
 								src={career.image}
 								alt={career.name}
-								className='h-[200px] object-cover w-full group-hover:h-[146px] transition-all duration-200 ease-in-out'
+								className='h-[200px] object-cover w-full transition-all duration-200 ease-in-out'
 							/>
 
 							<section className='pb-7 group-hover:text-white px-6 pt-6 transition-all duration-200 ease-in-out'>
@@ -173,11 +190,6 @@ export default function Home() {
 									</div>
 								</div>
 							</section>
-
-							<p className='place-items-center transform h-0 group-hover:h-14 border-opacity-[0.15] flex justify-center items-center border-t-2 border-white font-semibold text-white transition-all duration-200 ease-in-out'>
-								View Career
-								<BsArrowRightShort className='ml-1 text-[28px]' />
-							</p>
 						</a>
 					))}
 				</section>
