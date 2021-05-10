@@ -1,7 +1,20 @@
-import { prisma } from 'lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from 'lib/prisma'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+async function get(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const [areas, disciplines] = await Promise.all([
+      prisma.area.findMany(),
+      prisma.discipline.findMany(),
+    ])
+
+    res.json({ areas, disciplines })
+  } catch (e) {
+    res.status(500).end()
+  }
+}
+
+async function post(req: NextApiRequest, res: NextApiResponse) {
   const {
     title,
     areaName,
@@ -59,10 +72,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    res.json(role)
+    res.status(201).json(role)
   } catch (e) {
     console.log(e.message)
 
-    res.end()
+    res.status(500).end()
+  }
+}
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method } = req
+
+  switch (method) {
+    case 'GET': {
+      await get(req, res)
+    }
+    case 'POST': {
+      await post(req, res)
+    }
+    default: {
+      return res.status(405).end()
+    }
   }
 }
