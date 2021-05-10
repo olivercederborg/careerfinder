@@ -16,6 +16,9 @@ model Discipline {
   name String @unique
 
   Role Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Area {
@@ -24,6 +27,9 @@ model Area {
   name String @unique
 
   Role Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Category {
@@ -32,6 +38,9 @@ model Category {
   name String @unique
 
   roles Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Role {
@@ -44,4 +53,7 @@ model Role {
   area         Area       @relation(fields: [areaId], references: [id])
   areaId       Int
   categories   Category[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
