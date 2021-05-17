@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 interface Props extends HTMLProps<HTMLInputElement> {}
 
-export const Input = forwardRef<HTMLInputElement>(
+export const Input = forwardRef<HTMLInputElement, Props>(
   ({ className, type = 'text', ...props }: Props, inputRef) => {
     const rootClassName = cn(
       'Input',
