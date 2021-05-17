@@ -10,6 +10,51 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String?
+  email          String   @unique
+  hashedPassword String?
+  role           String   @default("USER")
+
+  tokens   Token[]
+  sessions Session[]
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  expiresAt          DateTime?
+  handle             String    @unique
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  hashedToken String
+  type        String
+  // See note below about TokenType enum
+  // type        TokenType
+  expiresAt   DateTime
+  sentTo      String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@unique([hashedToken, type])
+}
+
 model Discipline {
   id Int @id @default(autoincrement())
 
@@ -38,10 +83,10 @@ model Area {
 model Role {
   id Int @id @default(autoincrement())
 
-  name String
+  name String @unique
 
-  area   Area @relation(fields: [areaId], references: [id])
-  areaId Int
+  area   Area? @relation(fields: [areaId], references: [id])
+  areaId Int?
 
   jobs Job[]
 

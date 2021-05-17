@@ -1,6 +1,12 @@
+import { Prisma } from '.prisma/client'
 import { jsonHeader } from 'lib/jsonHeader'
 import { prisma } from 'lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+export type PostJob = {
+  name: string
+  roleName: string
+}
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
   const id = Number(req.query.id ?? 0)
@@ -27,16 +33,36 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
-  const id = Number(req.body.id)
-  const { name } = req.body
+  const id = Number(req.body.id ?? 0)
+  const { name, roleName } = req.body
+
+  const role = await prisma.role.upsert({
+    create: {
+      name: roleName,
+    },
+    update: {},
+    where: {
+      name: roleName,
+    },
+  })
+
+  const upsert: Prisma.JobUpsertArgs['create'] = {
+    name,
+    role: {
+      connectOrCreate: {
+        create: {
+          name: role.name,
+        },
+        where: {
+          name: role.name,
+        },
+      },
+    },
+  }
 
   const job = await prisma.job.upsert({
-    create: {
-      name,
-    },
-    update: {
-      name,
-    },
+    create: upsert,
+    update: upsert,
     where: {
       id,
     },
