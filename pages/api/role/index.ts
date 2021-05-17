@@ -1,29 +1,48 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from 'lib/prisma'
+import { session } from 'lib/session'
+import { jsonHeader } from 'lib/jsonHeader'
+
+const include = {
+  area: true,
+}
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const [areas, disciplines] = await Promise.all([
-      prisma.area.findMany(),
-      prisma.discipline.findMany(),
-    ])
+  const id = Number(req.query.id ?? 0)
 
-    res.json({ areas, disciplines })
-  } catch (e) {
-    res.status(500).end()
+  jsonHeader(res)
+
+  if (Number.isNaN(id)) {
+    return res.status(204).end()
   }
+
+  if (id) {
+    const role = await prisma.role.findUnique({
+      where: {
+        id,
+      },
+      include,
+    })
+
+    return res.status(200).json(role)
+  }
+
+  const roles = await prisma.role.findMany({
+    include,
+  })
+
+  return res.json(roles)
+}
+
+export type PostRole = {
+  id?: number
+  name: string
+  areaName: string
 }
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    title,
-    areaName,
-    disciplineName,
-  }: {
-    title: string | null
-    areaName: string | null
-    disciplineName: string | null
-  } = JSON.parse(req.body)
+  const id = Number(req.body.id ?? 0)
+  const { name, areaName }: PostRole = req.body
 
   const area = await prisma.area.upsert({
     create: {
@@ -35,20 +54,10 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     },
   })
 
-  const discipline = await prisma.area.upsert({
-    create: {
-      name: disciplineName,
-    },
-    update: {},
-    where: {
-      name: disciplineName,
-    },
-  })
-
-  try {
-    const role = await prisma.role.create({
+  if (id) {
+    const role = await prisma.role.update({
       data: {
-        title,
+        name,
         area: {
           connectOrCreate: {
             create: {
@@ -59,39 +68,59 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
             },
           },
         },
-        discipline: {
+      },
+      where: {
+        id,
+      },
+    })
+
+    return res.status(201).json(role)
+  }
+
+  try {
+    const role = await prisma.role.create({
+      include,
+      data: {
+        name,
+        area: {
           connectOrCreate: {
             create: {
-              name: discipline.name,
+              name: area.name,
             },
             where: {
-              name: discipline.name,
+              name: area.name,
             },
           },
         },
       },
     })
 
-    res.status(201).json(role)
+    return res.status(201).json(role)
   } catch (e) {
     console.log(e.message)
 
-    res.status(500).end()
+    return res.status(500).end()
   }
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  session(req, res)
+
   const { method } = req
 
-  switch (method) {
-    case 'GET': {
-      await get(req, res)
+  try {
+    switch (method) {
+      case 'GET': {
+        return get(req, res)
+      }
+      case 'POST': {
+        return post(req, res)
+      }
+      default: {
+        return res.status(405).end()
+      }
     }
-    case 'POST': {
-      await post(req, res)
-    }
-    default: {
-      return res.status(405).end()
-    }
+  } finally {
+    await prisma.$disconnect()
   }
 }

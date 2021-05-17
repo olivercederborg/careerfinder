@@ -6,26 +6,40 @@
     "dev": "next dev",
     "build": "next build",
     "build:deploy": "prisma migrate deploy && npm run build",
-    "start": "next start"
+    "start": "next start",
+    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed --preview-feature"
   },
   "dependencies": {
     "@prisma/client": "2.22.1",
     "autoprefixer": "^10.2.5",
+    "axios": "^0.21.1",
+    "change-case": "^4.1.2",
     "chart.js": "^3.2.0",
+    "classnames": "^2.3.1",
+    "cookie-session": "^1.4.0",
+    "micro-cookie-session": "^2.0.0-beta.1",
     "next": "10.x",
     "postcss": "^8.2.10",
     "react": "17.x",
     "react-chartjs-2": "^3.0.3",
     "react-dom": "17.x",
+    "react-hook-form": "^7.6.0",
     "react-icons": "^4.2.0",
+    "react-query": "^3.16.0",
+    "react-query-devtools": "^3.0.0-beta.1",
     "sass": "^1.32.10",
     "tailwindcss": "^2.1.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.2",
+    "@types/axios": "^0.14.0",
+    "@types/cookie-session": "^2.0.42",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "prisma": "2.22.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   }
 }

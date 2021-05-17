@@ -15,7 +15,7 @@ model Discipline {
 
   name String @unique
 
-  Role Role[]
+  areas Area[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -26,16 +26,8 @@ model Area {
 
   name String @unique
 
-  Role Role[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-}
-
-model Category {
-  id Int @id @default(autoincrement())
-
-  name String @unique
+  discipline   Discipline? @relation(fields: [disciplineId], references: [id])
+  disciplineId Int?
 
   roles Role[]
 
@@ -46,13 +38,24 @@ model Category {
 model Role {
   id Int @id @default(autoincrement())
 
-  title String
+  name String
 
-  discipline   Discipline @relation(fields: [disciplineId], references: [id])
-  disciplineId Int
-  area         Area       @relation(fields: [areaId], references: [id])
-  areaId       Int
-  categories   Category[]
+  area   Area @relation(fields: [areaId], references: [id])
+  areaId Int
+
+  jobs Job[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Job {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  role   Role? @relation(fields: [roleId], references: [id])
+  roleId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
