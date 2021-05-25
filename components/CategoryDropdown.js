@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
 import { RiSearchLine } from 'react-icons/ri'
-import { HiCheck } from 'react-icons/hi'
 
 export default function CategoryDropdown({
   careers,
@@ -8,9 +7,12 @@ export default function CategoryDropdown({
   setCareersFiltered,
 }) {
   const container = useRef(null)
+  const searchBarRef = useRef(null)
   const categoryRef = useRef(null)
   const checkBoxRef = useRef(null)
 
+  const [searchValue, setSearchValue] = useState('')
+  const [searchResults, setSearchResults] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [categoryFilters, setCategoryFilters] = useState([])
 
@@ -30,6 +32,7 @@ export default function CategoryDropdown({
   const handleClickOutside = (event) => {
     if (container.current && !container.current.contains(event.target)) {
       setIsOpen(false)
+      setSearchValue('')
     }
   }
 
@@ -49,6 +52,17 @@ export default function CategoryDropdown({
   }, [categoryFilters])
 
   useEffect(() => {
+    if (searchValue) {
+      let resultsArray = uniqueCategories.filter((item) =>
+        item.includes(searchValue)
+      )
+      setSearchResults(resultsArray)
+    } else {
+      setSearchResults([])
+    }
+  }, [searchValue])
+
+  useEffect(() => {
     if (isOpen) {
       document.addEventListener('click', handleClickOutside)
       document.addEventListener('keydown', (event) => {
@@ -61,11 +75,13 @@ export default function CategoryDropdown({
       <div>
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            setIsOpen(!isOpen)
+            setSearchResults([])
+            setSearchValue('')
+          }}
           className="inline-flex px-4 py-3 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1"
           id="menu-button"
-          aria-expanded="true"
-          aria-haspopup="true"
         >
           {categoryFilters.length && categoryFilters.length <= 1
             ? categoryFilters
@@ -94,9 +110,6 @@ export default function CategoryDropdown({
             className="ml-4"
             onClick={() => {
               setCategoryFilters([])
-              careerCategories.map((item) => {
-                document.getElementById(`${item}`).checked = false
-              })
             }}
           >
             Clear
@@ -115,9 +128,11 @@ export default function CategoryDropdown({
           <div className="relative flex flex-col justify-center mx-2.5 mt-2">
             <RiSearchLine className="text-md absolute ml-3 text-black" />
             <input
+              ref={searchBarRef}
               type="text"
+              onChange={() => setSearchValue(searchBarRef.current.value)}
               placeholder="Search for category"
-              className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
+              className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main outline-none focus:border transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
             />
           </div>
           <form
@@ -127,23 +142,47 @@ export default function CategoryDropdown({
             onChange={handleCategories}
             className="py-2 space-y-1"
           >
-            {uniqueCategories.slice(0, 5).map((category, i) => (
-              <label
-                key={i}
-                htmlFor={category}
-                className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
-              >
-                <input
-                  ref={checkBoxRef}
-                  id={category}
-                  type="checkbox"
-                  value={category}
-                  className="ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none"
-                />
-                <HiCheck className="absolute text-white" />
-                {category[0].toUpperCase() + category.slice(1).toLowerCase()}
-              </label>
-            ))}
+            {searchValue && searchResults.length ? (
+              searchResults.map((category, i) => (
+                <label
+                  key={i}
+                  htmlFor={category}
+                  className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
+                >
+                  <input
+                    ref={checkBoxRef}
+                    id={category}
+                    type="checkbox"
+                    value={category}
+                    checked={categoryFilters.includes(category) ? true : false}
+                    readOnly={true}
+                    className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
+                  />
+                  {category[0].toUpperCase() + category.slice(1).toLowerCase()}
+                </label>
+              ))
+            ) : !searchValue && !searchResults.length ? (
+              uniqueCategories.slice(0, 5).map((category, i) => (
+                <label
+                  key={i}
+                  htmlFor={category}
+                  className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
+                >
+                  <input
+                    ref={checkBoxRef}
+                    id={category}
+                    type="checkbox"
+                    value={category}
+                    checked={categoryFilters.includes(category) ? true : false}
+                    readOnly={true}
+                    className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
+                  />
+                  {category[0].toUpperCase() + category.slice(1).toLowerCase()}
+                </label>
+              ))
+            ) : (
+              <p className="px-3 py-2">No matching results.</p>
+            )}
           </form>
         </div>
       )}
