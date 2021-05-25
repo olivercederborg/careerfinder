@@ -1,9 +1,12 @@
+import { useQuery } from 'react-query'
 import { CopyFunctionSignatureType } from 'types'
 
-export const fetcher: CopyFunctionSignatureType<typeof fetch> = async (
-  ...args
-) => {
-  const res = await fetch(...args)
+type ArgsType<T> = T extends (...args: infer U) => any ? U : never
 
-  return res.json()
+type Context = ArgsType<typeof useQuery>[1]
+
+export const fetcher = async <T>({ queryKey }: Context): T => {
+  const json = await fetch(queryKey).then((r) => r.json())
+
+  return json
 }
