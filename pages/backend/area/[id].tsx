@@ -16,7 +16,7 @@ export function AreaForm(props: Props) {
   const router = useRouter()
   const id = router.query.id?.toString()
 
-  const { data } = useArea(id)
+  const area = useArea(id)
   const disciplines = useDisciplines()
   const { mutate } = useAreaMutation()
 
@@ -40,41 +40,51 @@ export function AreaForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/area/create'}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-start space-y-4"
-      >
-        <input defaultValue={data.id} type="hidden" {...register('id')} />
-
-        <label htmlFor="name" className="space-y-1">
-          <div className="font-semibold">Name</div>
-          <Input defaultValue={data.name} type="text" {...register('name')} />
-        </label>
-
-        <label htmlFor="disciplineName" className="space-y-1">
-          <div className="font-semibold">Discipline</div>
-
-          <Input
-            id="disciplineName"
-            defaultValue={data.discipline?.name}
-            type="text"
-            {...register('discipline.name')}
-            list="disciplineNames"
+      {area.isLoading || area.isError ? null : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col items-start space-y-4"
+        >
+          <input
+            defaultValue={area.data.id}
+            type="hidden"
+            {...register('id')}
           />
 
-          <datalist id="disciplineNames">
-            {disciplines.data?.map((discipline) => (
-              <option key={discipline.id} value={discipline.name}></option>
-            ))}
-          </datalist>
+          <label htmlFor="name" className="space-y-1">
+            <div className="font-semibold">Name</div>
+            <Input
+              defaultValue={area.data.name}
+              type="text"
+              {...register('name')}
+            />
+          </label>
 
-          {errors.discipline?.name ? (
-            <Alert variant="error">{errors.discipline.name.message}</Alert>
-          ) : null}
-        </label>
+          <label htmlFor="disciplineName" className="space-y-1">
+            <div className="font-semibold">Discipline</div>
 
-        <Button type="submit">Submit</Button>
-      </form>
+            <Input
+              id="disciplineName"
+              defaultValue={area.data.discipline?.name}
+              type="text"
+              {...register('discipline.name')}
+              list="disciplineNames"
+            />
+
+            <datalist id="disciplineNames">
+              {disciplines.data?.map((discipline) => (
+                <option key={discipline.id} value={discipline.name}></option>
+              ))}
+            </datalist>
+
+            {errors.discipline?.name ? (
+              <Alert variant="error">{errors.discipline.name.message}</Alert>
+            ) : null}
+          </label>
+
+          <Button type="submit">Submit</Button>
+        </form>
+      )}
     </Layout>
   )
 }

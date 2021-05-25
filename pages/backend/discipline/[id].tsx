@@ -17,7 +17,7 @@ export function DisciplineForm(props: Props) {
   const router = useRouter()
   const id = router.query.id?.toString()
 
-  const { data } = useDiscipline(id)
+  const discipline = useDiscipline(id)
   const { mutate } = useDisciplineMutation()
 
   const {
@@ -39,24 +39,34 @@ export function DisciplineForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/discipline/create'}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-start space-y-4"
-      >
-        <input defaultValue={data?.id} type="hidden" {...register('id')} />
+      {discipline.isLoading || discipline.isError ? null : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col items-start space-y-4"
+        >
+          <input
+            defaultValue={discipline.data?.id}
+            type="hidden"
+            {...register('id')}
+          />
 
-        <label htmlFor="name" className="space-y-1">
-          <div className="font-semibold">Name</div>
+          <label htmlFor="name" className="space-y-1">
+            <div className="font-semibold">Name</div>
 
-          <Input defaultValue={data?.name} type="text" {...register('name')} />
+            <Input
+              defaultValue={discipline.data?.name}
+              type="text"
+              {...register('name')}
+            />
 
-          {errors.name ? (
-            <Alert variant="error">{errors.name.message}</Alert>
-          ) : null}
-        </label>
+            {errors.name ? (
+              <Alert variant="error">{errors.name.message}</Alert>
+            ) : null}
+          </label>
 
-        <Button type="submit">Submit</Button>
-      </form>
+          <Button type="submit">Submit</Button>
+        </form>
+      )}
     </Layout>
   )
 }

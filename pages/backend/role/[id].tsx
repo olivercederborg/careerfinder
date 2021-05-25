@@ -16,7 +16,7 @@ export function RoleForm(props: Props) {
   const router = useRouter()
   const id = router.query.id?.toString()
 
-  const { data = {} } = useRole(id)
+  const role = useRole(id)
   const areas = useAreas()
   const { mutate } = useRoleMutation()
 
@@ -40,48 +40,58 @@ export function RoleForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/role/create'}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-start space-y-4"
-      >
-        {data.id ? (
-          <input defaultValue={data.id} type="hidden" {...register('id')} />
-        ) : null}
-
-        <label htmlFor="name" className="space-y-1">
-          <div className="font-semibold">Name</div>
-
-          <Input defaultValue={data.name} type="text" {...register('name')} />
-
-          {errors.name ? (
-            <Alert variant="error">{errors.name.message}</Alert>
+      {role.isLoading || role.isError ? null : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col items-start space-y-4"
+        >
+          {role.data.id ? (
+            <input
+              defaultValue={role.data.id}
+              type="hidden"
+              {...register('id')}
+            />
           ) : null}
-        </label>
 
-        <label htmlFor="areaName" className="space-y-1">
-          <div className="font-semibold">Area</div>
+          <label htmlFor="name" className="space-y-1">
+            <div className="font-semibold">Name</div>
 
-          <Input
-            id="areaName"
-            defaultValue={data.area?.name}
-            type="text"
-            {...register('area.name')}
-            list="areaNames"
-          />
+            <Input
+              defaultValue={role.data.name}
+              type="text"
+              {...register('name')}
+            />
 
-          <datalist id="areaNames">
-            {areas.data?.map((area) => (
-              <option key={area.id} value={area.name}></option>
-            ))}
-          </datalist>
+            {errors.name ? (
+              <Alert variant="error">{errors.name.message}</Alert>
+            ) : null}
+          </label>
 
-          {errors.area?.name ? (
-            <Alert variant="error">{errors.area.name.message}</Alert>
-          ) : null}
-        </label>
+          <label htmlFor="areaName" className="space-y-1">
+            <div className="font-semibold">Area</div>
 
-        <Button type="submit">Submit</Button>
-      </form>
+            <Input
+              id="areaName"
+              defaultValue={role.data.area?.name}
+              type="text"
+              {...register('area.name')}
+              list="areaNames"
+            />
+
+            <datalist id="areaNames">
+              {areas.data?.map((area) => (
+                <option key={area.id} value={area.name}></option>
+              ))}
+            </datalist>
+
+            {errors.area?.name ? (
+              <Alert variant="error">{errors.area.name.message}</Alert>
+            ) : null}
+          </label>
+
+          <Button type="submit">Submit</Button>
+        </form>
+      )}
     </Layout>
   )
 }
