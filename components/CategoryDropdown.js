@@ -7,8 +7,11 @@ export default function CategoryDropdown({
   careersFiltered,
   setCareersFiltered,
 }) {
+  const container = useRef(null)
   const categoryRef = useRef(null)
   const checkBoxRef = useRef(null)
+
+  const [isOpen, setIsOpen] = useState(false)
   const [categoryFilters, setCategoryFilters] = useState([])
 
   let careerCategories = careers.map((career) => career.category)
@@ -21,6 +24,12 @@ export default function CategoryDropdown({
       setCategoryFilters(
         categoryFilters.filter((item) => item !== e.target.value.toLowerCase())
       )
+    }
+  }
+
+  const handleClickOutside = (event) => {
+    if (container.current && !container.current.contains(event.target)) {
+      setIsOpen(false)
     }
   }
 
@@ -38,11 +47,21 @@ export default function CategoryDropdown({
       }
     })
   }, [categoryFilters])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', handleClickOutside)
+      document.addEventListener('keydown', (event) => {
+        event.key === 'Escape' && setIsOpen(false)
+      })
+    }
+  }, [isOpen])
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={container}>
       <div>
         <button
           type="button"
+          onClick={() => setIsOpen(!isOpen)}
           className="inline-flex px-4 py-3 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1"
           id="menu-button"
           aria-expanded="true"
@@ -85,47 +104,49 @@ export default function CategoryDropdown({
         ) : null}
       </div>
 
-      <div
-        className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="menu-button"
-        tabIndex="-1"
-      >
-        <div className="relative flex flex-col justify-center mx-2.5 mt-2">
-          <RiSearchLine className="text-md absolute ml-3 text-black" />
-          <input
-            type="text"
-            placeholder="Search for category"
-            className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
-          />
-        </div>
-        <form
-          name="categoryForm"
-          id="categoryForm"
-          ref={categoryRef}
-          onChange={handleCategories}
-          className="py-2 space-y-1"
+      {isOpen && (
+        <div
+          className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabIndex="-1"
         >
-          {uniqueCategories.slice(0, 5).map((category, i) => (
-            <label
-              key={i}
-              htmlFor={category}
-              className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
-            >
-              <input
-                ref={checkBoxRef}
-                id={category}
-                type="checkbox"
-                value={category}
-                className="ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none"
-              />
-              <HiCheck className="absolute text-white" />
-              {category[0].toUpperCase() + category.slice(1).toLowerCase()}
-            </label>
-          ))}
-        </form>
-      </div>
+          <div className="relative flex flex-col justify-center mx-2.5 mt-2">
+            <RiSearchLine className="text-md absolute ml-3 text-black" />
+            <input
+              type="text"
+              placeholder="Search for category"
+              className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
+            />
+          </div>
+          <form
+            name="categoryForm"
+            id="categoryForm"
+            ref={categoryRef}
+            onChange={handleCategories}
+            className="py-2 space-y-1"
+          >
+            {uniqueCategories.slice(0, 5).map((category, i) => (
+              <label
+                key={i}
+                htmlFor={category}
+                className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
+              >
+                <input
+                  ref={checkBoxRef}
+                  id={category}
+                  type="checkbox"
+                  value={category}
+                  className="ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none"
+                />
+                <HiCheck className="absolute text-white" />
+                {category[0].toUpperCase() + category.slice(1).toLowerCase()}
+              </label>
+            ))}
+          </form>
+        </div>
+      )}
     </div>
   )
 }
