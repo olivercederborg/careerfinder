@@ -1,12 +1,66 @@
-import Head from "next/head";
-import { RiSearchLine, RiShuffleFill } from "react-icons/ri";
-import { FiChevronDown } from "react-icons/fi";
-import { BsFillLightningFill, BsArrowRightShort } from "react-icons/bs";
+import Head from 'next/head'
+import { RiSearchLine, RiShuffleFill } from 'react-icons/ri'
+import { FiChevronDown } from 'react-icons/fi'
+import { HiCheck } from 'react-icons/hi'
 
-import { careers } from "../careers";
-import Navbar from "../components/Navbar";
+import { careers } from '../careers'
+import Navbar from '../components/Navbar'
+import { useEffect, useRef, useState } from 'react'
+import CareerCard from '../components/CareerCard'
 
 export default function Home() {
+	const careerSearchbar = useRef(null)
+	const categoryRef = useRef(null)
+	const checkBoxRef = useRef(null)
+
+	const [searchValue, setSearchValue] = useState(null)
+	const [searchResults, setSearchResults] = useState([])
+	const [careersFiltered, setCareersFiltered] = useState([])
+	const [categoryFilters, setCategoryFilters] = useState([])
+
+	let careerCategories = careers.map((career) => career.category)
+	let uniqueCategories = [...new Set(careerCategories)]
+
+	const handleCategories = (e) => {
+		if (e.target.checked) {
+			setCategoryFilters([...categoryFilters, e.target.value.toLowerCase()])
+		} else if (!e.target.checked) {
+			setCategoryFilters(
+				categoryFilters.filter(
+					(item) => item !== e.target.value.toLowerCase()
+				)
+			)
+		}
+	}
+
+	useEffect(() => {
+		careers.forEach((career, i) => {
+			if (
+				categoryFilters.includes(career.category) &&
+				!careersFiltered.includes(career)
+			) {
+				setCareersFiltered([...careersFiltered, career])
+			} else {
+				setCareersFiltered(
+					careers.filter((item) => categoryFilters.includes(item.category))
+				)
+			}
+		})
+		console.log(careersFiltered)
+	}, [categoryFilters])
+
+	useEffect(() => {
+		if (searchValue) {
+			setSearchResults(
+				careers.filter((career) =>
+					career.name.toLowerCase().includes(searchValue?.toLowerCase())
+				)
+			)
+		} else {
+			setSearchResults([])
+		}
+	}, [searchValue])
+
 	return (
 		<>
 			<Head>
@@ -51,149 +105,171 @@ export default function Home() {
 						<RiShuffleFill className='ml-3 text-xl' />
 					</button>
 				</div>
-				<div className='xl:px-0 relative px-6'>
-					<div className='md:justify-start flex items-center justify-between mt-10 space-x-5'>
-						<p className='text-lg font-bold uppercase'>Category</p>
-						<button
-							type='button'
-							className='place-items-center rounded-xl grid w-10 h-10 text-xl text-white bg-black shadow-md'
-						>
-							<RiSearchLine />
-						</button>
+
+				<div className='gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0 grid grid-cols-12 pb-8 mx-6 border-b'>
+					<div className='md:col-span-6 relative flex flex-col justify-center col-span-12'>
+						<RiSearchLine className='absolute ml-6 text-lg text-black' />
+						<input
+							type='jobSearch'
+							placeholder='Search for a career'
+							className='rounded-xl pl-14 w-full px-6 py-4 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black shadow-slight bg-white appearance-none'
+							ref={careerSearchbar}
+							onChange={() =>
+								setSearchValue(careerSearchbar.current.value)
+							}
+						/>
 					</div>
-				</div>
-				<form
-					action=''
-					className='no-scrollbar xl:px-0 flex px-6 mt-4 overflow-x-scroll'
-				>
-					<input
-						id='design'
-						name='design'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='design'
-					/>
-					<label
-						htmlFor='design'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
-					>
-						design
-					</label>
-					<input
-						id='marketing'
-						name='marketing'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='marketing'
-					/>
-					<label
-						htmlFor='marketing'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
-					>
-						marketing
-					</label>
-					<input
-						id='programming'
-						name='programming'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='programming'
-					/>
-					<label
-						htmlFor='programming'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
-					>
-						programming
-					</label>
-					<input
-						id='something'
-						name='something'
-						type='checkbox'
-						className='Filter-item__input hidden'
-						value='something'
-					/>
-					<label
-						htmlFor='something'
-						className='Filter-item rounded-xl px-5 py-2 mr-3 font-medium bg-white border-2 border-gray-300 cursor-pointer'
-					>
-						something
-					</label>
-				</form>
 
-				<div className='md:justify-start xl:px-0 flex flex-col justify-between px-6 mt-12'>
-					<p className='text-lg font-bold uppercase'>Sort by</p>
+					<div className='md:justify-start md:col-span-6 flex items-center justify-between col-span-12'>
+						<p className='text-base font-semibold uppercase'>Category</p>
 
-					<div className='border-b-[1px] flex items-center pb-6 mt-3 space-x-3'>
-						<div className='sorting-dropdown'>
-							<select
-								id='sort-by'
-								name='sort-by'
-								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5 text-base'
-							>
-								<option value='salary'>Salary</option>
-								<option value='test'>Popularity</option>
-							</select>
-						</div>
+						<div className='flex items-center ml-6'>
+							<div className='relative inline-block text-left'>
+								<div>
+									<button
+										type='button'
+										className='inline-flex px-4 py-3 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1'
+										id='menu-button'
+										aria-expanded='true'
+										aria-haspopup='true'
+									>
+										{categoryFilters.length &&
+										categoryFilters.length <= 1
+											? categoryFilters
+											: categoryFilters.length > 1
+											? `${categoryFilters
+													.slice(0, 1)
+													.join(', ')} +${
+													categoryFilters.slice(1).length
+											  }`
+											: 'Pick Category'}
+										<svg
+											className='w-5 h-5 ml-2 -mr-1'
+											xmlns='http://www.w3.org/2000/svg'
+											viewBox='0 0 20 20'
+											aria-hidden='true'
+											fill='#fff'
+										>
+											<path
+												fillRule='evenodd'
+												d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
+												clipRule='evenodd'
+											/>
+										</svg>
+									</button>
 
-						<div className='sorting-dropdown'>
-							<select
-								id='sort-mode'
-								name='sort-mode'
-								className='place-items-center rounded-xl grid px-4 py-[10px] text-white bg-black shadow-md font-medium cursor-pointer pr-5 text-base'
-							>
-								<option value='test'>High to Low</option>
-								<option value='salary'>Low to High</option>
-							</select>
+									{categoryFilters.length ? (
+										<button
+											className='ml-4'
+											onClick={() => {
+												setCategoryFilters([])
+												careerCategories.map((item) => {
+													document.getElementById(
+														`${item}`
+													).checked = false
+												})
+											}}
+										>
+											Clear
+										</button>
+									) : null}
+								</div>
+
+								<div
+									className='ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg'
+									role='menu'
+									aria-orientation='vertical'
+									aria-labelledby='menu-button'
+									tabIndex='-1'
+								>
+									<div className='relative flex flex-col justify-center mx-2.5 mt-2'>
+										<RiSearchLine className='text-md absolute ml-3 text-black' />
+										<input
+											type='text'
+											placeholder='Search for category'
+											className='rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none'
+										/>
+									</div>
+									<form
+										name='categoryForm'
+										id='categoryForm'
+										ref={categoryRef}
+										onChange={handleCategories}
+										className='py-2 space-y-1'
+									>
+										{uniqueCategories
+											.slice(0, 5)
+											.map((category, i) => (
+												<label
+													key={i}
+													htmlFor={category}
+													className='hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer'
+												>
+													<input
+														ref={checkBoxRef}
+														id={category}
+														type='checkbox'
+														value={category}
+														className='ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none'
+													/>
+													<HiCheck className='absolute text-white' />
+													{category[0].toUpperCase() +
+														category.slice(1).toLowerCase()}
+												</label>
+											))}
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<section className='md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8'>
-					{careers.map((career, i) => (
-						<a
-							href='#'
-							className='rounded-xl group hover:bg-black overflow-hidden transition-all duration-200 ease-in-out bg-white shadow-lg'
-							key={i}
-						>
-							<img
-								src={career.image}
-								alt={career.name}
-								className='h-[200px] object-cover w-full transition-all duration-200 ease-in-out'
-							/>
+					{searchResults &&
+						searchResults.map((career, i) => (
+							<CareerCard career={career} key={i} />
+						))}
 
-							<section className='pb-7 group-hover:text-white px-6 pt-6 transition-all duration-200 ease-in-out'>
-								<h3 className='inline-flex items-center text-2xl font-bold'>
-									{career.name}
-									{career.hot && (
-										<BsFillLightningFill className='filter drop-shadow-lightning ml-2 text-2xl text-yellow-400' />
-									)}
-								</h3>
+					{careersFiltered.length && !searchValue && !searchResults.length
+						? careersFiltered.map((career, i) => (
+								<CareerCard career={career} key={i} />
+						  ))
+						: null}
 
-								<div className='flex mt-4 space-x-2'>
-									<span className='px-3 py-[6px] text-sm font-medium bg-black text-white rounded-lg group-hover:bg-white group-hover:text-black transition-all duration-200 ease-in-out'>
-										{career.category}
-									</span>
-								</div>
+					{!searchResults.length &&
+						!searchValue &&
+						!careersFiltered.length &&
+						careers.map((career, i) => (
+							<CareerCard career={career} key={i} />
+						))}
 
-								<div className='grid grid-cols-2 mt-5'>
-									<div className='flex flex-col'>
-										<p className='text-base'>Avg. Salary</p>
-										<p className='mt-1 text-lg font-bold'>
-											{career.salary}
-										</p>
-									</div>
-									<div className='flex flex-col'>
-										<p className='text-base'>Time</p>
-										<p className='mt-1 text-lg font-bold'>
-											{career.time}
-										</p>
-									</div>
-								</div>
-							</section>
-						</a>
-					))}
+					{!searchResults.length &&
+						searchValue &&
+						!careersFiltered.length && (
+							<div className='col-span-full min-h-[300px] flex flex-col justify-center'>
+								<p className='text-2xl leading-relaxed text-center'>
+									We have no careers matching this search… <br />
+									Feel like trying your luck?
+								</p>
+
+								<button className='rounded-xl hover:-translate-y-1 hover:shadow-lg self-center px-12 py-4 mt-8 font-medium text-white transition-all duration-200 ease-in-out transform bg-black'>
+									Generate Random Career
+								</button>
+
+								<button
+									className='hover:underline px-12 py-4 mt-4 font-medium transition-all duration-200 ease-in-out transform'
+									onClick={() => {
+										setSearchValue(null)
+										careerSearchbar.current.value = null
+										careerSearchbar.current.focus()
+									}}
+								>
+									Try searching again
+								</button>
+							</div>
+						)}
 				</section>
 			</main>
 		</>
-	);
+	)
 }
