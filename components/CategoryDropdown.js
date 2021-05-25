@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
 import { RiSearchLine } from 'react-icons/ri'
-import { HiCheck } from 'react-icons/hi'
 
 export default function CategoryDropdown({
   careers,
@@ -157,9 +156,8 @@ export default function CategoryDropdown({
                     value={category}
                     checked={categoryFilters.includes(category) ? true : false}
                     readOnly={true}
-                    className="ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none"
+                    className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
-                  <HiCheck className="absolute text-white" />
                   {category[0].toUpperCase() + category.slice(1).toLowerCase()}
                 </label>
               ))
@@ -177,9 +175,8 @@ export default function CategoryDropdown({
                     value={category}
                     checked={categoryFilters.includes(category) ? true : false}
                     readOnly={true}
-                    className="ring-1 checked:bg-black checked:ring-black bg-white ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none"
+                    className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
-                  <HiCheck className="absolute text-white" />
                   {category[0].toUpperCase() + category.slice(1).toLowerCase()}
                 </label>
               ))
