@@ -4,16 +4,12 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 export type FormValues = Discipline
 
-async function fetchDiscipline(id: string) {
-  const { data } = await axios.get<FormValues>(`/api/discipline/${id}`)
-
-  return data
+export function useDisciplines() {
+  return useQuery<Discipline[]>('/api/discipline')
 }
 
 export function useDiscipline(id: string) {
-  return useQuery<Discipline>(['/api/discipline', id], () =>
-    fetchDiscipline(id)
-  )
+  return useQuery<Discipline>(['/api/discipline', id])
 }
 
 export function useDisciplineMutation() {

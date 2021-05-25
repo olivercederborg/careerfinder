@@ -4,44 +4,32 @@ import { Alert } from 'components/Alert'
 import { Layout } from 'components/backend/Layout'
 import { Button } from 'components/Button'
 import { Input } from 'components/Input'
+import { AreaFormValues, useArea, useAreaMutation } from 'hooks/backend/useArea'
+import { useDisciplines } from 'hooks/backend/useDiscipline'
 import { useRouter } from 'next/router'
-import { PostArea } from 'pages/api/area'
 import { HTMLProps } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useMutation, useQuery } from 'react-query'
-
-type FormValues = Area & {
-  discipline: Discipline
-}
 
 interface Props extends HTMLProps<HTMLFormElement> {}
 
-async function fetchArea(id: string) {
-  const { data } = await axios.get<FormValues>(`/api/role/${id}`)
-
-  return data
-}
-
-export function AreaForm({ id }: Props) {
+export function AreaForm(props: Props) {
   const router = useRouter()
+  const id = router.query.id?.toString()
 
-  const { data } = useQuery<FormValues>(['/api/area', id], () => fetchArea(id))
-  const disciplines = useQuery<Discipline[]>('/api/discipline')
-
-  const mutation = useMutation((newArea: PostArea) =>
-    axios.post('/api/area', newArea)
-  )
+  const { data } = useArea(id)
+  const disciplines = useDisciplines()
+  const { mutate } = useAreaMutation()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AreaFormValues>({
     shouldUnregister: true,
   })
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    mutation.mutate({
+  const onSubmit: SubmitHandler<AreaFormValues> = async (data) => {
+    mutate({
       id: data.id,
       name: data.name,
       disciplineName: data.discipline.name,

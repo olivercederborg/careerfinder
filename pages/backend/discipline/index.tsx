@@ -1,13 +1,12 @@
 import { HTMLProps } from 'react'
-import { useQuery } from 'react-query'
-import { Discipline } from '.prisma/client'
 import { List } from 'components/backend/Resource/List'
 import { Layout } from 'components/backend/Layout'
+import { useDisciplines } from 'hooks/backend/useDiscipline'
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export function DisciplineList(props: Props) {
-  const { data = [] } = useQuery<Discipline[]>('/api/discipline')
+  const { data = [] } = useDisciplines()
 
   return (
     <Layout createUrl={'/backend/discipline/create'}>

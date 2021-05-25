@@ -1,45 +1,32 @@
-import { Job, Role } from '.prisma/client'
-import axios from 'axios'
 import { Alert } from 'components/Alert'
 import { Layout } from 'components/backend/Layout'
 import { Button } from 'components/Button'
 import { Input } from 'components/Input'
+import { JobFormValues, useJob, useJobMutation } from 'hooks/backend/useJob'
+import { useRoles } from 'hooks/backend/useRole'
 import { useRouter } from 'next/router'
-import { PostJob } from 'pages/api/job'
 import { HTMLProps } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useMutation, useQuery } from 'react-query'
-
-type FormValues = Job & {
-  role: Role
-}
 
 interface Props extends HTMLProps<HTMLFormElement> {}
 
-async function fetchJob(id: string) {
-  const { data } = await axios.get(`/api/job/${id}`)
-
-  return data
-}
-
-export function JobForm({ id }: Props) {
+export function JobForm(props: Props) {
   const router = useRouter()
-  const { data } = useQuery<FormValues>(['/api/job', id], () => fetchJob(id))
-  const roles = useQuery<Role[]>('/api/role')
+  const id = router.query.id?.toString()
 
-  const mutation = useMutation((newJob: PostJob) =>
-    axios.post('/api/job', newJob)
-  )
+  const { data } = useJob(id)
+  const roles = useRoles()
+  const mutation = useJobMutation()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<JobFormValues>({
     shouldUnregister: true,
   })
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<JobFormValues> = async (data) => {
     mutation.mutate({
       name: data.name,
       roleName: data.role.name,

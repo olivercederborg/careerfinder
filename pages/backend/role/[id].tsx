@@ -4,47 +4,32 @@ import { Alert } from 'components/Alert'
 import { Layout } from 'components/backend/Layout'
 import { Button } from 'components/Button'
 import { Input } from 'components/Input'
+import { useAreas } from 'hooks/backend/useArea'
+import { useRole, useRoleMutation, RoleFormValues } from 'hooks/backend/useRole'
 import { useRouter } from 'next/router'
-import { PostRole } from 'pages/api/role'
 import { HTMLProps } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useMutation, useQuery } from 'react-query'
-import { Maybe } from 'types'
-
-type FormValues = Role & {
-  area: Maybe<Area>
-}
 
 interface Props extends HTMLProps<HTMLFormElement> {}
 
-async function fetchRole(id: string) {
-  const { data } = await axios.get<FormValues>(`/api/role/${id}`)
-
-  return data
-}
-
-export function RoleForm({ id }: Props) {
+export function RoleForm(props: Props) {
   const router = useRouter()
+  const id = router.query.id?.toString()
 
-  const { data } = useQuery<FormValues>(['/api/role', id], () => fetchRole(id))
-  const areas = useQuery<Area[]>('/api/area')
-
-  const mutation = useMutation((newRole: PostRole) =>
-    axios.post('/api/role', newRole)
-  )
-
-  console.log({ data })
+  const { data = {} } = useRole(id)
+  const areas = useAreas()
+  const { mutate } = useRoleMutation()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<RoleFormValues>({
     shouldUnregister: true,
   })
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    mutation.mutate({
+  const onSubmit: SubmitHandler<RoleFormValues> = async (data) => {
+    mutate({
       id: data.id,
       name: data.name,
       areaName: data.area.name,
