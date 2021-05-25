@@ -37,7 +37,11 @@ export function JobForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/job/create'}>
-      {job.isLoading || job.isError ? null : (
+      {job.isError ? (
+        <Alert>Error loading job</Alert>
+      ) : job.isLoading ? (
+        <Alert>Loading job...</Alert>
+      ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start space-y-4"

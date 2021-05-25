@@ -40,7 +40,11 @@ export function AreaForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/area/create'}>
-      {area.isLoading || area.isError ? null : (
+      {area.isError ? (
+        <Alert>Error loading area</Alert>
+      ) : area.isLoading ? (
+        <Alert>Loading area...</Alert>
+      ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start space-y-4"

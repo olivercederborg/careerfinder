@@ -40,7 +40,11 @@ export function RoleForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/role/create'}>
-      {role.isLoading || role.isError ? null : (
+      {role.isError ? (
+        <Alert>Error loading role</Alert>
+      ) : role.isLoading ? (
+        <Alert>Loading role...</Alert>
+      ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start space-y-4"

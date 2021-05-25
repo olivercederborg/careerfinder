@@ -39,7 +39,11 @@ export function DisciplineForm(props: Props) {
 
   return (
     <Layout createUrl={'/backend/discipline/create'}>
-      {discipline.isLoading || discipline.isError ? null : (
+      {discipline.isError ? (
+        <Alert>Error loading discipline</Alert>
+      ) : discipline.isLoading ? (
+        <Alert>Loading discipline...</Alert>
+      ) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start space-y-4"
