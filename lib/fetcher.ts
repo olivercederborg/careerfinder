@@ -1,9 +1,9 @@
-import { CopyFunctionSignatureType } from 'types'
+import { QueryFunctionContext, QueryKey } from 'react-query'
 
-export const fetcher: CopyFunctionSignatureType<typeof fetch> = async (
-  ...args
-) => {
-  const res = await fetch(...args)
+export async function fetcher(context: QueryFunctionContext<QueryKey, any>) {
+  const json = await fetch(context.queryKey.join('/'), {
+    method: 'GET',
+  }).then((response) => response.json())
 
-  return res.json()
+  return json
 }
