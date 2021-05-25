@@ -3,6 +3,7 @@ import { RiSearchLine } from 'react-icons/ri'
 
 export default function SearchBar({ setSearchValue }) {
   const careerSearchbar = useRef(null)
+
   return (
     <div className="md:col-span-6 relative flex flex-col justify-center col-span-12">
       <RiSearchLine className="absolute ml-6 text-lg text-black" />
