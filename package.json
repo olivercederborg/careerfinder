@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:deploy": "prisma migrate deploy && npm run build",
+    "build:deploy": "prisma migrate deploy && prisma generate && npm run build",
     "start": "next start",
     "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
     "db:migrate": "prisma migrate dev",
