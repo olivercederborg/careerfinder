@@ -2,25 +2,6 @@ import { jsonHeader } from 'lib/jsonHeader'
 import { prisma } from 'lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-async function postHandler(req: NextApiRequest, res: NextApiResponse) {
-  const id = Number(req.body.id)
-  const { name } = req.body
-
-  const discipline = await prisma.discipline.upsert({
-    create: {
-      name,
-    },
-    update: {
-      name,
-    },
-    where: {
-      id,
-    },
-  })
-
-  return res.status(200).json(discipline)
-}
-
 async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   const id = Number(req.query.id)
 
@@ -29,9 +10,7 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const discipline = await prisma.discipline.findUnique({
-    where: {
-      id: Number(id),
-    },
+    where: { id: Number(id) },
   })
 
   return res.status(200).json(discipline)
@@ -42,12 +21,8 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.body
 
   const discipline = await prisma.discipline.update({
-    data: {
-      name,
-    },
-    where: {
-      id,
-    },
+    data: { name },
+    where: { id },
   })
 
   return res.status(200).json(discipline)
@@ -72,9 +47,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     switch (method) {
-      case 'POST': {
-        return postHandler(req, res)
-      }
       case 'GET': {
         return getHandler(req, res)
       }

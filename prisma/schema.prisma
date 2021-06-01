@@ -70,3 +70,30 @@ model PageView {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
+
+model CourseCategory {
+  id Int @id @default(autoincrement())
+
+  courses Course[]
+
+  name String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+}
+
+model Course {
+  id Int @id @default(autoincrement())
+
+  CourseCategory   CourseCategory? @relation(fields: [courseCategoryId], references: [id])
+  courseCategoryId Int?
+
+  name        String
+  description String?
+  price       String
+  avatarUrl   String
+  imageUrl    String
+  author      String
+  locale      String
+}

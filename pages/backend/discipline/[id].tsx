@@ -18,7 +18,7 @@ export function DisciplineForm(props: Props) {
   const id = router.query.id?.toString()
 
   const discipline = useDiscipline(id)
-  const { mutate } = useDisciplineMutation()
+  const { mutate } = useDisciplineMutation(id)
 
   const {
     register,

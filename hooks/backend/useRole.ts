@@ -1,7 +1,7 @@
 import { Area, Role } from '.prisma/client'
 import axios from 'axios'
 import { PostRole } from 'pages/api/role'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Maybe } from 'types'
 
 export type RoleFormValues = Role & {
@@ -16,6 +16,29 @@ export function useRole(id: string) {
   return useQuery<RoleFormValues>(['/api/role', id])
 }
 
-export function useRoleMutation() {
-  return useMutation((newRole: PostRole) => axios.post('/api/role', newRole))
+export function useRoleMutation(id?: string) {
+  const queryClient = useQueryClient()
+
+  const idCheck = Number(id)
+
+  const mutation = useMutation(
+    (role: PostRole) => {
+      if (idCheck) {
+        return axios.patch(`/api/role/${id}`, role)
+      }
+
+      return axios.post('/api/role', role)
+    },
+    {
+      onSettled: () => {
+        if (idCheck) {
+          queryClient.invalidateQueries(['/api/role', id])
+        }
+
+        queryClient.invalidateQueries('/api/role')
+      },
+    }
+  )
+
+  return mutation
 }

@@ -15,8 +15,8 @@ export function JobForm(props: Props) {
   const id = router.query.id?.toString()
 
   const job = useJob(id)
+  const { mutate } = useJobMutation(id)
   const roles = useRoles()
-  const mutation = useJobMutation()
 
   const {
     register,
@@ -27,7 +27,7 @@ export function JobForm(props: Props) {
   })
 
   const onSubmit: SubmitHandler<JobFormValues> = async (data) => {
-    mutation.mutate({
+    mutate({
       name: data.name,
       roleName: data.role.name,
     })

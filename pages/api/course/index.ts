@@ -1,28 +1,13 @@
-import { Prisma } from '.prisma/client'
-import { jsonHeader } from 'lib/jsonHeader'
 import { prisma } from 'lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export type PostJob = {
-  name: string
-  roleName: string
-}
-
 async function getHandler(req: NextApiRequest, res: NextApiResponse) {
-  const jobs = await prisma.job.findMany()
+  const courses = await prisma.course.findMany()
 
-  return res.status(200).json(jobs)
+  return res.status(200).json(courses)
 }
 
-async function postHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { name } = req.body
-
-  const job = await prisma.job.create({
-    data: { name },
-  })
-
-  return res.status(200).json(job)
-}
+async function postHandler(req: NextApiRequest, res: NextApiResponse) {}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
