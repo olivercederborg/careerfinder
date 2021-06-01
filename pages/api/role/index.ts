@@ -97,8 +97,6 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
 
     return res.status(201).json(role)
   } catch (e) {
-    console.log(e.message)
-
     return res.status(500).end()
   }
 }

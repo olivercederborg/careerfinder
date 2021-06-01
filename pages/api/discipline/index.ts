@@ -2,7 +2,17 @@ import { jsonHeader } from 'lib/jsonHeader'
 import { prisma } from 'lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-async function get(req: NextApiRequest, res: NextApiResponse) {
+async function postHandler(req: NextApiRequest, res: NextApiResponse) {
+  const { name } = req.body
+
+  const discipline = await prisma.discipline.create({
+    data: { name },
+  })
+
+  return res.status(200).json(discipline)
+}
+
+async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   const disciplines = await prisma.discipline.findMany()
 
   return res.status(200).json(disciplines)
@@ -15,8 +25,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     switch (method) {
+      case 'POST': {
+        return postHandler(req, res)
+      }
       case 'GET': {
-        return get(req, res)
+        return getHandler(req, res)
       }
       default: {
         return res.status(405).end()

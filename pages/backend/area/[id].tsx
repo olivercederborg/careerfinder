@@ -17,8 +17,8 @@ export function AreaForm(props: Props) {
   const id = router.query.id?.toString()
 
   const area = useArea(id)
+  const { mutate } = useAreaMutation(id)
   const disciplines = useDisciplines()
-  const { mutate } = useAreaMutation()
 
   const {
     register,

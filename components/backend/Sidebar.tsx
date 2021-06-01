@@ -15,6 +15,12 @@ function Sidebar() {
       <Link href="/backend/job">
         <a>Job</a>
       </Link>
+      <Link href="/backend/course-category">
+        <a>Course Category</a>
+      </Link>
+      <Link href="/backend/course">
+        <a>Course</a>
+      </Link>
     </div>
   )
 }
