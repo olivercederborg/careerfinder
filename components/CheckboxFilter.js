@@ -71,39 +71,37 @@ export default function CheckboxFilter({
     }
   }, [isOpen])
   return (
-    <div className="relative inline-block" ref={container}>
-      <div>
-        <button
-          type="button"
-          onClick={() => {
-            setIsOpen(!isOpen)
-            setSearchResults([])
-            setSearchValue('')
-          }}
-          className="inline-flex items-center min-w-[256px] justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
-          id="menu-button"
-        >
-          {inputFilters.length && inputFilters.length <= 1
-            ? inputFilters
-            : inputFilters.length > 1
-            ? `${inputFilters.slice(0, 1).join(', ')} +${
-                inputFilters.slice(1).length
-              }`
-            : `${children}`}
-          <BsCaretDownFill />
-        </button>
+    <div className="relative inline-block w-full" ref={container}>
+      <button
+        type="button"
+        onClick={() => {
+          setIsOpen(!isOpen)
+          setSearchResults([])
+          setSearchValue('')
+        }}
+        className="inline-flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
+        id="menu-button"
+      >
+        {inputFilters.length && inputFilters.length <= 1
+          ? inputFilters
+          : inputFilters.length > 1
+          ? `${inputFilters.slice(0, 1).join(', ')} +${
+              inputFilters.slice(1).length
+            }`
+          : `${children}`}
+        <BsCaretDownFill className="ml-3" />
+      </button>
 
-        {inputFilters.length ? (
-          <button
-            className="ml-4"
-            onClick={() => {
-              setInputFilters([])
-            }}
-          >
-            Clear
-          </button>
-        ) : null}
-      </div>
+      {inputFilters.length ? (
+        <button
+          className="ml-4"
+          onClick={() => {
+            setInputFilters([])
+          }}
+        >
+          Clear
+        </button>
+      ) : null}
 
       {isOpen && (
         <div
