@@ -7,7 +7,7 @@
         "name": "React.js Introduction",
         "publisher": "Codecademy",
         "publisherLogo":
-        "https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
         "categories": ["JavaScript", "React.js", "Test", "HTML", "CSS"],
         "difficulty": "Beginner",
         "cost": 0,
@@ -29,7 +29,7 @@
         "name": "React.js Crash Course",
         "publisher": "Udemy",
         "publisherLogo":
-        "https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg",
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
         "categories": ["React.js"],
         "difficulty": "Intermediate",
         "cost": 99,
@@ -49,6 +49,67 @@
       },
       {
         "name": "Vue.js + Firebase",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["Vue.js", "Firebase", "HTML", "CSS"],
+        "difficulty": "Advanced",
+        "cost": 6969,
+        "new": false,
+        "hot": true
+      }
+    ]
+  },
+  {
+    "id": "test-category",
+    "category": "Test Category",
+    "courses": [
+      {
+        "name": "Test 1",
+        "publisher": "Test",
+        "publisherLogo":
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
+        "categories": ["JavaScript", "React.js", "Test", "HTML", "CSS"],
+        "difficulty": "Beginner",
+        "cost": 0,
+        "new": true,
+        "hot": false
+      },
+      {
+        "name": "Test 2",
+        "publisher": "Test",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["JavaScript"],
+        "difficulty": "Beginner",
+        "cost": 49.95,
+        "new": false,
+        "hot": false
+      },
+      {
+        "name": "Test 3",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
+        "categories": ["React.js"],
+        "difficulty": "Intermediate",
+        "cost": 99,
+        "new": false,
+        "hot": false
+      },
+      {
+        "name": "Test 4",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://www.pvaeshop.com/wp-content/uploads/2020/05/g.jpg",
+        "categories": ["HTML", "CSS", "JavaScript"],
+        "difficulty": "Beginner",
+        "cost": 199,
+        "new": true,
+        "hot": false
+      },
+      {
+        "name": "Test 5",
         "publisher": "Udemy",
         "publisherLogo":
         "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
