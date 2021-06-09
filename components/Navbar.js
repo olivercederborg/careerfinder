@@ -52,7 +52,7 @@ export default function Navbar() {
           <Link href="/courses">
             <a
               className={`px-6 py-3 rounded-[10px] font-medium ${
-                router.pathname === '/courses'
+                router.pathname.includes('/courses')
                   ? 'bg-black text-white'
                   : 'hover:bg-black hover:bg-opacity-5 text-black'
               }`}
