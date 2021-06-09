@@ -53,9 +53,7 @@ export default function CheckboxFilter({
 
   useEffect(() => {
     if (searchValue) {
-      let resultsArray = uniqueCategories.filter((item) =>
-        item.includes(searchValue)
-      )
+      let resultsArray = input.filter((item) => item.includes(searchValue))
       setSearchResults(resultsArray)
     } else {
       setSearchResults([])
@@ -148,7 +146,7 @@ export default function CheckboxFilter({
                 </label>
               ))
             ) : !searchValue && !searchResults.length ? (
-              uniqueCategories.slice(0, 5).map((category, i) => (
+              input.slice(0, 5).map((category, i) => (
                 <label
                   key={i}
                   htmlFor={category}
