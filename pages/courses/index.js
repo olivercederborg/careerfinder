@@ -88,11 +88,11 @@ export default function CoursesPage({ data }) {
 
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Difficulty
-            <CheckboxFilter>All Difficulties</CheckboxFilter>
+            {/* <CheckboxFilter>All Difficulties</CheckboxFilter> */}
           </div>
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Price
-            <CheckboxFilter>All Prices</CheckboxFilter>
+            {/* <CheckboxFilter>All Prices</CheckboxFilter> */}
           </div>
         </CourseFiltersShell>
 
@@ -125,7 +125,7 @@ export default function CoursesPage({ data }) {
                         >
                           <td className="relative px-10 py-6 font-semibold">
                             <div className="flex items-center">
-                              {course.hot || course.new ? (
+                              {course.hot || course.isNew ? (
                                 <div
                                   className={`w-0 h-0 border-b-[40px] text-white flex items-start justify-center text-xs absolute left-0 top-0 transform -rotate-45 translate-x-[-26px] -translate-y-1.5 rounded-lg ${
                                     course.hot
