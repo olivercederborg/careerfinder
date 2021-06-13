@@ -2,25 +2,27 @@ import { useEffect, useState, useRef } from 'react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { RiSearchLine } from 'react-icons/ri'
 import { GrFormClose } from 'react-icons/gr'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-export default function CategoryFilter({
-  children,
-  input,
-  inputFiltered,
-  setInputFiltered,
-  ...props
-}) {
-  const container = useRef(null)
+interface Props {
+  children: any
+  input: any[]
+}
+
+export default function CategoryFilter({ children, input }: Props) {
+  const router = useRouter()
+  const { query } = useRouter()
+
+  const containerRef = useRef<HTMLDivElement>(null)
   const searchBarRef = useRef(null)
 
-  const [searchValue, setSearchValue] = useState('')
-  const [searchResults, setSearchResults] = useState([])
-  const [isOpen, setIsOpen] = useState()
-  const [inputFilters, setInputFilters] = useState([])
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isOpen, setIsOpen] = useState<boolean>()
 
   const handleClickOutside = (event) => {
-    if (container.current && !container.current.contains(event.target)) {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
       setIsOpen(false)
       setSearchValue('')
     }
@@ -48,7 +50,7 @@ export default function CategoryFilter({
     }
   }, [isOpen])
   return (
-    <div className="relative inline-block w-full" ref={container}>
+    <div className="relative inline-block w-full" ref={containerRef}>
       <button
         type="button"
         onClick={() => {
@@ -70,7 +72,6 @@ export default function CategoryFilter({
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
-          tabIndex="-1"
         >
           <div className="relative flex flex-col justify-center mx-2.5 mt-2">
             <RiSearchLine className="text-md absolute ml-3 text-black" />
@@ -96,37 +97,51 @@ export default function CategoryFilter({
             />
           </div>
           <ul className="py-2 space-y-1">
+            {!searchValue ? (
+              <li
+                onClick={() => router.push('/courses')}
+                className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
+                  !query?.id
+                    ? 'pointer-events-none text-gray-400'
+                    : 'cursor-pointer'
+                }`}
+              >
+                All Categories
+              </li>
+            ) : null}
             {searchResults.length
               ? searchResults.map((item, i) => (
                   <li
                     key={i}
-                    className=" hover:bg-gray-100 flex items-center px-3 py-2 font-normal"
+                    onClick={() =>
+                      router.push(
+                        `/courses/${item.split(' ').join('-').toLowerCase()}`
+                      )
+                    }
+                    className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
+                      query?.id == item.split(' ').join('-').toLowerCase()
+                        ? 'pointer-events-none text-gray-400'
+                        : 'cursor-pointer'
+                    }`}
                   >
-                    <Link
-                      key={i}
-                      href={`/courses/${item
-                        .split(' ')
-                        .join('-')
-                        .toLowerCase()}`}
-                    >
-                      <a className="w-full">{item}</a>
-                    </Link>
+                    {item}
                   </li>
                 ))
               : input.map((item, i) => (
                   <li
                     key={i}
-                    className=" hover:bg-gray-100 flex items-center px-3 py-2 font-normal"
+                    onClick={() =>
+                      router.push(
+                        `/courses/${item.split(' ').join('-').toLowerCase()}`
+                      )
+                    }
+                    className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
+                      query?.id == item.split(' ').join('-').toLowerCase()
+                        ? 'pointer-events-none text-gray-400'
+                        : 'cursor-pointer'
+                    }`}
                   >
-                    <Link
-                      key={i}
-                      href={`/courses/${item
-                        .split(' ')
-                        .join('-')
-                        .toLowerCase()}`}
-                    >
-                      <a className="w-full">{item}</a>
-                    </Link>
+                    {item}
                   </li>
                 ))}
           </ul>
