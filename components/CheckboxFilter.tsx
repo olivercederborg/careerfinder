@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
+
 import { BsCaretDownFill } from 'react-icons/bs'
 import { RiSearchLine } from 'react-icons/ri'
 
@@ -23,14 +23,14 @@ export default function CheckboxFilter({
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [isOpen, setIsOpen] = useState<boolean>()
 
-  const { query } = useRouter()
-
   const handleCheckboxes = (e) => {
     if (e.target.checked) {
-      setFilteredInput(() => [...filteredInput, e.target.value])
+      setFilteredInput(() => [...filteredInput, e.target.value.toLowerCase()])
     } else if (!e.target.checked) {
       setFilteredInput(() =>
-        filteredInput.filter((item) => item !== e.target.value)
+        filteredInput.filter(
+          (item) => item.toLowerCase() !== e.target.value.toLowerCase()
+        )
       )
     }
   }
@@ -41,23 +41,6 @@ export default function CheckboxFilter({
       setSearchValue('')
     }
   }
-
-  useEffect(() => {
-    input?.forEach((item, i) => {
-      if (
-        filteredInput.includes(item.category) &&
-        !filteredInput.includes(item)
-      ) {
-        setFilteredInput(() => [...filteredInput, item])
-      } else {
-        setFilteredInput(() =>
-          input?.filter((item) => filteredInput.includes(item.category))
-        )
-      }
-    })
-
-    setFilteredInput(() => filteredInput)
-  }, [filteredInput])
 
   useEffect(() => {
     if (searchValue) {
@@ -114,7 +97,7 @@ export default function CheckboxFilter({
               ref={searchBarRef}
               type="text"
               onChange={() => setSearchValue(searchBarRef.current.value)}
-              placeholder="Search for category"
+              placeholder="Search"
               className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main outline-none focus:border transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
             />
           </div>
@@ -135,7 +118,11 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={filteredInput.includes(filter) ? true : false}
+                    checked={
+                      filteredInput.includes(filter.toLowerCase())
+                        ? true
+                        : false
+                    }
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
@@ -153,7 +140,11 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={filteredInput.includes(filter) ? true : false}
+                    checked={
+                      filteredInput.includes(filter.toLowerCase())
+                        ? true
+                        : false
+                    }
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
