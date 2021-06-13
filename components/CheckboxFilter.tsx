@@ -1,36 +1,42 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { RiSearchLine } from 'react-icons/ri'
 
+interface Props {
+  children: any
+  input: any[]
+  filteredInput: any[]
+  setFilteredInput: (value: React.SetStateAction<any[]>) => void
+}
+
 export default function CheckboxFilter({
   children,
   input,
-  inputFiltered,
-  setInputFiltered,
-  ...props
-}) {
-  const container = useRef(null)
+  filteredInput,
+  setFilteredInput,
+}: Props) {
+  const containerRef = useRef(null)
   const searchBarRef = useRef(null)
-  const categoryRef = useRef(null)
-  const checkBoxRef = useRef(null)
 
-  const [searchValue, setSearchValue] = useState('')
-  const [searchResults, setSearchResults] = useState([])
-  const [isOpen, setIsOpen] = useState()
-  const [inputFilters, setInputFilters] = useState([])
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isOpen, setIsOpen] = useState<boolean>()
+
+  const { query } = useRouter()
 
   const handleCheckboxes = (e) => {
     if (e.target.checked) {
-      setInputFilters([...categoryFilters, e.target.value.toLowerCase()])
+      setFilteredInput(() => [...filteredInput, e.target.value])
     } else if (!e.target.checked) {
-      setInputFilters(
-        categoryFilters.filter((item) => item !== e.target.value.toLowerCase())
+      setFilteredInput(() =>
+        filteredInput.filter((item) => item !== e.target.value)
       )
     }
   }
 
-  const handleClickOutside = (event) => {
-    if (container.current && !container.current.contains(event.target)) {
+  const handleClickOutside = (e) => {
+    if (containerRef.current && !containerRef.current.contains(e.target)) {
       setIsOpen(false)
       setSearchValue('')
     }
@@ -39,21 +45,25 @@ export default function CheckboxFilter({
   useEffect(() => {
     input?.forEach((item, i) => {
       if (
-        inputFilters.includes(item.category) &&
-        !inputFiltered.includes(item)
+        filteredInput.includes(item.category) &&
+        !filteredInput.includes(item)
       ) {
-        setInputFiltered([...inputFiltered, item])
+        setFilteredInput(() => [...filteredInput, item])
       } else {
-        setInputFiltered(
-          input?.filter((item) => inputFilters.includes(item.category))
+        setFilteredInput(() =>
+          input?.filter((item) => filteredInput.includes(item.category))
         )
       }
     })
-  }, [inputFilters])
+
+    setFilteredInput(() => filteredInput)
+  }, [filteredInput])
 
   useEffect(() => {
     if (searchValue) {
-      let resultsArray = input.filter((item) => item.includes(searchValue))
+      let resultsArray = input.filter((item) =>
+        item.toLowerCase().includes(searchValue.toLowerCase())
+      )
       setSearchResults(resultsArray)
     } else {
       setSearchResults([])
@@ -68,8 +78,9 @@ export default function CheckboxFilter({
       })
     }
   }, [isOpen])
+
   return (
-    <div className="relative inline-block w-full" ref={container}>
+    <div className="relative inline-block w-full" ref={containerRef}>
       <button
         type="button"
         onClick={() => {
@@ -80,34 +91,22 @@ export default function CheckboxFilter({
         className="inline-flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
         id="menu-button"
       >
-        {inputFilters.length && inputFilters.length <= 1
-          ? inputFilters
-          : inputFilters.length > 1
-          ? `${inputFilters.slice(0, 1).join(', ')} +${
-              inputFilters.slice(1).length
+        {filteredInput.length && filteredInput.length <= 1
+          ? filteredInput
+          : filteredInput.length > 1
+          ? `${filteredInput.slice(0, 1).join(', ')} +${
+              filteredInput.slice(1).length
             }`
           : `${children}`}
         <BsCaretDownFill className="ml-3" />
       </button>
 
-      {inputFilters.length ? (
-        <button
-          className="ml-4"
-          onClick={() => {
-            setInputFilters([])
-          }}
-        >
-          Clear
-        </button>
-      ) : null}
-
       {isOpen && (
         <div
-          className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg"
+          className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute left-0 w-full md:w-[272px] mt-2 z-20 origin-top-right bg-white rounded-[10px] shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
-          tabIndex="-1"
         >
           <div className="relative flex flex-col justify-center mx-2.5 mt-2">
             <RiSearchLine className="text-md absolute ml-3 text-black" />
@@ -122,46 +121,43 @@ export default function CheckboxFilter({
           <form
             name="categoryForm"
             id="categoryForm"
-            ref={categoryRef}
             onChange={handleCheckboxes}
             className="py-2 space-y-1"
           >
             {searchValue && searchResults.length ? (
-              searchResults.map((category, i) => (
+              searchResults.map((filter, i) => (
                 <label
                   key={i}
-                  htmlFor={category}
+                  htmlFor={filter}
                   className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
                 >
                   <input
-                    ref={checkBoxRef}
-                    id={category}
+                    id={filter}
                     type="checkbox"
-                    value={category}
-                    checked={categoryFilters.includes(category) ? true : false}
+                    value={filter}
+                    checked={filteredInput.includes(filter) ? true : false}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
-                  {category[0].toUpperCase() + category.slice(1).toLowerCase()}
+                  {filter}
                 </label>
               ))
             ) : !searchValue && !searchResults.length ? (
-              input.slice(0, 5).map((category, i) => (
+              input.map((filter, i) => (
                 <label
                   key={i}
-                  htmlFor={category}
+                  htmlFor={filter}
                   className="hover:bg-gray-100 checked:bg-black group flex items-center px-3 py-2 cursor-pointer"
                 >
                   <input
-                    ref={checkBoxRef}
-                    id={category}
+                    id={filter}
                     type="checkbox"
-                    value={category}
-                    checked={categoryFilters.includes(category) ? true : false}
+                    value={filter}
+                    checked={filteredInput.includes(filter) ? true : false}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
-                  {category[0].toUpperCase() + category.slice(1).toLowerCase()}
+                  {filter}
                 </label>
               ))
             ) : (
