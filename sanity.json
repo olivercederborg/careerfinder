@@ -1,0 +1,30 @@
+{
+  "root": true,
+  "project": {
+    "name": "Careerfinder"
+  },
+  "api": {
+    "projectId": "98ibb1it",
+    "dataset": "production"
+  },
+  "plugins": [
+    "@sanity/base",
+    "@sanity/components",
+    "@sanity/default-layout",
+    "@sanity/default-login",
+    "@sanity/desk-tool",
+    "@sanity/google-maps-input",
+    "media-library"
+  ],
+  "env": {
+    "development": {
+      "plugins": ["@sanity/vision"]
+    }
+  },
+  "parts": [
+    {
+      "name": "part:@sanity/base/schema",
+      "path": "./schemas/index"
+    }
+  ]
+}
