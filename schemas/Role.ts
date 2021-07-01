@@ -1,10 +1,10 @@
-import { NAME_FIELD } from './primitives'
+import { NAME_FIELD, slugField } from './primitives'
 
 export const Role = {
   title: 'Role',
   name: 'role',
   type: 'document',
-  fields: [NAME_FIELD],
+  fields: [NAME_FIELD, slugField('name')],
 }
 
 export const ReferenceRole = {

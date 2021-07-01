@@ -1,5 +1,4 @@
-import { ReferenceCourseCategory } from './CourseCategory'
-import { NAME_FIELD } from './primitives'
+import { NAME_FIELD, slugField } from './primitives'
 
 export const Course = {
   title: 'Course',
@@ -7,6 +6,7 @@ export const Course = {
   type: 'document',
   fields: [
     NAME_FIELD,
+    slugField('name'),
     {
       title: 'Course categories',
       name: 'courseCategories',
@@ -17,6 +17,14 @@ export const Course = {
           to: [{ type: 'courseCategory' }],
         },
       ],
+    },
+    {
+      title: 'Link',
+      name: 'link',
+      type: 'url',
+      validation: (Rule) => {
+        return Rule.uri({ scheme: ['http', 'https'] })
+      },
     },
     {
       name: 'price',
