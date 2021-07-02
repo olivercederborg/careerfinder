@@ -1,4 +1,5 @@
-import type { Area, Discipline, Job, Prisma, Role } from '.prisma/client'
+import { Area, Discipline, Job, Role } from 'codegen'
+import { SanityReference } from 'sanity-codegen'
 
 export type CopyFunctionSignatureType<T extends (...args: any) => any> = (
   ...args: Parameters<T>
@@ -10,9 +11,11 @@ export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>
 }
 
-export type JobValues = Prisma.JobCreateArgs['data'] & {
-  id: number
-  area?: Prisma.AreaCreateArgs['data']
-  discipline?: Prisma.DisciplineCreateArgs['data']
-  role?: Prisma.RoleCreateArgs['data']
-}
+export type Career = {
+  _type: 'job'
+} & Job & {
+    hot: boolean
+    discipline: SanityReference<Discipline>
+    area: SanityReference<Area>
+    role: SanityReference<Role>
+  }

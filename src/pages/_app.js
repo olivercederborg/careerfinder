@@ -2,8 +2,6 @@ import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
 import { fetcher } from '../lib/fetcher'
-import { usePageView } from '../hooks'
-import { Layout as BackendLayout } from '../components/backend/Layout'
 
 import 'styles/tailwind.css'
 import 'styles/global.scss'
@@ -17,8 +15,6 @@ const queryClient = new QueryClient({
 })
 
 function MyApp({ Component, pageProps, router }) {
-  usePageView()
-
   return (
     <>
       <Head>
@@ -30,13 +26,7 @@ function MyApp({ Component, pageProps, router }) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        {router.pathname.startsWith('/backend') ? (
-          <BackendLayout>
-            <Component {...pageProps} />
-          </BackendLayout>
-        ) : (
-          <Component {...pageProps} />
-        )}
+        <Component {...pageProps} />
       </QueryClientProvider>
     </>
   )

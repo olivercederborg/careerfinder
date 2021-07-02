@@ -1,13 +1,20 @@
 import Head from 'next/head'
-import { RiSearchLine, RiShuffleFill } from 'react-icons/ri'
-import { BsFillLightningFill, BsCaretDownFill } from 'react-icons/bs'
+import { RiSearchLine } from 'react-icons/ri'
+import { BsFillLightningFill } from 'react-icons/bs'
+import BlockContent from '@sanity/block-content-to-react'
 
-import { careers } from '../careers'
 import Navbar from '../components/Navbar'
 import CareerChart from '../components/CareerChart'
 import { useRef, useState } from 'react'
 import CourseCard from '../components/CourseCard'
 import { useEffect } from 'react'
+import { sanity } from 'lib/sanity'
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+} from 'next'
+import type { Career } from 'types'
 
 const courses = [
   {
@@ -76,8 +83,60 @@ const courses = [
   },
 ]
 
-const Career = () => {
-  const career = careers[0]
+type StaticProps = {
+  career: Career
+}
+
+export const getStaticProps: GetStaticProps<StaticProps> = async ({
+  params,
+}) => {
+  const { slug } = params
+  console.log(slug)
+
+  let [career] = await sanity.getAll('job', `slug.current == "${slug}"`)
+
+  console.log(career)
+
+  let resolvedCareer: Career = {
+    ...career,
+    hot: Math.random() > 0.9,
+    discipline: {
+      ...(await sanity.expand(career.discipline)),
+      ...career.discipline,
+    },
+    area: {
+      ...(await sanity.expand(career.area)),
+      ...career.area,
+    },
+    role: {
+      ...(await sanity.expand(career.role)),
+      ...career.role,
+    },
+  }
+
+  return {
+    props: {
+      career: resolvedCareer,
+    },
+  }
+}
+
+export const getStaticPaths: GetStaticPaths = async ({}) => {
+  const careers = await sanity.getAll('job')
+
+  return {
+    paths: careers.map((career) => ({
+      params: {
+        slug: career.slug.current,
+      },
+    })),
+    fallback: false,
+  }
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticProps>
+
+const CareerPage = ({ career }: Props) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
 
@@ -107,24 +166,27 @@ const Career = () => {
 
       <Navbar />
 
-      <main className="xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12 grid grid-cols-1">
+      <main className="grid grid-cols-1 xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12">
         <img
-          src={career.image}
+          src={'career.image'}
           alt={career.name}
           className="max-h-[450px] object-cover md:col-span-12 w-full xl:rounded-xl"
         />
 
-        <article className="mt-7 md:mt-12 md:col-span-6 3xl:col-span-4 px-6">
+        <article className="px-6 mt-7 md:mt-12 md:col-span-6 3xl:col-span-4">
           <h2 className="inline-flex items-center text-3xl font-semibold">
             {career.name}
             {career.hot && (
-              <BsFillLightningFill className="filter drop-shadow-lightning ml-3 text-2xl text-yellow-400" />
+              <BsFillLightningFill className="ml-3 text-2xl text-yellow-400 filter drop-shadow-lightning" />
             )}
           </h2>
-          <p className="mt-7 font-semibold">Life of a {career.name}</p>
-          <p className="mt-3">{career.description}</p>
+          <p className="font-semibold mt-7">Life of a {career.name}</p>
+          <BlockContent
+            blocks={career.description}
+            className="mt-3 space-y-2"
+          ></BlockContent>
           <img
-            src={career.imageTwo}
+            src={'career.imageTwo'}
             alt=""
             className="mt-8 rounded-xl h-[300px] object-cover w-full hidden md:block"
           />
@@ -137,38 +199,31 @@ const Career = () => {
             sectionNavIsTop && 'mx-0 rounded-none'
           }`}
         >
-          <a href="#courses" className="text-gray-main py-6 font-medium">
+          <a href="#courses" className="py-6 font-medium text-gray-main">
             Courses
           </a>
-          <a href="#potential" className="text-gray-main py-6 font-medium">
+          <a href="#potential" className="py-6 font-medium text-gray-main">
             Potential
           </a>
-          <a href="#jobs" className="text-gray-main py-6 font-medium">
+          <a href="#jobs" className="py-6 font-medium text-gray-main">
             Jobs
           </a>
         </nav>
 
         <section
           id="courses"
-          className="md:col-span-6 3xl:col-span-4 flex flex-col items-start px-6 my-12 font-semibold"
+          className="flex flex-col items-start px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Courses</h3>
 
-          {courses.map((course, i) => {
-            let freeCourses = course.courses.filter(
-              (item) => item.cost === 'free'
-            )
-
-            let paidCourses = course.courses.filter(
-              (item) => item.cost !== 'free'
-            )
+          {career.courses.map((course, i) => {
             return (
               <CourseCard
                 key={i}
                 name={course.title}
-                free={freeCourses.length}
-                paid={paidCourses.length}
+                free={true}
+                paid={true}
                 courses={course.courses}
               />
             )
@@ -181,12 +236,12 @@ const Career = () => {
 
         <section
           id="potential"
-          className="md:col-span-6 3xl:col-span-4 flex flex-col px-6 my-12 font-semibold"
+          className="flex flex-col px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Earning Potential</h3>
 
-          <div className="rounded-2xl md:inline-flex md:self-start flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg">
+          <div className="flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg rounded-2xl md:inline-flex md:self-start">
             <button className="px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out text-sm">
               1 year
             </button>
@@ -203,7 +258,7 @@ const Career = () => {
 
         <section
           id="jobs"
-          className="md:col-span-6 3xl:col-span-4 px-6 my-12 font-semibold"
+          className="px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Jobs Available</h3>
@@ -218,9 +273,9 @@ const Career = () => {
           </div>
 
           <div className="mt-8 space-y-4">
-            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
+            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
               <div className="flex flex-col w-8/12">
-                <p className="text-gray-main text-sm font-normal">
+                <p className="text-sm font-normal text-gray-main">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">
@@ -230,9 +285,9 @@ const Career = () => {
               <p className="text-2xl">13.342</p>
             </section>
 
-            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
+            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
               <div className="flex flex-col w-8/12">
-                <p className="text-gray-main text-sm font-normal">
+                <p className="text-sm font-normal text-gray-main">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">Europe</p>
@@ -240,9 +295,9 @@ const Career = () => {
               <p className="text-2xl">27.281</p>
             </section>
 
-            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
+            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
               <div className="flex flex-col w-8/12">
-                <p className="text-gray-main text-sm font-normal">
+                <p className="text-sm font-normal text-gray-main">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">China</p>
@@ -256,4 +311,4 @@ const Career = () => {
   )
 }
 
-export default Career
+export default CareerPage

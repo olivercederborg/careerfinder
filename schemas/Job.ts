@@ -18,5 +18,18 @@ export const Job = {
       title: 'Description',
       type: 'blockContent',
     },
+    {
+      title: 'Courses',
+      name: 'courses',
+      type: 'array',
+      of: [
+        {
+          title: 'Course',
+          name: 'course',
+          type: 'reference',
+          to: [{ type: 'course' }],
+        },
+      ],
+    },
   ],
 }

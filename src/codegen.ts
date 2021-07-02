@@ -40,6 +40,13 @@ export interface Discipline extends SanityDocument {
    *
    */
   name?: string;
+
+  /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
 }
 
 /**
@@ -56,6 +63,13 @@ export interface Area extends SanityDocument {
    *
    */
   name?: string;
+
+  /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
 }
 
 /**
@@ -72,6 +86,13 @@ export interface Role extends SanityDocument {
    *
    */
   name?: string;
+
+  /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
 }
 
 /**
@@ -88,6 +109,13 @@ export interface Job extends SanityDocument {
    *
    */
   name?: string;
+
+  /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
 
   /**
    * Discipline — `reference`
@@ -116,6 +144,13 @@ export interface Job extends SanityDocument {
    *
    */
   description?: BlockContent;
+
+  /**
+   * Courses — `array`
+   *
+   *
+   */
+  courses?: Array<SanityKeyedReference<Course>>;
 }
 
 /**
@@ -132,6 +167,13 @@ export interface CourseCategory extends SanityDocument {
    *
    */
   name?: string;
+
+  /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
 }
 
 /**
@@ -150,11 +192,25 @@ export interface Course extends SanityDocument {
   name?: string;
 
   /**
+   * Slug — `slug`
+   *
+   *
+   */
+  slug?: { _type: "slug"; current: string };
+
+  /**
    * Course categories — `array`
    *
    *
    */
   courseCategories?: Array<SanityKeyedReference<CourseCategory>>;
+
+  /**
+   * Link — `url`
+   *
+   *
+   */
+  link?: string;
 
   /**
    * Price — `string`
