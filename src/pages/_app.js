@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
-import { fetcher } from '../lib/fetcher'
+import { fetcher } from '@lib/fetcher'
 import { usePageView } from '../hooks'
 
-import 'styles/tailwind.css'
-import 'styles/global.scss'
+import '@styles/tailwind.css'
+import '@styles/global.scss'
 
 const queryClient = new QueryClient({
   defaultOptions: {

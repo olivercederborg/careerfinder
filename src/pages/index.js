@@ -3,7 +3,7 @@ import { RiSearchLine, RiShuffleFill } from 'react-icons/ri'
 import { FiChevronDown } from 'react-icons/fi'
 import { HiCheck } from 'react-icons/hi'
 
-import { careers } from '../careers'
+import { careers } from '../../careers'
 import Navbar from '../components/Navbar'
 import { useEffect, useRef, useState } from 'react'
 import CareerCard from '../components/CareerCard'
@@ -73,7 +73,13 @@ export default function Home() {
         </div>
 
         <div className="gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0 grid grid-cols-12 pb-8 mx-6 border-b">
-          <SearchBar setSearchValue={setSearchValue} />
+          <div className="md:col-span-6 relative flex flex-col justify-center col-span-12">
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              placeholderText="Search for careers"
+            />
+          </div>
 
           <div className="md:justify-start md:col-span-6 flex items-center justify-between col-span-12">
             <p className="text-base font-semibold uppercase">Category</p>

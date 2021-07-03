@@ -37,8 +37,6 @@ export default function CategoryFilter({ children, input }: Props) {
     } else {
       setSearchResults([])
     }
-    console.log(searchResults)
-    console.log(searchValue)
   }, [searchValue])
 
   useEffect(() => {

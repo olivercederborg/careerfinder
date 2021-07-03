@@ -15,7 +15,12 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"]
+      "@components/*": ["src/components/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@lib/*": ["src/lib/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@types/*": ["src/types/*"],
+      "@styles/*": ["src/styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "scripts/insert.js"],

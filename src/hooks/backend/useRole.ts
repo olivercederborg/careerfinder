@@ -1,6 +1,6 @@
 import { Area, Role } from '.prisma/client'
 import axios from 'axios'
-import { PostRole } from 'pages/api/role'
+import { PostRole } from 'src/pages/api/role'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Maybe } from 'types'
 

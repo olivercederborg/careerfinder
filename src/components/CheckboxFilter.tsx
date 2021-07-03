@@ -75,11 +75,14 @@ export default function CheckboxFilter({
         id="menu-button"
       >
         {filteredInput.length && filteredInput.length <= 1
-          ? filteredInput
+          ? `${filteredInput[0]
+              .slice(0, 1)
+              .toUpperCase()}${filteredInput[0].slice(1)}`
           : filteredInput.length > 1
-          ? `${filteredInput.slice(0, 1).join(', ')} +${
-              filteredInput.slice(1).length
-            }`
+          ? `${
+              filteredInput[0].slice(0, 1).toUpperCase() +
+              filteredInput[0].slice(1)
+            } +${filteredInput.slice(1).length}`
           : `${children}`}
         <BsCaretDownFill className="ml-3" />
       </button>
@@ -118,11 +121,7 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={
-                      filteredInput.includes(filter.toLowerCase())
-                        ? true
-                        : false
-                    }
+                    checked={filteredInput.includes(filter.toLowerCase())}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
@@ -140,11 +139,7 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={
-                      filteredInput.includes(filter.toLowerCase())
-                        ? true
-                        : false
-                    }
+                    checked={filteredInput.includes(filter.toLowerCase())}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />

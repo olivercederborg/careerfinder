@@ -39,6 +39,12 @@ const filterByPrice = (coursesInput: any[], priceValues) => {
   })
 }
 
+const filterBySearch = (coursesInput: any[], query: string) => {
+  return coursesInput.filter((course) =>
+    course.name.toLowerCase().includes(query.toLowerCase())
+  )
+}
+
 const useFilters = () => {
   const [filteredCourses, setFilteredCourses] = useState([])
 
@@ -93,7 +99,15 @@ const useFilters = () => {
       setFilteredCourses(() => initialCourses)
     }
   }
-  return { filteredCourses, useFilter }
+
+  const useSearchFilter = (courses: any[], query?: string) => {
+    if (query) {
+      return filterBySearch(courses, query)
+    }
+    return []
+  }
+
+  return { filteredCourses, useFilter, useSearchFilter }
 }
 
 export default useFilters

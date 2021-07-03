@@ -1,6 +1,6 @@
 import { Job, Role } from '.prisma/client'
 import axios from 'axios'
-import { PostJob } from 'pages/api/job'
+import { PostJob } from 'src/pages/api/job'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 export type JobFormValues = Job & {

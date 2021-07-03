@@ -1,7 +1,7 @@
 import { Area, Discipline } from '.prisma/client'
 import axios from 'axios'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { PostArea } from 'pages/api/area/[id]'
+import { PostArea } from 'src/pages/api/area/[id]'
 
 export type AreaFormValues = Area & {
   discipline: Discipline

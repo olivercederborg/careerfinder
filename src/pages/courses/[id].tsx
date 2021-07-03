@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+
 import axios from 'axios'
 import { useQuery } from 'react-query'
 
@@ -10,7 +11,9 @@ import CoursesTable from '@components/CoursesTable'
 import CategoryFilter from '@components/CategoryFilter'
 import CheckboxFilter from '@components/CheckboxFilter'
 import LoadMoreButton from '@components/LoadMoreButton'
-import useFilters from '../../hooks/useCourseFilter'
+import SearchBar from '@components/SearchBar'
+import useFilters from '@hooks/useCourseFilter'
+import { setCoursesUrlParams } from '@helpers/setUrlParams'
 
 export async function getStaticPaths() {
   const res = await axios(`http://localhost:8000/courses/`)
@@ -27,6 +30,7 @@ export async function getStaticPaths() {
     fallback: false,
   }
 }
+
 export async function getStaticProps(ctx) {
   const id = ctx.params.id
   const res = await axios(`http://localhost:8000/courses/${id}`)
@@ -47,21 +51,21 @@ export async function getStaticProps(ctx) {
 }
 
 export default function CoursesPage({ data: category }) {
-  const { filteredCourses, useFilter } = useFilters()
-  const { query }: any = useRouter()
+  const { data: fetched } = useQuery('fetchCourses', () =>
+    axios('http://localhost:8000/courses/')
+  )
+
   const router = useRouter()
-
-  const {
-    isLoading: isLoadingCourses,
-    error: coursesError,
-    data: fetched,
-  } = useQuery('fetchCourses', () => axios('http://localhost:8000/courses/'))
-
-  const allCourses = fetched?.data
+  const { query }: any = useRouter()
+  const { filteredCourses, useFilter, useSearchFilter } = useFilters()
 
   const [mounted, setMounted] = useState<boolean>(false)
-  const [loadedCoursesAmount, setLoadedCoursesAmount] = useState<number>(10)
+  const [searchValue, setSearchValue] = useState('')
   const [courses, setCourses] = useState(category?.courses || [])
+  const [coursesBySearch, setCoursesBySearch] = useState(
+    useSearchFilter(category?.courses, searchValue)
+  )
+  const [loadedCoursesAmount, setLoadedCoursesAmount] = useState<number>(10)
   const [categories, setCategories] = useState([])
   const [difficulties, setDifficulties] = useState([])
   const [pricing, setPricing] = useState([])
@@ -72,16 +76,19 @@ export default function CoursesPage({ data: category }) {
   )
   const [filteredCoursePricing, setFilteredCoursePricing] = useState([])
 
+  const allCourses = fetched?.data
+
   useEffect(() => setMounted(true), [])
 
   useEffect(() => setCourses(category.courses), [category])
 
+  // Filter courses by inputs.
   useEffect(() => {
     useFilter(
       courses,
-      filteredCourseCategories.length && filteredCourseCategories,
-      filteredCourseDifficulties.length && filteredCourseDifficulties,
-      filteredCoursePricing.length && filteredCoursePricing
+      filteredCourseCategories || null,
+      filteredCourseDifficulties || null,
+      filteredCoursePricing || null
     )
   }, [
     filteredCourseCategories,
@@ -89,103 +96,16 @@ export default function CoursesPage({ data: category }) {
     filteredCoursePricing,
   ])
 
+  // Set filtering URL params when filters change.
   useEffect(() => {
     if (mounted) {
-      if (
-        filteredCourseCategories.length ||
-        filteredCourseDifficulties.length ||
-        filteredCoursePricing.length
-      ) {
-        const courseCategoryUrlParams = filteredCourseCategories
-          .join(',')
-          .toLowerCase()
-
-        const difficultyUrlParams = filteredCourseDifficulties
-          .join(',')
-          .toLowerCase()
-
-        const pricingUrlParams = filteredCoursePricing.join(',').toLowerCase()
-
-        if (
-          courseCategoryUrlParams.length &&
-          !difficultyUrlParams.length &&
-          !pricingUrlParams.length
-        ) {
-          router.push(`?categories=${courseCategoryUrlParams}`, undefined, {
-            shallow: true,
-          })
-        } else if (
-          !courseCategoryUrlParams.length &&
-          difficultyUrlParams.length &&
-          !pricingUrlParams.length
-        ) {
-          router.push(`?difficulties=${difficultyUrlParams}`, undefined, {
-            shallow: true,
-          })
-        } else if (
-          !courseCategoryUrlParams.length &&
-          !difficultyUrlParams.length &&
-          pricingUrlParams.length
-        ) {
-          router.push(`?pricing=${pricingUrlParams}`, undefined, {
-            shallow: true,
-          })
-        } else if (
-          courseCategoryUrlParams.length &&
-          difficultyUrlParams.length &&
-          pricingUrlParams.length
-        ) {
-          router.push(
-            `?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        } else if (
-          !courseCategoryUrlParams.length &&
-          difficultyUrlParams.length &&
-          pricingUrlParams.length
-        ) {
-          router.push(
-            `?difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        } else if (
-          courseCategoryUrlParams.length &&
-          !difficultyUrlParams.length &&
-          pricingUrlParams.length
-        ) {
-          router.push(
-            `?categories=${courseCategoryUrlParams}&pricing=${pricingUrlParams}`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        } else if (
-          courseCategoryUrlParams.length &&
-          difficultyUrlParams.length &&
-          !pricingUrlParams.length
-        ) {
-          router.push(
-            `?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        }
-      } else if (
-        !filteredCourseCategories.length &&
-        !filteredCourseDifficulties.length &&
-        !filteredCoursePricing.length
-      ) {
-        router.push(query.id, undefined, { shallow: true })
-      }
+      setCoursesUrlParams(
+        router,
+        query,
+        filteredCourseCategories || null,
+        filteredCourseDifficulties || null,
+        filteredCoursePricing || null
+      )
     }
   }, [
     filteredCourseCategories,
@@ -193,8 +113,14 @@ export default function CoursesPage({ data: category }) {
     filteredCoursePricing,
   ])
 
+  // Reset filters when changing overall category.
   useEffect(() => {
-    if (mounted && !query?.categories) {
+    if (
+      mounted &&
+      !query?.categories &&
+      !query?.difficulties &&
+      !query?.pricing
+    ) {
       setFilteredCourseCategories([])
       setFilteredCourseDifficulties([])
       setFilteredCoursePricing([])
@@ -220,13 +146,10 @@ export default function CoursesPage({ data: category }) {
   }, [query?.prices])
 
   useEffect(() => {
-    let categoriesArray = []
-
     if (allCourses) {
-      allCourses.forEach((courseCategory) => {
-        categoriesArray.push(courseCategory?.category)
-        setCategories(categoriesArray)
-      })
+      setCategories(() =>
+        allCourses.map((courseCategory) => courseCategory.category)
+      )
     }
   }, [allCourses])
 
@@ -237,6 +160,12 @@ export default function CoursesPage({ data: category }) {
 
     if (category) {
       category?.courses.forEach((course) => {
+        course.categories.forEach((item) => {
+          if (!courseCategoriesArray.includes(item)) {
+            courseCategoriesArray.push(item)
+          }
+        })
+
         if (!difficultiesArray.includes(course.difficulty)) {
           difficultiesArray.push(course.difficulty)
         }
@@ -246,19 +175,63 @@ export default function CoursesPage({ data: category }) {
         } else if (course.cost == 0 && !pricingArray.includes('Free')) {
           pricingArray.push('Free')
         }
-
-        course.categories.forEach((item) => {
-          if (!courseCategoriesArray.includes(item)) {
-            courseCategoriesArray.push(item)
-          }
-        })
-
-        setCourseCategories(courseCategoriesArray)
-        setDifficulties(difficultiesArray)
-        setPricing(pricingArray)
       })
+
+      setCourseCategories(courseCategoriesArray)
+      setDifficulties(difficultiesArray)
+      setPricing(pricingArray)
     }
   }, [category])
+
+  useEffect(() => {
+    useFilter(
+      courses,
+      filteredCourseCategories.length && filteredCourseCategories,
+      filteredCourseDifficulties.length && filteredCourseDifficulties,
+      filteredCoursePricing.length && filteredCoursePricing
+    )
+  }, [
+    filteredCourseCategories,
+    filteredCourseDifficulties,
+    filteredCoursePricing,
+  ])
+
+  useEffect(() => {
+    setCoursesBySearch(() =>
+      useSearchFilter(filteredCourses || courses, searchValue)
+    )
+  }, [searchValue, filteredCourses])
+
+  useEffect(() => {
+    if (mounted) {
+      setCoursesUrlParams(
+        router,
+        query,
+        filteredCourseCategories || null,
+        filteredCourseDifficulties || null,
+        filteredCoursePricing || null
+      )
+    }
+  }, [
+    filteredCourseCategories,
+    filteredCourseDifficulties,
+    filteredCoursePricing,
+  ])
+
+  useEffect(() => {
+    if (mounted && query?.categories)
+      setFilteredCourseCategories(query?.categories?.split(','))
+  }, [query?.categories])
+
+  useEffect(() => {
+    if (mounted && query?.difficulties)
+      setFilteredCourseDifficulties(query?.difficulties?.split(','))
+  }, [query?.difficulties])
+
+  useEffect(() => {
+    if (mounted && query?.pricing)
+      setFilteredCoursePricing(query?.pricing?.split(','))
+  }, [query?.pricing])
 
   return (
     <>
@@ -323,24 +296,51 @@ export default function CoursesPage({ data: category }) {
             </CheckboxFilter>
           </div>
         </CourseFiltersShell>
+
+        <section className="container mt-8">
+          <label htmlFor="search-bar" className="md:w-72 inline-block w-full">
+            Search
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              placeholderText="Search courses"
+              eleId="search-bar"
+            />
+          </label>
+        </section>
+
         <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
-          {filteredCourses.length ? (
+          {searchValue && coursesBySearch.length ? (
+            <CoursesTable
+              inputCourses={coursesBySearch}
+              loadedCoursesAmount={loadedCoursesAmount}
+            />
+          ) : null}
+
+          {(searchValue && !coursesBySearch.length) ||
+          (!searchValue &&
+            !filteredCourses.length &&
+            (filteredCourseCategories.length ||
+              filteredCourseDifficulties.length ||
+              filteredCoursePricing)) ? (
+            <h2 className="py-8 text-xl text-center">
+              Sorry! We found no courses matching your filters.
+            </h2>
+          ) : null}
+
+          {!searchValue && filteredCourses.length ? (
             <CoursesTable
               inputCourses={filteredCourses}
               loadedCoursesAmount={loadedCoursesAmount}
             />
-          ) : !filteredCourses.length &&
-            (filteredCourseCategories.length ||
-              filteredCourseDifficulties.length) ? (
-            <h2 className="py-8 text-xl text-center">
-              Sorry! We found no courses matching your filters.
-            </h2>
-          ) : (
+          ) : (!searchValue && !filteredCourseCategories) ||
+            (!searchValue && !filteredCourseDifficulties) ||
+            (!searchValue && !filteredCoursePricing) ? (
             <CoursesTable
               inputCourses={courses}
               loadedCoursesAmount={loadedCoursesAmount}
             />
-          )}
+          ) : null}
         </section>
 
         {filteredCourses.length > loadedCoursesAmount ? (
