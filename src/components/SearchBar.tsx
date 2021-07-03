@@ -5,7 +5,7 @@ interface Props {
   searchValue: string
   setSearchValue: (string) => void
   placeholderText?: string
-  eleId: string
+  eleId?: string
 }
 
 export default function SearchBar({
