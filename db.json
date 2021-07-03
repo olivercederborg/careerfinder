@@ -1,0 +1,136 @@
+{ "courses": [
+  {
+    "id": "web-development",
+    "category": "Web Development",
+    "courses": [
+      {
+        "name": "React.js Introduction",
+        "publisher": "Codecademy",
+        "publisherLogo":
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
+        "categories": ["JavaScript", "React.js", "Topkek", "HTML", "CSS"],
+        "difficulty": "Beginner",
+        "cost": 0,
+        "isNew": true,
+        "isHot": false
+      },
+      {
+        "name": "Going to the depths with JavaScript",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["JavaScript"],
+        "difficulty": "Beginner",
+        "cost": 49.95,
+        "isNew": false,
+        "isHot": false
+      },
+      {
+        "name": "React.js Crash Course",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["React.js"],
+        "difficulty": "Intermediate",
+        "cost": 99,
+        "isNew": false,
+        "isHot": false
+      },
+      {
+        "name": "Front-end Developer Career Course",
+        "publisher": "Google",
+        "publisherLogo":
+        "https://www.pvaeshop.com/wp-content/uploads/2020/05/g.jpg",
+        "categories": ["HTML", "CSS", "JavaScript"],
+        "difficulty": "Beginner",
+        "cost": 199,
+        "isNew": true,
+        "isHot": false
+      },
+      {
+        "name": "Best Front-end dev course",
+        "publisher": "Google",
+        "publisherLogo":
+        "https://www.pvaeshop.com/wp-content/uploads/2020/05/g.jpg",
+        "categories": ["HTML", "CSS", "JavaScript", "React.js", "Svelte"],
+        "difficulty": "Beginner",
+        "cost": 300,
+        "isNew": false,
+        "isHot": false
+      },
+      {
+        "name": "Vue.js + Firebase",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["Vue.js", "Firebase", "HTML", "CSS"],
+        "difficulty": "Advanced",
+        "cost": 6969,
+        "isNew": false,
+        "isHot": true
+      }
+    ]
+  },
+  {
+    "id": "test-category",
+    "category": "Test Category",
+    "courses": [
+      {
+        "name": "Test 1",
+        "publisher": "Test",
+        "publisherLogo":
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
+        "categories": ["JavaScript", "React.js", "Test", "HTML", "CSS"],
+        "difficulty": "Beginner",
+        "cost": 0,
+        "isNew": true,
+        "isHot": false
+      },
+      {
+        "name": "Test 2",
+        "publisher": "Test",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["JavaScript", "YOYOYO"],
+        "difficulty": "Beginner",
+        "cost": 49.95,
+        "isNew": false,
+        "isHot": false
+      },
+      {
+        "name": "Test 3",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://ik.imagekit.io/himalayas/codecademy_logo_qjHd3EH8tx.jpeg",
+        "categories": ["React.js"],
+        "difficulty": "Intermediate",
+        "cost": 99,
+        "isNew": false,
+        "isHot": false
+      },
+      {
+        "name": "Test 4",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://www.pvaeshop.com/wp-content/uploads/2020/05/g.jpg",
+        "categories": ["HTML", "CSS", "JavaScript"],
+        "difficulty": "Beginner",
+        "cost": 199,
+        "isNew": true,
+        "isHot": false
+      },
+      {
+        "name": "Test 5",
+        "publisher": "Udemy",
+        "publisherLogo":
+        "https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1",
+        "categories": ["Vue.js", "Firebase", "HTML", "CSS"],
+        "difficulty": "Advanced",
+        "cost": 6969,
+        "isNew": false,
+        "isHot": true
+      }
+    ]
+  }
+]
+}
