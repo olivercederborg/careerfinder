@@ -13,9 +13,9 @@ generator client {
 model Discipline {
   id Int @id @default(autoincrement())
 
-  name String @unique
+  jobs Job[]
 
-  areas Area[]
+  name String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -24,12 +24,9 @@ model Discipline {
 model Area {
   id Int @id @default(autoincrement())
 
+  jobs Job[]
+
   name String @unique
-
-  discipline   Discipline? @relation(fields: [disciplineId], references: [id])
-  disciplineId Int?
-
-  roles Role[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -38,12 +35,9 @@ model Area {
 model Role {
   id Int @id @default(autoincrement())
 
-  name String @unique
-
-  area   Area? @relation(fields: [areaId], references: [id])
-  areaId Int?
-
   jobs Job[]
+
+  name String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -52,10 +46,14 @@ model Role {
 model Job {
   id Int @id @default(autoincrement())
 
-  name String
+  discipline   Discipline? @relation(fields: [disciplineId], references: [id])
+  disciplineId Int?
+  area         Area?       @relation(fields: [areaId], references: [id])
+  areaId       Int?
+  role         Role?       @relation(fields: [roleId], references: [id])
+  roleId       Int?
 
-  role   Role? @relation(fields: [roleId], references: [id])
-  roleId Int?
+  name String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
