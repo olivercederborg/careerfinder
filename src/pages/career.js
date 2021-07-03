@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { RiSearchLine, RiShuffleFill } from 'react-icons/ri'
 import { BsFillLightningFill, BsCaretDownFill } from 'react-icons/bs'
 
-import { careers } from '../careers'
+import { careers } from '../../careers'
 import Navbar from '../components/Navbar'
 import CareerChart from '../components/CareerChart'
 import { useRef, useState } from 'react'
