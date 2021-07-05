@@ -14,20 +14,25 @@ export const Job = {
     ReferenceArea,
     ReferenceRole,
     {
+      name: 'banner',
+      title: 'Banner',
+      type: 'image',
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'blockContent',
     },
     {
-      title: 'Courses',
-      name: 'courses',
+      title: 'Course categories',
+      name: 'courseCategories',
       type: 'array',
       of: [
         {
-          title: 'Course',
-          name: 'course',
+          title: 'Course category',
+          name: 'courseCategory',
           type: 'reference',
-          to: [{ type: 'course' }],
+          to: [{ type: 'courseCategory' }],
         },
       ],
     },

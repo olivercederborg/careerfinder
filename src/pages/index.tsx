@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { RiShuffleFill } from 'react-icons/ri'
 import { FiChevronDown } from 'react-icons/fi'
-import { differenceInDays } from 'date-fns'
 
 import Navbar from 'components/Navbar'
 import SearchBar from 'components/SearchBar'
@@ -10,37 +9,28 @@ import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { useEffect, useState } from 'react'
 import { sanity } from 'lib/sanity'
-import type { Career } from 'types'
+import { groq } from 'next-sanity'
+import { FrontpageCareer } from 'types'
 
 type StaticProps = {
-  careers: Career[]
+  careers: FrontpageCareer[]
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const careers = await sanity.getAll('job')
+const careersQuery = groq`*[_type == 'job']{
+  name,
+  "slug": slug.current,
+  banner,
+  "time": role->time,
+  "salary": role->salary,
+  "discipline": discipline->name,
+}`
 
-  const careersWithResolvedRefs: Career[] = await Promise.all(
-    careers.map(async (career) => ({
-      ...career,
-      hot: Math.random() > 0.9,
-      discipline: {
-        ...(await sanity.expand(career.discipline)),
-        ...career.discipline,
-      },
-      area: {
-        ...(await sanity.expand(career.area)),
-        ...career.area,
-      },
-      role: {
-        ...(await sanity.expand(career.role)),
-        ...career.role,
-      },
-    }))
-  )
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+  const careers = await sanity().fetch<FrontpageCareer[]>(careersQuery)
 
   return {
     props: {
-      careers: careersWithResolvedRefs,
+      careers,
     },
   }
 }

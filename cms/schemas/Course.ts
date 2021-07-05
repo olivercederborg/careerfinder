@@ -30,20 +30,16 @@ export const Course = {
       name: 'price',
       title: 'Price',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'displayImage',
-      title: 'Display Image',
+      name: 'publisherImage',
+      title: 'Publisher Image',
       type: 'image',
     },
     {
-      name: 'authorImage',
-      title: 'Author Image',
-      type: 'image',
-    },
-    {
-      name: 'author',
-      title: 'Author',
+      name: 'publisher',
+      title: 'Publisher',
       type: 'string',
     },
     {

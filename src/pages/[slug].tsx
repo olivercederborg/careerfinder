@@ -14,7 +14,8 @@ import type {
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next'
-import type { Career } from 'types'
+import { groq } from 'next-sanity'
+import { SingleCareer } from 'types'
 
 const courses = [
   {
@@ -84,50 +85,55 @@ const courses = [
 ]
 
 type StaticProps = {
-  career: Career
+  career: SingleCareer
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async ({
   params,
 }) => {
   const { slug } = params
-  console.log(slug)
 
-  let [career] = await sanity.getAll('job', `slug.current == "${slug}"`)
+  const career = await sanity().fetch<SingleCareer>(
+    groq`*[_type == 'job' && defined(slug.current) && slug.current == '${slug}'][0]{
+      name,
+      "slug": slug.current,
+      banner,
+      description,
+      courseCategories[]->{
+        name,
+        "slug": slug.current,
+        "courses": *[_type == 'course' && references(^._id)]{
+          name,
+          "slug": slug.current,
+          link,
+          publisher,
+          publisherImage,
+          price,
+        },
+      },
+    }`
+  )
 
-  console.log(career)
-
-  let resolvedCareer: Career = {
-    ...career,
-    hot: Math.random() > 0.9,
-    discipline: {
-      ...(await sanity.expand(career.discipline)),
-      ...career.discipline,
-    },
-    area: {
-      ...(await sanity.expand(career.area)),
-      ...career.area,
-    },
-    role: {
-      ...(await sanity.expand(career.role)),
-      ...career.role,
-    },
-  }
+  console.log({ career })
 
   return {
     props: {
-      career: resolvedCareer,
+      career,
     },
   }
 }
 
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  const careers = await sanity.getAll('job')
+  const careers = await sanity().fetch<{ slug: string }[]>(
+    groq`*[_type == 'job' && defined(slug.current)]{
+      "slug": slug.current
+    }`
+  )
 
   return {
-    paths: careers.map((career) => ({
+    paths: careers.map(({ slug }) => ({
       params: {
-        slug: career.slug.current,
+        slug,
       },
     })),
     fallback: false,
@@ -217,14 +223,14 @@ const CareerPage = ({ career }: Props) => {
         >
           <h3 className="mb-8 text-3xl">Courses</h3>
 
-          {career.courses.map((course, i) => {
+          {career.courseCategories.map((courseCategory) => {
             return (
               <CourseCard
-                key={i}
-                name={course.title}
+                key={courseCategory.slug}
+                name={courseCategory.name}
                 free={true}
                 paid={true}
-                courses={course.courses}
+                courses={courseCategory.courses}
               />
             )
           })}
