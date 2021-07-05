@@ -20,6 +20,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 
 type StaticProps = {
   course: unknown
+  category: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -58,6 +59,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async ({
 
 export default function CoursesPage({
   course,
+  category = {},
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { data: fetched } = useQuery('fetchCourses', () =>
     axios('http://localhost:8000/courses/')
@@ -94,6 +96,7 @@ export default function CoursesPage({
 
   // Filter courses by inputs.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useFilter(
       courses,
       filteredCourseCategories || null,
@@ -101,9 +104,11 @@ export default function CoursesPage({
       filteredCoursePricing || null
     )
   }, [
+    courses,
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
+    useFilter,
   ])
 
   // Set filtering URL params when filters change.
@@ -121,6 +126,9 @@ export default function CoursesPage({
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
+    mounted,
+    query,
+    router,
   ])
 
   // Reset filters when changing overall category.
@@ -135,25 +143,31 @@ export default function CoursesPage({
       setFilteredCourseDifficulties([])
       setFilteredCoursePricing([])
     }
-  }, [query?.id])
+  }, [
+    mounted,
+    query?.categories,
+    query?.difficulties,
+    query.id,
+    query?.pricing,
+  ])
 
   useEffect(() => {
     if (mounted && query?.categories) {
       setFilteredCourseCategories(query?.categories?.split(','))
     }
-  }, [query?.categories])
+  }, [mounted, query?.categories])
 
   useEffect(() => {
     if (mounted && query?.difficulties) {
       setFilteredCourseDifficulties(query?.difficulties?.split(','))
     }
-  }, [query?.difficulties])
+  }, [mounted, query?.difficulties])
 
   useEffect(() => {
     if (mounted && query?.prices) {
       setFilteredCoursePricing(query?.prices?.split(','))
     }
-  }, [query?.prices])
+  }, [mounted, query?.prices])
 
   useEffect(() => {
     if (allCourses) {
@@ -194,6 +208,7 @@ export default function CoursesPage({
   }, [category])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useFilter(
       courses,
       filteredCourseCategories.length && filteredCourseCategories,
@@ -201,16 +216,19 @@ export default function CoursesPage({
       filteredCoursePricing.length && filteredCoursePricing
     )
   }, [
+    courses,
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
+    useFilter,
   ])
 
   useEffect(() => {
     setCoursesBySearch(() =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       useSearchFilter(filteredCourses || courses, searchValue)
     )
-  }, [searchValue, filteredCourses])
+  }, [searchValue, filteredCourses, useSearchFilter, courses])
 
   useEffect(() => {
     if (mounted) {
@@ -226,33 +244,30 @@ export default function CoursesPage({
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
+    mounted,
+    query,
+    router,
   ])
 
   useEffect(() => {
     if (mounted && query?.categories)
       setFilteredCourseCategories(query?.categories?.split(','))
-  }, [query?.categories])
+  }, [mounted, query?.categories])
 
   useEffect(() => {
     if (mounted && query?.difficulties)
       setFilteredCourseDifficulties(query?.difficulties?.split(','))
-  }, [query?.difficulties])
+  }, [mounted, query?.difficulties])
 
   useEffect(() => {
     if (mounted && query?.pricing)
       setFilteredCoursePricing(query?.pricing?.split(','))
-  }, [query?.pricing])
+  }, [mounted, query?.pricing])
 
   return (
     <>
       <Head>
         <title>Courses - CareerFinder</title>
-
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       <Navbar />

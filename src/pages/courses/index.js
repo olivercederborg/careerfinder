@@ -54,12 +54,6 @@ export default function CoursesPage({ data }) {
     <>
       <Head>
         <title>Courses - CareerFinder</title>
-
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       <Navbar />
@@ -69,7 +63,7 @@ export default function CoursesPage({ data }) {
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
           </h2>
-          <h3 className="text-gray-main text-2xl font-medium">
+          <h3 className="text-2xl font-medium text-gray-main">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </h3>
         </section>
@@ -97,8 +91,8 @@ export default function CoursesPage({ data }) {
         </CourseFiltersShell>
 
         {data ? (
-          <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
-            <table className="md:table-auto w-full overflow-hidden text-left border-collapse divide-y table-fixed">
+          <section className="container my-12 overflow-x-auto shadow-lg rounded-xl">
+            <table className="w-full overflow-hidden text-left border-collapse divide-y table-fixed md:table-auto">
               <thead>
                 <tr>
                   <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-2/5 md:w-auto border-b">
@@ -145,11 +139,11 @@ export default function CoursesPage({ data }) {
                               <img
                                 src={course.publisherLogo}
                                 alt=""
-                                className="h-11 w-11 rounded-xl mr-4 shadow-lg"
+                                className="mr-4 shadow-lg h-11 w-11 rounded-xl"
                               />
                               <div className="flex flex-col">
                                 <p>{course.name}</p>
-                                <p className="text-gray-main text-sm font-medium">
+                                <p className="text-sm font-medium text-gray-main">
                                   By {course.publisher}
                                 </p>
                               </div>
@@ -188,7 +182,7 @@ export default function CoursesPage({ data }) {
         {courses?.length > loadedCoursesAmount && (
           <button
             onClick={() => setLoadedCoursesAmount(loadedCoursesAmount + 10)}
-            className="rounded-xl flex px-6 py-4 mx-auto my-4 text-center text-white bg-black"
+            className="flex px-6 py-4 mx-auto my-4 text-center text-white bg-black rounded-xl"
           >
             Load 2 more
           </button>
