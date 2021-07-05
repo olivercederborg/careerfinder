@@ -19,20 +19,6 @@ export const Course = {
       ],
     },
     {
-      title: 'Link',
-      name: 'link',
-      type: 'url',
-      validation: (Rule) => {
-        return Rule.uri({ scheme: ['http', 'https'] })
-      },
-    },
-    {
-      name: 'price',
-      title: 'Price',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
       name: 'publisherImage',
       title: 'Publisher Image',
       type: 'image',
@@ -41,6 +27,28 @@ export const Course = {
       name: 'publisher',
       title: 'Publisher',
       type: 'string',
+    },
+    {
+      title: 'Link',
+      name: 'link',
+      type: 'url',
+      validation: (Rule) => {
+        return Rule.uri({ scheme: ['http', 'https'] })
+      },
+    },
+    {
+      name: 'difficulty',
+      title: 'Difficulty',
+      type: 'string',
+      options: {
+        list: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
+      },
+    },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'description',

@@ -18,3 +18,5 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     )
   }
 )
+
+TextArea.displayName = 'TextArea'

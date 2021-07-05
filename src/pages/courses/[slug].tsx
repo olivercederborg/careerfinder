@@ -53,19 +53,22 @@ export const getStaticProps: GetStaticProps<StaticProps> = async ({
   )
 
   return {
-    props: { course },
+    props: {
+      course,
+      category: {
+        courses: [],
+      },
+    },
   }
 }
 
 export default function CoursesPage({
   course,
-  category = {},
+  category,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { data: fetched } = useQuery('fetchCourses', () =>
-    axios('http://localhost:8000/courses/')
-  )
-
-  console.log({ course })
+  const fetched = {
+    data: [],
+  }
 
   const router = useRouter()
   const { query }: any = useRouter()

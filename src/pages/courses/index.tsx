@@ -1,41 +1,62 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import axios from 'axios'
 
-import CategoryFilter from '@components/CategoryFilter'
-import CheckboxFilter from '@components/CheckboxFilter'
-import CourseFiltersShell from '@components/CourseFiltersShell'
-import Navbar from '@components/Navbar'
+import CategoryFilter from 'components/CategoryFilter'
+import CourseFiltersShell from 'components/CourseFiltersShell'
+import Navbar from 'components/Navbar'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { imageBuilder, sanity } from 'lib/sanity'
+import { groq } from 'next-sanity'
+import Image from 'next/image'
+import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-export async function getStaticProps() {
-  const res = await axios(`http://localhost:8000/courses`)
-  const data = res.data
+type StaticProps = {
+  courses: {
+    name: string
+    slug: string
+    hot: boolean
+    isNew: boolean
+    publisher: string
+    publisherImage: SanityImageSource
+    price: string
+    courseCategories: {
+      name: string
+      slug: string
+    }[]
+    difficulty: string
+  }[]
+}
 
-  if (!data) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+  const courses = await sanity().fetch(groq`*[_type == 'course']{
+    name,
+    "slug": slug.current,
+    publisher,
+    publisherImage,
+    price,
+    courseCategories[]->{
+      name,
+      "slug": slug.current,
+    },
+    difficulty
+  }`)
 
   return {
-    props: { data },
+    props: {
+      courses,
+    },
   }
 }
 
-export default function CoursesPage({ data }) {
-  const router = useRouter()
-  const { query } = useRouter()
+type Props = InferGetStaticPropsType<typeof getStaticProps>
 
+function CoursesPage({ courses: staticCourses }: Props) {
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(10)
-  const [courses, setCourses] = useState([])
+  const [courses, setCourses] = useState(staticCourses)
   const [categories, setCategories] = useState([])
-  const [categoriesFiltered, setCategoriesFiltered] = useState([])
-  const [courseCategories, setCourseCategories] = useState([])
+
+  const data = useMemo(() => [], [])
 
   useEffect(() => {
     let coursesArray = []
@@ -71,13 +92,7 @@ export default function CoursesPage({ data }) {
         <CourseFiltersShell>
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Category
-            <CategoryFilter
-              input={categories}
-              inputFiltered={categoriesFiltered}
-              setInputFiltered={setCategoriesFiltered}
-            >
-              All Categories
-            </CategoryFilter>
+            <CategoryFilter input={categories}>All Categories</CategoryFilter>
           </div>
 
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
@@ -112,7 +127,11 @@ export default function CoursesPage({ data }) {
               <tbody className="font-medium">
                 {courses?.length
                   ? courses?.slice(0, loadedCoursesAmount).map((course, i) => (
-                      <Link key={i} href="https://google.com">
+                      <Link
+                        key={course.slug}
+                        href="https://google.com"
+                        passHref
+                      >
                         <tr
                           key={i}
                           className="border-t border-b cursor-pointer"
@@ -136,11 +155,18 @@ export default function CoursesPage({ data }) {
                                   </span>
                                 </div>
                               ) : null}
-                              <img
-                                src={course.publisherLogo}
-                                alt=""
-                                className="mr-4 shadow-lg h-11 w-11 rounded-xl"
-                              />
+                              <div className="flex items-center mr-4">
+                                <Image
+                                  src={imageBuilder(course.publisherImage)
+                                    .size(44, 44)
+                                    .auto('format')
+                                    .url()}
+                                  width={44}
+                                  height={44}
+                                  alt={course.publisher}
+                                  className="shadow-lg h-11 w-11 rounded-xl"
+                                />
+                              </div>
                               <div className="flex flex-col">
                                 <p>{course.name}</p>
                                 <p className="text-sm font-medium text-gray-main">
@@ -151,11 +177,14 @@ export default function CoursesPage({ data }) {
                           </td>
                           <td className="px-10 py-6">
                             <p className="inline-block mr-3">
-                              {course?.categories?.slice(0, 2).join(', ')}
+                              {course.courseCategories
+                                ?.slice(0, 2)
+                                .map((category) => category.name)
+                                .join(', ')}
                             </p>
-                            {course?.categories?.length > 2 ? (
+                            {course.courseCategories?.length > 2 ? (
                               <span className="inline-block px-2 py-1 text-sm text-gray-600 bg-gray-200 rounded-lg">
-                                +{course?.categories?.length - 2} more
+                                +{course.courseCategories?.length - 2} more
                               </span>
                             ) : (
                               ''
@@ -164,8 +193,8 @@ export default function CoursesPage({ data }) {
                           <td className="px-10 py-6">{course.difficulty}</td>
                           <td className="px-10 py-6">
                             <span className="w-[64px] inline-flex justify-center items-center py-1 text-sm font-medium text-white bg-black rounded-lg">
-                              {course.cost
-                                ? `$${Math.round(course.cost)}`
+                              {parseInt(course.price, 10)
+                                ? `$${Math.round(parseInt(course.price, 10))}`
                                 : 'FREE'}
                             </span>
                           </td>
@@ -191,3 +220,5 @@ export default function CoursesPage({ data }) {
     </>
   )
 }
+
+export default CoursesPage

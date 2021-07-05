@@ -232,20 +232,6 @@ export interface Course extends SanityDocument {
   courseCategories?: Array<SanityKeyedReference<CourseCategory>>;
 
   /**
-   * Link — `url`
-   *
-   *
-   */
-  link?: string;
-
-  /**
-   * Price — `string`
-   *
-   *
-   */
-  price?: string;
-
-  /**
    * Publisher Image — `image`
    *
    *
@@ -263,6 +249,27 @@ export interface Course extends SanityDocument {
    *
    */
   publisher?: string;
+
+  /**
+   * Link — `url`
+   *
+   *
+   */
+  link?: string;
+
+  /**
+   * Difficulty — `string`
+   *
+   *
+   */
+  difficulty?: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+
+  /**
+   * Price — `string`
+   *
+   *
+   */
+  price?: string;
 
   /**
    * Description — `blockContent`

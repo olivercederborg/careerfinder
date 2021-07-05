@@ -1,4 +1,5 @@
 import { imageBuilder } from 'lib/sanity'
+import Image from 'next/image'
 import { useState } from 'react'
 import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { SingleCareer } from 'types'
@@ -49,12 +50,15 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
             key={course.slug}
             href={course.link}
             target={'_blank'}
-            rel="noopener"
+            rel="noopener noreferrer"
             className="flex items-center justify-between p-6 bg-white hover:bg-gray-50"
           >
             <div className="flex justify-start space-x-4">
-              <img
+              <Image
                 src={imageBuilder(course.publisherImage).size(44, 44).url()}
+                layout="fixed"
+                width={44}
+                height={44}
                 alt={`${course.name} by ${course.publisher}`}
                 className={`rounded-[10px] object-cover w-11 h-11 text-xl text-white bg-black shadow-md`}
               />

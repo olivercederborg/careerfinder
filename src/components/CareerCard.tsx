@@ -1,4 +1,5 @@
 import { imageBuilder } from 'lib/sanity'
+import Image from 'next/image'
 import Link from 'next/link'
 import { BsFillLightningFill } from 'react-icons/bs'
 import { FrontpageCareer } from 'types'
@@ -11,8 +12,10 @@ function CareerCard({ career }: Props) {
   return (
     <Link href={`/${career.slug}`}>
       <a className="overflow-hidden transition-all duration-200 ease-in-out bg-white shadow-lg rounded-xl group hover:bg-black">
-        <img
+        <Image
           src={imageBuilder(career.banner).size(290, 200).auto('format').url()}
+          width={290}
+          height={200}
           alt={career.name}
           className="h-[200px] object-cover w-full transition-all duration-200 ease-in-out"
         />
