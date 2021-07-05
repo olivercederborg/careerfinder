@@ -2,132 +2,71 @@ import Head from 'next/head'
 import { RiSearchLine } from 'react-icons/ri'
 import { BsFillLightningFill } from 'react-icons/bs'
 import BlockContent from '@sanity/block-content-to-react'
+import Image from 'next/image'
 
-import Navbar from '../components/Navbar'
-import CareerChart from '../components/CareerChart'
-import { useRef, useState } from 'react'
-import CourseCard from '../components/CourseCard'
-import { useEffect } from 'react'
-import { sanity } from 'lib/sanity'
+import { useRef, useState, useEffect } from 'react'
+
+import { imageBuilder, sanity } from 'lib/sanity'
 import type {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next'
-import type { Career } from 'types'
-
-const courses = [
-  {
-    title: 'HTML/CSS',
-    courses: [
-      {
-        name: 'The Basics of Web Development',
-        publisher: 'Codecademy',
-        publisherLogo:
-          'https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg',
-        cost: 'free',
-      },
-      {
-        name: 'HTML/CSS In-depth Course',
-        publisher: 'Udemy',
-        publisherLogo:
-          'https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1',
-        cost: '$50',
-      },
-    ],
-  },
-  {
-    title: 'JavaScript',
-    courses: [
-      {
-        name: 'The Basics of Web Development',
-        publisher: 'Codecademy',
-        publisherLogo:
-          'https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg',
-        cost: 'free',
-      },
-      {
-        name: 'HTML/CSS In-depth Course',
-        publisher: 'Udemy',
-        publisherLogo:
-          'https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg',
-        cost: '$50',
-      },
-    ],
-  },
-  {
-    title: 'React.js',
-    courses: [
-      {
-        name: 'React.js Introduction',
-        publisher: 'Codecademy',
-        publisherLogo:
-          'https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg',
-        cost: 'free',
-      },
-      {
-        name: 'React.js Crash Course',
-        publisher: 'Codecademy',
-        publisherLogo:
-          'https://pbs.twimg.com/profile_images/1314000477466636290/fwTNDGoi_400x400.jpg',
-        cost: '$50',
-      },
-      {
-        name: 'React.js & Firebase Course',
-        publisher: 'Udemy',
-        publisherLogo:
-          'https://i0.wp.com/sourceofapk.com/wp-content/uploads/2020/11/udemy-tv-apk-latest.jpg?fit=600%2C600&ssl=1',
-        cost: '$100',
-      },
-    ],
-  },
-]
+import { groq } from 'next-sanity'
+import { SingleCareer } from 'types'
+import CourseCard from '../components/CourseCard'
+import CareerChart from '../components/CareerChart'
+import Navbar from '../components/Navbar'
+import { useNextSanityImage } from 'next-sanity-image'
 
 type StaticProps = {
-  career: Career
+  career: SingleCareer
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async ({
   params,
 }) => {
   const { slug } = params
-  console.log(slug)
 
-  let [career] = await sanity.getAll('job', `slug.current == "${slug}"`)
-
-  console.log(career)
-
-  let resolvedCareer: Career = {
-    ...career,
-    hot: Math.random() > 0.9,
-    discipline: {
-      ...(await sanity.expand(career.discipline)),
-      ...career.discipline,
-    },
-    area: {
-      ...(await sanity.expand(career.area)),
-      ...career.area,
-    },
-    role: {
-      ...(await sanity.expand(career.role)),
-      ...career.role,
-    },
-  }
+  const career = await sanity().fetch<SingleCareer>(
+    groq`*[_type == 'job' && defined(slug.current) && slug.current == '${slug}'][0]{
+      name,
+      "slug": slug.current,
+      banner,
+      description,
+      courseCategories[]->{
+        name,
+        "slug": slug.current,
+        "courses": *[_type == 'course' && references(^._id)]{
+          name,
+          "slug": slug.current,
+          link,
+          publisher,
+          publisherImage,
+          price,
+        },
+      },
+    }`
+  )
 
   return {
     props: {
-      career: resolvedCareer,
+      career,
     },
   }
 }
 
 export const getStaticPaths: GetStaticPaths = async ({}) => {
-  const careers = await sanity.getAll('job')
+  const careers = await sanity().fetch<{ slug: string }[]>(
+    groq`*[_type == 'job' && defined(slug.current)]{
+      "slug": slug.current
+    }`
+  )
 
   return {
-    paths: careers.map((career) => ({
+    paths: careers.map(({ slug }) => ({
       params: {
-        slug: career.slug.current,
+        slug,
       },
     })),
     fallback: false,
@@ -141,7 +80,7 @@ const CareerPage = ({ career }: Props) => {
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
 
   const stickySectionNav = () => {
-    let sectionNavOffset = sectionNav?.current?.getBoundingClientRect().top
+    const sectionNavOffset = sectionNav?.current?.getBoundingClientRect().top
     if (sectionNavOffset == 0) {
       setSectionNavIsTop(true)
     } else {
@@ -158,6 +97,8 @@ const CareerPage = ({ career }: Props) => {
     }
   }, [])
 
+  const bannerImageProps = useNextSanityImage(sanity(), career.banner)
+
   return (
     <>
       <Head>
@@ -167,11 +108,13 @@ const CareerPage = ({ career }: Props) => {
       <Navbar />
 
       <main className="grid grid-cols-1 xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12">
-        <img
-          src={'career.image'}
-          alt={career.name}
-          className="max-h-[450px] object-cover md:col-span-12 w-full xl:rounded-xl"
-        />
+        <div className="relative md:col-span-12 h-[450px] flex justify-center">
+          <Image
+            {...bannerImageProps}
+            alt={career.name}
+            className="object-cover w-full xl:rounded-xl"
+          />
+        </div>
 
         <article className="px-6 mt-7 md:mt-12 md:col-span-6 3xl:col-span-4">
           <h2 className="inline-flex items-center text-3xl font-semibold">
@@ -184,11 +127,6 @@ const CareerPage = ({ career }: Props) => {
           <BlockContent
             blocks={career.description}
             className="mt-3 space-y-2"
-          ></BlockContent>
-          <img
-            src={'career.imageTwo'}
-            alt=""
-            className="mt-8 rounded-xl h-[300px] object-cover w-full hidden md:block"
           />
         </article>
 
@@ -217,17 +155,15 @@ const CareerPage = ({ career }: Props) => {
         >
           <h3 className="mb-8 text-3xl">Courses</h3>
 
-          {career.courses.map((course, i) => {
-            return (
-              <CourseCard
-                key={i}
-                name={course.title}
-                free={true}
-                paid={true}
-                courses={course.courses}
-              />
-            )
-          })}
+          {career.courseCategories.map((courseCategory) => (
+            <CourseCard
+              key={courseCategory.slug}
+              name={courseCategory.name}
+              free
+              paid
+              courses={courseCategory.courses}
+            />
+          ))}
 
           <button className="rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black">
             View all 5 courses

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Role" ALTER COLUMN "areaId" DROP NOT NULL;

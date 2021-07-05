@@ -93,6 +93,20 @@ export interface Role extends SanityDocument {
    *
    */
   slug?: { _type: "slug"; current: string };
+
+  /**
+   * Salary — `number`
+   *
+   *
+   */
+  salary?: number;
+
+  /**
+   * Time — `string`
+   *
+   *
+   */
+  time?: string;
 }
 
 /**
@@ -139,6 +153,18 @@ export interface Job extends SanityDocument {
   role?: SanityReference<Role>;
 
   /**
+   * Banner — `image`
+   *
+   *
+   */
+  banner?: {
+    _type: "image";
+    asset: SanityAsset;
+    crop?: SanityImageCrop;
+    hotspot?: SanityImageHotspot;
+  };
+
+  /**
    * Description — `blockContent`
    *
    *
@@ -146,11 +172,11 @@ export interface Job extends SanityDocument {
   description?: BlockContent;
 
   /**
-   * Courses — `array`
+   * Course categories — `array`
    *
    *
    */
-  courses?: Array<SanityKeyedReference<Course>>;
+  courseCategories?: Array<SanityKeyedReference<CourseCategory>>;
 }
 
 /**
@@ -206,6 +232,25 @@ export interface Course extends SanityDocument {
   courseCategories?: Array<SanityKeyedReference<CourseCategory>>;
 
   /**
+   * Publisher Image — `image`
+   *
+   *
+   */
+  publisherImage?: {
+    _type: "image";
+    asset: SanityAsset;
+    crop?: SanityImageCrop;
+    hotspot?: SanityImageHotspot;
+  };
+
+  /**
+   * Publisher — `string`
+   *
+   *
+   */
+  publisher?: string;
+
+  /**
    * Link — `url`
    *
    *
@@ -213,42 +258,18 @@ export interface Course extends SanityDocument {
   link?: string;
 
   /**
+   * Difficulty — `string`
+   *
+   *
+   */
+  difficulty?: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+
+  /**
    * Price — `string`
    *
    *
    */
   price?: string;
-
-  /**
-   * Display Image — `image`
-   *
-   *
-   */
-  displayImage?: {
-    _type: "image";
-    asset: SanityAsset;
-    crop?: SanityImageCrop;
-    hotspot?: SanityImageHotspot;
-  };
-
-  /**
-   * Author Image — `image`
-   *
-   *
-   */
-  authorImage?: {
-    _type: "image";
-    asset: SanityAsset;
-    crop?: SanityImageCrop;
-    hotspot?: SanityImageHotspot;
-  };
-
-  /**
-   * Author — `string`
-   *
-   *
-   */
-  author?: string;
 
   /**
    * Description — `blockContent`

@@ -24,7 +24,7 @@
   "parts": [
     {
       "name": "part:@sanity/base/schema",
-      "path": "./schemas/index"
+      "path": "./cms/schemas/index"
     }
   ]
 }

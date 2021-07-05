@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { RiShuffleFill } from 'react-icons/ri'
 import { FiChevronDown } from 'react-icons/fi'
-import { differenceInDays } from 'date-fns'
 
 import Navbar from 'components/Navbar'
 import SearchBar from 'components/SearchBar'
@@ -10,37 +9,28 @@ import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { useEffect, useState } from 'react'
 import { sanity } from 'lib/sanity'
-import type { Career } from 'types'
+import { groq } from 'next-sanity'
+import { FrontpageCareer } from 'types'
 
 type StaticProps = {
-  careers: Career[]
+  careers: FrontpageCareer[]
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const careers = await sanity.getAll('job')
+const careersQuery = groq`*[_type == 'job']{
+  name,
+  "slug": slug.current,
+  banner,
+  "time": role->time,
+  "salary": role->salary,
+  "discipline": discipline->name,
+}`
 
-  const careersWithResolvedRefs: Career[] = await Promise.all(
-    careers.map(async (career) => ({
-      ...career,
-      hot: Math.random() > 0.9,
-      discipline: {
-        ...(await sanity.expand(career.discipline)),
-        ...career.discipline,
-      },
-      area: {
-        ...(await sanity.expand(career.area)),
-        ...career.area,
-      },
-      role: {
-        ...(await sanity.expand(career.role)),
-        ...career.role,
-      },
-    }))
-  )
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+  const careers = await sanity().fetch<FrontpageCareer[]>(careersQuery)
 
   return {
     props: {
-      careers: careersWithResolvedRefs,
+      careers,
     },
   }
 }
@@ -62,26 +52,20 @@ export default function Home({ careers }: Props) {
     } else {
       setSearchResults([])
     }
-  }, [searchValue])
+  }, [careers, searchValue])
 
   return (
     <>
       <Head>
         <title>Home - CareerFinder</title>
-
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       <Navbar />
 
-      <header className="bg-hero-image py-80 relative text-center bg-black bg-center bg-no-repeat bg-cover">
-        <article className="bg-opacity-70 absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-center bg-black">
-          <div className="xl:container xl:px-0 xl:mx-auto md:mt-0 px-6 -mt-32">
-            <h2 className="md:text-5xl text-4xl font-semibold text-white">
+      <header className="relative text-center bg-black bg-center bg-no-repeat bg-cover bg-hero-image py-80">
+        <article className="absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-center bg-black bg-opacity-70">
+          <div className="px-6 -mt-32 xl:container xl:px-0 xl:mx-auto md:mt-0">
+            <h2 className="text-4xl font-semibold text-white md:text-5xl">
               Start a New Career in Six Months.
             </h2>
             <p className="mt-5 text-white">
@@ -90,33 +74,33 @@ export default function Home({ careers }: Props) {
               Optio est, molestias iure repellendus inventore repudiandae
               delectus aliquid ea voluptate deleniti.
             </p>
-            <button className="rounded-xl hover:-translate-y-1 hover:shadow-lg md:w-auto self-center w-full px-12 py-4 mt-12 font-medium text-black transition-all duration-200 ease-in-out transform bg-white border-2 border-white">
+            <button className="self-center w-full px-12 py-4 mt-12 font-medium text-black transition-all duration-200 ease-in-out transform bg-white border-2 border-white rounded-xl hover:-translate-y-1 hover:shadow-lg md:w-auto">
               Generate Random Career
             </button>
           </div>
-          <button className="rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out">
+          <button className="absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out rounded-xl group md:w-auto bottom-5">
             Or Browse Careers
             <FiChevronDown className="mt-2 text-5xl transform" />
           </button>
         </article>
       </header>
 
-      <main className="xl:container pb-32 mx-auto mt-16">
-        <div className="bottom-8 fixed z-10 hidden w-screen px-6">
-          <button className="rounded-xl shadow-yellow inline-flex items-center justify-center w-full py-4 font-semibold text-center text-white bg-yellow-500">
+      <main className="pb-32 mx-auto mt-16 xl:container">
+        <div className="fixed z-10 hidden w-screen px-6 bottom-8">
+          <button className="inline-flex items-center justify-center w-full py-4 font-semibold text-center text-white bg-yellow-500 rounded-xl shadow-yellow">
             Draw Random Career
             <RiShuffleFill className="ml-3 text-xl" />
           </button>
         </div>
 
-        <div className="gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0 grid grid-cols-12 pb-8 mx-6 border-b">
+        <div className="grid grid-cols-12 pb-8 mx-6 border-b gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0">
           <SearchBar
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             placeholderText="Search for careers"
           />
 
-          <div className="md:justify-start md:col-span-6 flex items-center justify-between col-span-12">
+          <div className="flex items-center justify-between col-span-12 md:justify-start md:col-span-6">
             <p className="text-base font-semibold uppercase">Category</p>
 
             <div className="flex items-center ml-6">
@@ -129,7 +113,7 @@ export default function Home({ careers }: Props) {
           </div>
         </div>
 
-        <section className="md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8">
+        <section className="grid grid-cols-1 gap-10 px-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0">
           {searchResults?.map((career, i) => (
             <CareerCard career={career} key={i} />
           ))}
@@ -152,12 +136,12 @@ export default function Home({ careers }: Props) {
                 Feel like trying your luck?
               </p>
 
-              <button className="rounded-xl hover:-translate-y-1 hover:shadow-lg self-center px-12 py-4 mt-8 font-medium text-white transition-all duration-200 ease-in-out transform bg-black">
+              <button className="self-center px-12 py-4 mt-8 font-medium text-white transition-all duration-200 ease-in-out transform bg-black rounded-xl hover:-translate-y-1 hover:shadow-lg">
                 Generate Random Career
               </button>
 
               <button
-                className="hover:underline px-12 py-4 mt-4 font-medium transition-all duration-200 ease-in-out transform"
+                className="px-12 py-4 mt-4 font-medium transition-all duration-200 ease-in-out transform hover:underline"
                 onClick={() => {
                   setSearchValue(null)
                   // careerSearchbar.current.value = null
