@@ -34,8 +34,9 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
               isExpanded ? 'hidden' : 'inline-block'
             }`}
           >
-            {courses.map((course) => parseInt(course.price) === 0)} Free &bull;{' '}
-            {courses.map((course) => parseInt(course.price) !== 0)} Paid
+            {courses.map((course) => parseInt(course.price) === 0).length} Free
+            &bull;{' '}
+            {courses.map((course) => parseInt(course.price) !== 0).length} Paid
           </p>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
             </div>
 
             <p className="py-1 uppercase min-w-[60px] bg-black rounded-lg text-[13px] text-white text-center font-semibold">
-              {course.price}
+              {parseInt(course.price) === 0 ? 'FREE' : course.price}
             </p>
           </a>
         ))}

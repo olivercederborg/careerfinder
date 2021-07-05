@@ -193,9 +193,9 @@ function CoursesPage({ courses: staticCourses }: Props) {
                           <td className="px-10 py-6">{course.difficulty}</td>
                           <td className="px-10 py-6">
                             <span className="w-[64px] inline-flex justify-center items-center py-1 text-sm font-medium text-white bg-black rounded-lg">
-                              {parseInt(course.price, 10)
-                                ? `$${Math.round(parseInt(course.price, 10))}`
-                                : 'FREE'}
+                              {parseInt(course.price, 10) === 0
+                                ? 'FREE'
+                                : `$${Math.round(parseInt(course.price, 10))}`}
                             </span>
                           </td>
                         </tr>
