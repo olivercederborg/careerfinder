@@ -34,9 +34,10 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
               isExpanded ? 'hidden' : 'inline-block'
             }`}
           >
-            {courses.map((course) => parseInt(course.price) === 0).length} Free
-            &bull;{' '}
-            {courses.map((course) => parseInt(course.price) !== 0).length} Paid
+            {courses.filter((course) => parseInt(course.price) === 0).length}{' '}
+            Free &bull;{' '}
+            {courses.filter((course) => parseInt(course.price) !== 0).length}{' '}
+            Paid
           </p>
         </div>
       </div>
