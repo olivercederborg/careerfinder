@@ -5,55 +5,65 @@ import Head from 'next/head'
 import axios from 'axios'
 import { useQuery } from 'react-query'
 
-import Navbar from '@components/Navbar'
-import CourseFiltersShell from '@components/CourseFiltersShell'
-import CoursesTable from '@components/CoursesTable'
-import CategoryFilter from '@components/CategoryFilter'
-import CheckboxFilter from '@components/CheckboxFilter'
-import LoadMoreButton from '@components/LoadMoreButton'
-import SearchBar from '@components/SearchBar'
-import useFilters from '@hooks/useCourseFilter'
-import { setCoursesUrlParams } from '@helpers/setUrlParams'
+import Navbar from 'components/Navbar'
+import CourseFiltersShell from 'components/CourseFiltersShell'
+import CoursesTable from 'components/CoursesTable'
+import CategoryFilter from 'components/CategoryFilter'
+import CheckboxFilter from 'components/CheckboxFilter'
+import LoadMoreButton from 'components/LoadMoreButton'
+import SearchBar from 'components/SearchBar'
+import useFilters from 'hooks/useCourseFilter'
+import { setCoursesUrlParams } from 'helpers/setUrlParams'
+import { groq } from 'next-sanity'
+import { sanity } from 'lib/sanity'
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 
-export async function getStaticPaths() {
-  const res = await axios(`http://localhost:8000/courses/`)
-  const data = res.data
+type StaticProps = {
+  course: unknown
+}
 
-  const paths = data.map((item) => {
-    return {
-      params: { id: item.id.toString() },
-    }
-  })
+export const getStaticPaths: GetStaticPaths = async () => {
+  const courses = await sanity().fetch<{ slug: string }[]>(
+    groq`*[_type == 'course' && defined(slug.current)]{
+      "slug": slug.current
+    }`
+  )
 
   return {
-    paths,
+    paths: courses.map(({ slug }) => ({
+      params: {
+        slug,
+      },
+    })),
     fallback: false,
   }
 }
 
-export async function getStaticProps(ctx) {
-  const id = ctx.params.id
-  const res = await axios(`http://localhost:8000/courses/${id}`)
-  const data = res.data
+export const getStaticProps: GetStaticProps<StaticProps> = async ({
+  params,
+}) => {
+  const { slug } = params
 
-  if (!data) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
+  const course = await sanity().fetch<{}>(
+    groq`*[_type == 'course' && defined(slug.current) && slug.current == '${slug}'][0]{
+      name,
+      "slug": slug.current,
+    }`
+  )
 
   return {
-    props: { data },
+    props: { course },
   }
 }
 
-export default function CoursesPage({ data: category }) {
+export default function CoursesPage({
+  course,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const { data: fetched } = useQuery('fetchCourses', () =>
     axios('http://localhost:8000/courses/')
   )
+
+  console.log({ course })
 
   const router = useRouter()
   const { query }: any = useRouter()
@@ -252,7 +262,7 @@ export default function CoursesPage({ data: category }) {
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
           </h2>
-          <h3 className="text-gray-main text-2xl font-medium">
+          <h3 className="text-2xl font-medium text-gray-main">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </h3>
         </section>
@@ -298,7 +308,7 @@ export default function CoursesPage({ data: category }) {
         </CourseFiltersShell>
 
         <section className="container mt-8">
-          <label htmlFor="search-bar" className="md:w-72 inline-block w-full">
+          <label htmlFor="search-bar" className="inline-block w-full md:w-72">
             Search
             <SearchBar
               searchValue={searchValue}
@@ -309,7 +319,7 @@ export default function CoursesPage({ data: category }) {
           </label>
         </section>
 
-        <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
+        <section className="container my-12 overflow-x-auto shadow-lg rounded-xl">
           {searchValue && coursesBySearch.length ? (
             <CoursesTable
               inputCourses={coursesBySearch}
