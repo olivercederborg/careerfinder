@@ -49,8 +49,6 @@ export const getStaticProps: GetStaticProps<StaticProps> = async ({
     }`
   )
 
-  console.log({ career })
-
   return {
     props: {
       career,
@@ -110,7 +108,7 @@ const CareerPage = ({ career }: Props) => {
       <Navbar />
 
       <main className="grid grid-cols-1 xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12">
-        <div className="relative md:col-span-12 h-[450px]">
+        <div className="relative md:col-span-12 h-[450px] flex justify-center">
           <Image
             {...bannerImageProps}
             alt={career.name}
