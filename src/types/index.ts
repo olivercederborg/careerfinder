@@ -1,6 +1,5 @@
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
-import { BlockContent, Job } from 'codegen'
-import { SanityBlock } from 'sanity-codegen'
+import { BlockContent } from 'codegen'
 
 export type CopyFunctionSignatureType<T extends (...args: any) => any> = (
   ...args: Parameters<T>
@@ -27,6 +26,7 @@ export type SingleCareer = {
   slug: string
   hot: boolean
   description: BlockContent
+  banner: SanityImageSource
   courseCategories: {
     name: string
     slug: string
