@@ -8,7 +8,6 @@ import Navbar from 'components/Navbar'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { imageBuilder, sanity } from 'lib/sanity'
 import { groq } from 'next-sanity'
-import Image from 'next/image'
 import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 type StaticProps = {
@@ -156,7 +155,7 @@ function CoursesPage({ courses: staticCourses }: Props) {
                                 </div>
                               ) : null}
                               <div className="flex items-center mr-4">
-                                <Image
+                                <img
                                   src={imageBuilder(course.publisherImage)
                                     .size(44, 44)
                                     .auto('format')

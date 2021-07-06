@@ -1,6 +1,5 @@
 import { imageBuilder } from 'lib/sanity'
 import Link from 'next/link'
-import Image from 'next/image'
 
 interface Course {
   name: string
@@ -65,7 +64,7 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: Props) => {
                       </span>
                     </div>
                   ) : null}
-                  <Image
+                  <img
                     src={imageBuilder(course.publisherLogo)
                       .size(44, 44)
                       .auto('format')
