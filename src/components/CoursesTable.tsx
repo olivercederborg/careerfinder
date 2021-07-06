@@ -45,7 +45,7 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: Props) => {
       </thead>
 
       <tbody className="font-medium">
-        {inputCourses?.slice(0, loadedCoursesAmount).map((course, i) => (
+        {inputCourses?.slice(0, loadedCoursesAmount).map((course: any, i) => (
           <Link key={i} href={course.link} passHref>
             <tr key={i} className="border-t border-b cursor-pointer">
               <td className="relative px-10 py-6 font-semibold">
