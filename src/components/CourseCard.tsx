@@ -57,7 +57,10 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
           >
             <div className="flex justify-start space-x-4">
               <Image
-                src={imageBuilder(course.publisherImage).size(44, 44).url()}
+                src={imageBuilder(course.publisherImage)
+                  .size(44, 44)
+                  .auto('format')
+                  .url()}
                 layout="fixed"
                 width={44}
                 height={44}

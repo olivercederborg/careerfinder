@@ -1,4 +1,6 @@
+import { imageBuilder } from 'lib/sanity'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Course {
   name: string
@@ -24,7 +26,7 @@ interface Props {
 
 const CoursesTable = ({ inputCourses, loadedCoursesAmount }: Props) => {
   return (
-    <table className="md:table-auto w-full overflow-hidden text-left border-collapse divide-y table-fixed">
+    <table className="w-full overflow-hidden text-left border-collapse divide-y table-fixed md:table-auto">
       <thead>
         <tr>
           <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-2/5 md:w-auto border-b">
@@ -43,8 +45,8 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: Props) => {
       </thead>
 
       <tbody className="font-medium">
-        {inputCourses?.slice(0, loadedCoursesAmount).map((course: any, i) => (
-          <Link key={i} href="https://google.com">
+        {inputCourses?.slice(0, loadedCoursesAmount).map((course, i) => (
+          <Link key={i} href={course.link} passHref>
             <tr key={i} className="border-t border-b cursor-pointer">
               <td className="relative px-10 py-6 font-semibold">
                 <div className="flex items-center">
@@ -63,14 +65,19 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: Props) => {
                       </span>
                     </div>
                   ) : null}
-                  <img
-                    src={course.publisherLogo}
-                    alt=""
-                    className="h-11 w-11 rounded-xl mr-4 shadow-lg"
+                  <Image
+                    src={imageBuilder(course.publisherLogo)
+                      .size(44, 44)
+                      .auto('format')
+                      .url()}
+                    width={44}
+                    height={44}
+                    alt={course.publisher}
+                    className="mr-4 shadow-lg h-11 w-11 rounded-xl"
                   />
                   <div className="flex flex-col">
                     <p>{course.name}</p>
-                    <p className="text-gray-main text-sm font-medium">
+                    <p className="text-sm font-medium text-gray-main">
                       By {course.publisher}
                     </p>
                   </div>
