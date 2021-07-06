@@ -7,7 +7,7 @@ const config: ClientConfig = {
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   // token: process.env.SANITY_TOKEN,
   apiVersion: 'v2021-07-05',
-  useCdn: process.env.NODE_ENV === 'production',
+  useCdn: false,
 }
 
 const sanityClient = createClient(config)
