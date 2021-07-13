@@ -12,7 +12,11 @@ const careersQuery = groq`*[_type == 'job']{
 }`
 
 type Career = {
+  name: string
   slug: string
+  time: string
+  salary: number
+  discipline: string
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
