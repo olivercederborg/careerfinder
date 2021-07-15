@@ -3,6 +3,7 @@ import { RiSearchLine } from 'react-icons/ri'
 
 export default function CategoryDropdown({
   careers,
+  categories,
   careersFiltered,
   setCareersFiltered,
 }) {
@@ -16,15 +17,15 @@ export default function CategoryDropdown({
   const [isOpen, setIsOpen] = useState(false)
   const [categoryFilters, setCategoryFilters] = useState([])
 
-  let careerCategories = careers.map((career) => career.category)
+  let careerCategories = categories.map((category) => category.name)
   let uniqueCategories = [...new Set(careerCategories)]
 
   const handleCategories = (e) => {
     if (e.target.checked) {
-      setCategoryFilters([...categoryFilters, e.target.value.toLowerCase()])
+      setCategoryFilters([...categoryFilters, e.target.value])
     } else if (!e.target.checked) {
       setCategoryFilters(
-        categoryFilters.filter((item) => item !== e.target.value.toLowerCase())
+        categoryFilters.filter((item) => item !== e.target.value)
       )
     }
   }
@@ -37,29 +38,21 @@ export default function CategoryDropdown({
   }
 
   useEffect(() => {
-    careers.forEach((career, i) => {
-      if (
-        categoryFilters.includes(career.category) &&
-        !careersFiltered.includes(career)
-      ) {
-        setCareersFiltered([...careersFiltered, career])
-      } else {
-        setCareersFiltered(
-          careers.filter((item) => categoryFilters.includes(item.category))
-        )
-      }
-    })
+    setCareersFiltered(
+      careers.filter((item) => categoryFilters.includes(item.discipline))
+    )
   }, [categoryFilters])
 
   useEffect(() => {
     if (searchValue) {
       let resultsArray = uniqueCategories.filter((item) =>
-        item.includes(searchValue)
+        item.toLowerCase().includes(searchValue.toLowerCase())
       )
       setSearchResults(resultsArray)
     } else {
       setSearchResults([])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])
 
   useEffect(() => {
