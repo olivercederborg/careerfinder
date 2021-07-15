@@ -6,14 +6,14 @@ import Image from 'next/image'
 
 import { useRef, useState, useEffect } from 'react'
 
-import { imageBuilder, sanity } from 'lib/sanity'
+import { sanity } from 'lib/sanity'
 import type {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next'
 import { groq } from 'next-sanity'
-import { SingleCareer } from 'types'
+import { Category, SingleCareer } from 'types'
 import CourseCard from '../components/CourseCard'
 import CareerChart from '../components/CareerChart'
 import Navbar from '../components/Navbar'
@@ -21,37 +21,52 @@ import { useNextSanityImage } from 'next-sanity-image'
 
 type StaticProps = {
   career: SingleCareer
+  categories: Category[]
 }
+
+const careerQuery = (
+  slug: string
+) => groq`*[_type == 'job' && defined(slug.current) && slug.current == '${slug}'][0]{
+  name,
+  "slug": slug.current,
+  banner,
+  description,
+  courseCategories[]->{
+    name,
+    "slug": slug.current,
+    "courses": *[_type == 'course' && references(^._id)]{
+      name,
+      "slug": slug.current,
+      link,
+      publisher,
+      publisherImage,
+      price,
+    },
+  },
+}`
+
+const categoriesQuery = groq`*[_type == 'discipline']{
+  name,
+  "slug": slug.current,
+}`
 
 export const getStaticProps: GetStaticProps<StaticProps> = async ({
   params,
 }) => {
   const { slug } = params
 
-  const career = await sanity().fetch<SingleCareer>(
-    groq`*[_type == 'job' && defined(slug.current) && slug.current == '${slug}'][0]{
-      name,
-      "slug": slug.current,
-      banner,
-      description,
-      courseCategories[]->{
-        name,
-        "slug": slug.current,
-        "courses": *[_type == 'course' && references(^._id)]{
-          name,
-          "slug": slug.current,
-          link,
-          publisher,
-          publisherImage,
-          price,
-        },
-      },
-    }`
+  const career = await sanity().fetch<StaticProps['career']>(
+    careerQuery(slug.toString())
+  )
+
+  const categories = await sanity().fetch<StaticProps['categories']>(
+    categoriesQuery
   )
 
   return {
     props: {
       career,
+      categories,
     },
   }
 }
@@ -75,7 +90,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CareerPage = ({ career }: Props) => {
+const CareerPage = ({ career, categories }: Props) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
 

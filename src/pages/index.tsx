@@ -10,10 +10,11 @@ import CareerCard from 'components/CareerCard'
 import { useEffect, useState } from 'react'
 import { sanity } from 'lib/sanity'
 import { groq } from 'next-sanity'
-import { FrontpageCareer } from 'types'
+import { FrontpageCareer, Category } from 'types'
 
 type StaticProps = {
   careers: FrontpageCareer[]
+  categories: Category[]
 }
 
 const careersQuery = groq`*[_type == 'job']{
@@ -25,19 +26,29 @@ const careersQuery = groq`*[_type == 'job']{
   "discipline": discipline->name,
 }`
 
+const categoriesQuery = groq`*[_type == 'discipline']{
+  name,
+  "slug": slug.current,
+}`
+
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const careers = await sanity().fetch<FrontpageCareer[]>(careersQuery)
+  const careers = await sanity().fetch<StaticProps['careers']>(careersQuery)
+
+  const categories = await sanity().fetch<StaticProps['categories']>(
+    categoriesQuery
+  )
 
   return {
     props: {
       careers,
+      categories,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-export default function Home({ careers }: Props) {
+export default function Home({ careers, categories }: Props) {
   const [searchValue, setSearchValue] = useState(null)
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])

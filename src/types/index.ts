@@ -21,6 +21,11 @@ export type FrontpageCareer = {
   discipline: string
 }
 
+export type Category = {
+  name: string
+  slug: string
+}
+
 export type SingleCareer = {
   name: string
   slug: string
