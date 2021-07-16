@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { RiSearchLine } from 'react-icons/ri'
 import { GrFormClose } from 'react-icons/gr'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 interface Props {
   children: any
-  input: any[]
+  input: {
+    name: string
+    slug: string
+  }[]
 }
 
 export default function CategoryFilter({ children, input }: Props) {
@@ -31,7 +33,7 @@ export default function CategoryFilter({ children, input }: Props) {
   useEffect(() => {
     if (searchValue) {
       let resultsArray = input.filter((item) =>
-        item.toLowerCase().includes(searchValue.toLowerCase())
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
       )
       setSearchResults(resultsArray)
     } else {
@@ -111,35 +113,27 @@ export default function CategoryFilter({ children, input }: Props) {
               ? searchResults.map((item, i) => (
                   <li
                     key={i}
-                    onClick={() =>
-                      router.push(
-                        `/courses/${item.split(' ').join('-').toLowerCase()}`
-                      )
-                    }
+                    onClick={() => router.push(`/courses/${item.slug}`)}
                     className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
-                      query?.id == item.split(' ').join('-').toLowerCase()
+                      query?.id == item.slug
                         ? 'pointer-events-none text-gray-400'
                         : 'cursor-pointer'
                     }`}
                   >
-                    {item}
+                    {item.name}
                   </li>
                 ))
               : input.map((item, i) => (
                   <li
                     key={i}
-                    onClick={() =>
-                      router.push(
-                        `/courses/${item.split(' ').join('-').toLowerCase()}`
-                      )
-                    }
+                    onClick={() => router.push(`/courses/${item.slug}`)}
                     className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
-                      query?.id == item.split(' ').join('-').toLowerCase()
+                      query?.id == item.slug
                         ? 'pointer-events-none text-gray-400'
                         : 'cursor-pointer'
                     }`}
                   >
-                    {item}
+                    {item.name}
                   </li>
                 ))}
           </ul>
