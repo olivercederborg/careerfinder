@@ -225,6 +225,13 @@ export interface Course extends SanityDocument {
   slug?: { _type: "slug"; current: string };
 
   /**
+   * Discipline — `reference`
+   *
+   *
+   */
+  discipline?: SanityReference<Discipline>;
+
+  /**
    * Course categories — `array`
    *
    *

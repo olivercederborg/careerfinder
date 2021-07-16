@@ -3,7 +3,7 @@ import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import { ClientConfig, createClient } from 'next-sanity'
 
 const config: ClientConfig = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  projectId: '98ibb1it',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
   // token: process.env.SANITY_TOKEN,
   apiVersion: 'v2021-07-05',
