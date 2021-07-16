@@ -38,17 +38,6 @@ export default function Navbar() {
               Home
             </a>
           </Link>
-          <Link href="/career">
-            <a
-              className={`px-6 py-3 rounded-[10px] font-medium ${
-                router.pathname === '/career'
-                  ? 'bg-black text-white'
-                  : 'hover:bg-black hover:bg-opacity-5 text-black'
-              }`}
-            >
-              Career
-            </a>
-          </Link>
           <Link href="/courses">
             <a
               className={`px-6 py-3 rounded-[10px] font-medium ${
@@ -87,13 +76,6 @@ export default function Navbar() {
                 <Link href="/">
                   <a className="hover:text-gray-300 hover:border-b-4 text-4xl font-semibold text-white border-gray-300">
                     Home
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/career">
-                  <a className="hover:text-gray-300 hover:border-b-4 text-4xl font-semibold text-white border-gray-300">
-                    Career
                   </a>
                 </Link>
               </li>
