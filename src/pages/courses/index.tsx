@@ -25,6 +25,10 @@ type StaticProps = {
     }[]
     difficulty: string
   }[]
+  categories: {
+    name: string
+    slug: string
+  }[]
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
@@ -41,34 +45,24 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
     difficulty
   }`)
 
+  const categories = await sanity().fetch(groq`*[_type == 'discipline']{
+    name,
+    "slug": slug.current,
+  }`)
+
   return {
     props: {
       courses,
+      categories,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-function CoursesPage({ courses: staticCourses }: Props) {
+function CoursesPage({ courses: staticCourses, categories }: Props) {
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(10)
   const [courses, setCourses] = useState(staticCourses)
-  const [categories, setCategories] = useState([])
-
-  const data = useMemo(() => [], [])
-
-  useEffect(() => {
-    let coursesArray = []
-    let categoriesArray = []
-
-    data.forEach((category) => {
-      category.courses.forEach((item) => coursesArray.push(item))
-      categoriesArray.push(category.category)
-
-      setCourses(coursesArray)
-      setCategories(categoriesArray)
-    })
-  }, [data])
 
   return (
     <>
@@ -83,7 +77,7 @@ function CoursesPage({ courses: staticCourses }: Props) {
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
           </h2>
-          <h3 className="text-2xl font-medium text-gray-main">
+          <h3 className="text-gray-main text-2xl font-medium">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </h3>
         </section>
@@ -104,9 +98,9 @@ function CoursesPage({ courses: staticCourses }: Props) {
           </div>
         </CourseFiltersShell>
 
-        {data ? (
-          <section className="container my-12 overflow-x-auto shadow-lg rounded-xl">
-            <table className="w-full overflow-hidden text-left border-collapse divide-y table-fixed md:table-auto">
+        {staticCourses ? (
+          <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
+            <table className="md:table-auto w-full overflow-hidden text-left border-collapse divide-y table-fixed">
               <thead>
                 <tr>
                   <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-2/5 md:w-auto border-b">
@@ -163,12 +157,12 @@ function CoursesPage({ courses: staticCourses }: Props) {
                                   width={44}
                                   height={44}
                                   alt={course.publisher}
-                                  className="shadow-lg h-11 w-11 rounded-xl"
+                                  className="h-11 w-11 rounded-xl shadow-lg"
                                 />
                               </div>
                               <div className="flex flex-col">
                                 <p>{course.name}</p>
-                                <p className="text-sm font-medium text-gray-main">
+                                <p className="text-gray-main text-sm font-medium">
                                   By {course.publisher}
                                 </p>
                               </div>
@@ -210,7 +204,7 @@ function CoursesPage({ courses: staticCourses }: Props) {
         {courses?.length > loadedCoursesAmount && (
           <button
             onClick={() => setLoadedCoursesAmount(loadedCoursesAmount + 10)}
-            className="flex px-6 py-4 mx-auto my-4 text-center text-white bg-black rounded-xl"
+            className="rounded-xl flex px-6 py-4 mx-auto my-4 text-center text-white bg-black"
           >
             Load 2 more
           </button>

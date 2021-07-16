@@ -93,6 +93,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const CareerPage = ({ career, categories }: Props) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
+  const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(1)
 
   const stickySectionNav = () => {
     const sectionNavOffset = sectionNav?.current?.getBoundingClientRect().top
@@ -122,23 +123,23 @@ const CareerPage = ({ career, categories }: Props) => {
 
       <Navbar />
 
-      <main className="grid grid-cols-1 xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12">
+      <main className="xl:container md:gap-x-4 xl:mx-auto md:grid-cols-12 grid grid-cols-1">
         <div className="relative md:col-span-12 h-[450px] flex justify-center">
           <Image
             {...bannerImageProps}
             alt={career.name}
-            className="object-cover w-full xl:rounded-xl"
+            className="xl:rounded-xl object-cover w-full"
           />
         </div>
 
-        <article className="px-6 mt-7 md:mt-12 md:col-span-6 3xl:col-span-4">
+        <article className="mt-7 md:mt-12 md:col-span-6 3xl:col-span-4 px-6">
           <h2 className="inline-flex items-center text-3xl font-semibold">
             {career.name}
             {career.hot && (
-              <BsFillLightningFill className="ml-3 text-2xl text-yellow-400 filter drop-shadow-lightning" />
+              <BsFillLightningFill className="filter drop-shadow-lightning ml-3 text-2xl text-yellow-400" />
             )}
           </h2>
-          <p className="font-semibold mt-7">Life of a {career.name}</p>
+          <p className="mt-7 font-semibold">Life of a {career.name}</p>
           <BlockContent
             blocks={career.description}
             className="mt-3 space-y-2"
@@ -152,47 +153,61 @@ const CareerPage = ({ career, categories }: Props) => {
             sectionNavIsTop && 'mx-0 rounded-none'
           }`}
         >
-          <a href="#courses" className="py-6 font-medium text-gray-main">
+          <a href="#courses" className="text-gray-main py-6 font-medium">
             Courses
           </a>
-          <a href="#potential" className="py-6 font-medium text-gray-main">
+          <a href="#potential" className="text-gray-main py-6 font-medium">
             Potential
           </a>
-          <a href="#jobs" className="py-6 font-medium text-gray-main">
+          <a href="#jobs" className="text-gray-main py-6 font-medium">
             Jobs
           </a>
         </nav>
 
         <section
           id="courses"
-          className="flex flex-col items-start px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
+          className="md:col-span-6 3xl:col-span-4 flex flex-col items-start px-6 my-12 font-semibold"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Courses</h3>
 
-          {career.courseCategories.map((courseCategory) => (
-            <CourseCard
-              key={courseCategory.slug}
-              name={courseCategory.name}
-              free
-              paid
-              courses={courseCategory.courses}
-            />
-          ))}
+          {career.courseCategories ? (
+            career.courseCategories
+              .slice(0, loadedCoursesAmount)
+              .map((courseCategory) => (
+                <CourseCard
+                  key={courseCategory.slug}
+                  name={courseCategory.name}
+                  free
+                  paid
+                  courses={courseCategory.courses}
+                />
+              ))
+          ) : (
+            <h3>No Courses to show</h3>
+          )}
 
-          <button className="rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black">
-            View all 5 courses
-          </button>
+          {career.courseCategories &&
+          career.courseCategories.length > loadedCoursesAmount ? (
+            <button
+              className="rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black"
+              onClick={() =>
+                setLoadedCoursesAmount(career.courseCategories.length)
+              }
+            >
+              View all {career.courseCategories.length} courses
+            </button>
+          ) : null}
         </section>
 
         <section
           id="potential"
-          className="flex flex-col px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
+          className="md:col-span-6 3xl:col-span-4 flex flex-col px-6 my-12 font-semibold"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Earning Potential</h3>
 
-          <div className="flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg rounded-2xl md:inline-flex md:self-start">
+          <div className="rounded-2xl md:inline-flex md:self-start flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg">
             <button className="px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out text-sm">
               1 year
             </button>
@@ -209,7 +224,7 @@ const CareerPage = ({ career, categories }: Props) => {
 
         <section
           id="jobs"
-          className="px-6 my-12 font-semibold md:col-span-6 3xl:col-span-4"
+          className="md:col-span-6 3xl:col-span-4 px-6 my-12 font-semibold"
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Jobs Available</h3>
@@ -224,9 +239,9 @@ const CareerPage = ({ career, categories }: Props) => {
           </div>
 
           <div className="mt-8 space-y-4">
-            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
+            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
               <div className="flex flex-col w-8/12">
-                <p className="text-sm font-normal text-gray-main">
+                <p className="text-gray-main text-sm font-normal">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">
@@ -236,9 +251,9 @@ const CareerPage = ({ career, categories }: Props) => {
               <p className="text-2xl">13.342</p>
             </section>
 
-            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
+            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
               <div className="flex flex-col w-8/12">
-                <p className="text-sm font-normal text-gray-main">
+                <p className="text-gray-main text-sm font-normal">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">Europe</p>
@@ -246,9 +261,9 @@ const CareerPage = ({ career, categories }: Props) => {
               <p className="text-2xl">27.281</p>
             </section>
 
-            <section className="flex items-center justify-between p-6 bg-white shadow-lg rounded-xl">
+            <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
               <div className="flex flex-col w-8/12">
-                <p className="text-sm font-normal text-gray-main">
+                <p className="text-gray-main text-sm font-normal">
                   Jobs available in
                 </p>
                 <p className="mt-1 text-xl font-semibold truncate">China</p>

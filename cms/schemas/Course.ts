@@ -1,4 +1,5 @@
 import { NAME_FIELD, slugField } from './primitives'
+import { ReferenceDiscipline } from './Discipline'
 
 export const Course = {
   title: 'Course',
@@ -7,6 +8,7 @@ export const Course = {
   fields: [
     NAME_FIELD,
     slugField('name'),
+    ReferenceDiscipline,
     {
       title: 'Course categories',
       name: 'courseCategories',

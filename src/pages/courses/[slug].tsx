@@ -280,7 +280,7 @@ export default function CoursesPage({
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
           </h2>
-          <h3 className="text-2xl font-medium text-gray-main">
+          <h3 className="text-gray-main text-2xl font-medium">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </h3>
         </section>
@@ -326,7 +326,7 @@ export default function CoursesPage({
         </CourseFiltersShell>
 
         <section className="container mt-8">
-          <label htmlFor="search-bar" className="inline-block w-full md:w-72">
+          <label htmlFor="search-bar" className="md:w-72 inline-block w-full">
             Search
             <SearchBar
               searchValue={searchValue}
@@ -337,7 +337,7 @@ export default function CoursesPage({
           </label>
         </section>
 
-        <section className="container my-12 overflow-x-auto shadow-lg rounded-xl">
+        <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
           {searchValue && coursesBySearch.length ? (
             <CoursesTable
               inputCourses={coursesBySearch}
