@@ -14,7 +14,7 @@ export default function Navbar() {
         <Link href="/">
           <a className="inline-block">
             <h1 className="text-xl font-bold tracking-normal text-gray-900 uppercase">
-              CareerFinder
+              Workish
             </h1>
           </a>
         </Link>
