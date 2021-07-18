@@ -1,7 +1,6 @@
 import { sanity } from 'lib/sanity'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { groq } from 'next-sanity'
-import sample from 'lodash/sample'
 
 const careersQuery = groq`*[_type == 'job']{
   name,
@@ -26,9 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case 'GET': {
       const careers = await sanity().fetch<Career[]>(careersQuery)
 
-      const career = sample(careers)
-
-      return res.status(200).json(career)
+      return res.status(200).json(careers)
     }
 
     default: {
