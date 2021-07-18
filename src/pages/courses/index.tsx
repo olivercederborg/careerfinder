@@ -18,6 +18,7 @@ type StaticProps = {
     isNew: boolean
     publisher: string
     publisherImage: SanityImageSource
+    link: string
     price: string
     courseCategories: {
       name: string
@@ -37,7 +38,9 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
     "slug": slug.current,
     publisher,
     publisherImage,
+    discipline,
     price,
+    link,
     courseCategories[]->{
       name,
       "slug": slug.current,
@@ -67,7 +70,7 @@ function CoursesPage({ courses: staticCourses, categories }: Props) {
   return (
     <>
       <Head>
-        <title>Courses - CareerFinder</title>
+        <title>Courses - Workish</title>
       </Head>
 
       <Navbar />
@@ -120,11 +123,7 @@ function CoursesPage({ courses: staticCourses, categories }: Props) {
               <tbody className="font-medium">
                 {courses?.length
                   ? courses?.slice(0, loadedCoursesAmount).map((course, i) => (
-                      <Link
-                        key={course.slug}
-                        href="https://google.com"
-                        passHref
-                      >
+                      <Link key={course.link} href={course.link} passHref>
                         <tr
                           key={i}
                           className="border-t border-b cursor-pointer"
@@ -186,9 +185,9 @@ function CoursesPage({ courses: staticCourses, categories }: Props) {
                           <td className="px-10 py-6">{course.difficulty}</td>
                           <td className="px-10 py-6">
                             <span className="w-[64px] inline-flex justify-center items-center py-1 text-sm font-medium text-white bg-black rounded-lg">
-                              {parseInt(course.price, 10) === 0
+                              {!course.price
                                 ? 'FREE'
-                                : `$${Math.round(parseInt(course.price, 10))}`}
+                                : course.price.toUpperCase()}
                             </span>
                           </td>
                         </tr>

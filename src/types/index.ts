@@ -45,3 +45,19 @@ export type SingleCareer = {
     }[]
   }[]
 }
+
+export type Course = {
+  name: string
+  slug: string
+  discipline: string
+  description: BlockContent
+  link: string
+  publisher: string
+  publisherImage: SanityImageSource
+  price: string
+  difficulty: string
+  courseCategories: {
+    name: string
+    slug: string
+  }[]
+}

@@ -118,7 +118,7 @@ const CareerPage = ({ career, categories }: Props) => {
   return (
     <>
       <Head>
-        <title>{career.name} - CareerFinder</title>
+        <title>{career.name} - Workish</title>
       </Head>
 
       <Navbar />
