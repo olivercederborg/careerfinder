@@ -6,7 +6,7 @@ import { FiChevronDown } from 'react-icons/fi'
 import sample from 'lodash/sample'
 
 import Navbar from 'components/Navbar'
-import SearchBar from 'components/SearchBar'
+import SearchBar from 'components/SearchBarOld'
 import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { sanity } from 'lib/sanity'
@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 export default function Home({ careers, categories }: Props) {
-  const [searchValue, setSearchValue] = useState(null)
+  const [searchValue, setSearchValue] = useState<any>(null)
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])
   const [generatedCareer, setGeneratedCareer] = useState(null)
@@ -145,7 +145,6 @@ export default function Home({ careers, categories }: Props) {
 
         <div className="gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0 grid grid-cols-12 pb-8 mx-6 border-b">
           <SearchBar
-            searchValue={searchValue}
             setSearchValue={setSearchValue}
             placeholderText="Search for careers"
           />

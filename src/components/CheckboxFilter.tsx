@@ -69,7 +69,7 @@ export default function CheckboxFilter({
           setSearchResults([])
           setSearchValue('')
         }}
-        className="inline-flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
+        className="flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2 truncate"
         id="menu-button"
       >
         {filteredInput.length && filteredInput.length <= 1
@@ -82,7 +82,7 @@ export default function CheckboxFilter({
               filteredInput[0].slice(1)
             } +${filteredInput.slice(1).length}`
           : `${children}`}
-        <BsCaretDownFill className="ml-3" />
+        <BsCaretDownFill className="right-3 absolute" />
       </button>
 
       {isOpen && (

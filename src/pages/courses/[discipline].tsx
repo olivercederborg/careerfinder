@@ -231,42 +231,6 @@ export default function CoursesPage({
     setPricing(pricingArray)
   }, [mounted, initialCourses])
 
-  // const courses = useMemo(() => {
-  //   if (filteredCourseCategories.length) {
-  //     return initialCourses.filter((course) => {
-  //       for (const value of filteredCourseCategories) {
-  //         for (const category of course.courseCategories) {
-  //           if (
-  //             category.name
-  //               .toString()
-  //               .toLowerCase()
-  //               .includes(value.toLowerCase())
-  //           ) {
-  //             return course
-  //           }
-  //         }
-  //       }
-  //     })
-  //   }
-
-  //   if (filteredCourseDifficulties.length) {
-  //     return initialCourses.filter((course) => {
-  //       for (const value of filteredCourseDifficulties) {
-  //         if (
-  //           course.difficulty
-  //             .toString()
-  //             .toLowerCase()
-  //             .includes(value.toLowerCase())
-  //         ) {
-  //           return course
-  //         }
-  //       }
-  //     })
-  //   }
-
-  //   return initialCourses
-  // }, [initialCourses, filteredCourseCategories, filteredCourseDifficulties])
-
   return (
     <>
       <Head>
@@ -275,7 +239,7 @@ export default function CoursesPage({
 
       <Navbar />
 
-      <main className="pb-12">
+      <main className="px-4 pb-12">
         <section className="flex flex-col items-center justify-center px-6 my-32 space-y-4 text-center">
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
@@ -324,15 +288,17 @@ export default function CoursesPage({
         </CourseFiltersShell>
 
         <section className="container mt-8">
-          <label htmlFor="search-bar" className="md:w-72 inline-block w-full">
-            Search
+          <div className="md:w-72">
+            <label htmlFor="search-bar" className="block mb-2">
+              Search
+            </label>
             <SearchBar
               searchValue={searchValue}
               setSearchValue={setSearchValue}
               placeholderText="Search courses"
               eleId="search-bar"
             />
-          </label>
+          </div>
         </section>
 
         <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
