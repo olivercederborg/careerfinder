@@ -124,10 +124,7 @@ function CoursesPage({ courses: staticCourses, categories }: Props) {
                 {courses?.length
                   ? courses?.slice(0, loadedCoursesAmount).map((course, i) => (
                       <Link key={course.link} href={course.link} passHref>
-                        <tr
-                          key={i}
-                          className="border-t border-b cursor-pointer"
-                        >
+                        <tr className="border-t border-b cursor-pointer">
                           <td className="relative px-10 py-6 font-semibold">
                             <div className="flex items-center">
                               {course.hot || course.isNew ? (

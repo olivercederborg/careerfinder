@@ -3,10 +3,12 @@ import { useState } from 'react'
 const filterByCategory = (coursesInput: any[], categoryValues) => {
   return coursesInput.filter((course) => {
     for (const value of categoryValues) {
-      if (
-        course.categories.toString().toLowerCase().includes(value.toLowerCase())
-      ) {
-        return course
+      for (const category of course.courseCategories) {
+        if (
+          category.name.toString().toLowerCase().includes(value.toLowerCase())
+        ) {
+          return course
+        }
       }
     }
   })
@@ -28,11 +30,12 @@ const filterByPrice = (coursesInput: any[], priceValues) => {
   return coursesInput.filter((course) => {
     for (const value of priceValues) {
       switch (value) {
-        case 'free':
-          if (course.cost === 0) return course
+        case 'Free':
+          if (course.price.toLowerCase() == 'free') return course
           break
-        case 'paid':
-          if (course.cost > 0) return course
+        case 'Paid':
+          if (course.price && course.price.toLowerCase() != 'free')
+            return course
           break
       }
     }
@@ -50,9 +53,9 @@ const useFilters = () => {
 
   const useFilter = (
     initialCourses: any[],
-    categoryValues: string[],
-    difficultyValues: string[],
-    priceValues: string[]
+    categoryValues: string[] | null,
+    difficultyValues: string[] | null,
+    priceValues: string[] | null
   ) => {
     if (categoryValues && difficultyValues && priceValues) {
       let filtered = []

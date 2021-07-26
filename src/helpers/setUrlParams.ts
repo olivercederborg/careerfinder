@@ -12,10 +12,12 @@ export const setCoursesUrlParams = (
   ) {
     const courseCategoryUrlParams = filteredCourseCategories
       .join(',')
+      .replace(' ', '%20')
       .toLowerCase()
 
     const difficultyUrlParams = filteredCourseDifficulties
       .join(',')
+      .replace(' ', '%20')
       .toLowerCase()
 
     const pricingUrlParams = filteredCoursePricing.join(',').toLowerCase()
@@ -25,32 +27,44 @@ export const setCoursesUrlParams = (
       !difficultyUrlParams.length &&
       !pricingUrlParams.length
     ) {
-      router.push(`?categories=${courseCategoryUrlParams}`, undefined, {
-        shallow: true,
-      })
+      router.push(
+        `${query.discipline}?categories=${courseCategoryUrlParams}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      )
     } else if (
       !courseCategoryUrlParams.length &&
       difficultyUrlParams.length &&
       !pricingUrlParams.length
     ) {
-      router.push(`?difficulties=${difficultyUrlParams}`, undefined, {
-        shallow: true,
-      })
+      router.push(
+        `${query.discipline}?difficulties=${difficultyUrlParams}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      )
     } else if (
       !courseCategoryUrlParams.length &&
       !difficultyUrlParams.length &&
       pricingUrlParams.length
     ) {
-      router.push(`?pricing=${pricingUrlParams}`, undefined, {
-        shallow: true,
-      })
+      router.push(
+        `${query.discipline}?pricing=${pricingUrlParams}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      )
     } else if (
       courseCategoryUrlParams.length &&
       difficultyUrlParams.length &&
       pricingUrlParams.length
     ) {
       router.push(
-        `?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
+        `${query.discipline}?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
         undefined,
         {
           shallow: true,
@@ -62,7 +76,7 @@ export const setCoursesUrlParams = (
       pricingUrlParams.length
     ) {
       router.push(
-        `?difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
+        `${query.discipline}?difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
         undefined,
         {
           shallow: true,
@@ -74,7 +88,7 @@ export const setCoursesUrlParams = (
       pricingUrlParams.length
     ) {
       router.push(
-        `?categories=${courseCategoryUrlParams}&pricing=${pricingUrlParams}`,
+        `${query.discipline}?categories=${courseCategoryUrlParams}&pricing=${pricingUrlParams}`,
         undefined,
         {
           shallow: true,
@@ -86,7 +100,7 @@ export const setCoursesUrlParams = (
       !pricingUrlParams.length
     ) {
       router.push(
-        `?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}`,
+        `${query.discipline}?categories=${courseCategoryUrlParams}&difficulties=${difficultyUrlParams}`,
         undefined,
         {
           shallow: true,
@@ -98,6 +112,6 @@ export const setCoursesUrlParams = (
     !filteredCourseDifficulties.length &&
     !filteredCoursePricing.length
   ) {
-    router.push(query?.id, undefined, { shallow: true })
+    router.push(query?.discipline, undefined, { shallow: true })
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
@@ -17,23 +17,25 @@ import { setCoursesUrlParams } from 'helpers/setUrlParams'
 import { groq } from 'next-sanity'
 import { sanity } from 'lib/sanity'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import { capitalizeWords } from 'helpers/capitalizeWords'
 
 type StaticProps = {
-  course: unknown
   category: any
+  categories: any
+  initialCourses: any
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const courses = await sanity().fetch<{ slug: string }[]>(
-    groq`*[_type == 'course' && defined(slug.current)]{
-      "slug": slug.current
+  const courses = await sanity().fetch<{ discipline: string }[]>(
+    groq`*[_type == 'course' && defined(discipline)]{
+      "discipline": discipline->slug.current
     }`
   )
 
   return {
-    paths: courses.map(({ slug }) => ({
+    paths: courses.map(({ discipline }) => ({
       params: {
-        slug,
+        discipline,
       },
     })),
     fallback: false,
@@ -43,76 +45,101 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<StaticProps> = async ({
   params,
 }) => {
-  const { slug } = params
+  const { discipline } = params
 
-  const course = await sanity().fetch<{}>(
-    groq`*[_type == 'course' && defined(slug.current) && slug.current == '${slug}'][0]{
+  const category = await sanity().fetch<{}>(
+    groq`*[_type == 'discipline' && defined(slug.current) && slug.current == '${discipline}'][0]{
       name,
       "slug": slug.current,
     }`
   )
 
+  const categories = await sanity().fetch<{}>(
+    groq`*[_type == 'discipline']{
+      name,
+      "slug": slug.current,
+    }`
+  )
+
+  const initialCourses = await sanity().fetch<{}>(
+    groq`*[_type == 'course' && defined(discipline) && discipline->slug.current == '${discipline}']{
+    name,
+    "slug": slug.current,
+    publisher,
+    publisherImage,
+    discipline->{
+      name,
+      "slug": slug.current,
+    },
+    price,
+    link,
+    courseCategories[]->{
+      name,
+      "slug": slug.current,
+    },
+    difficulty
+    }`
+  )
+
   return {
     props: {
-      course,
-      category: {
-        courses: [],
-      },
+      category,
+      categories,
+      initialCourses,
     },
   }
 }
 
 export default function CoursesPage({
-  course,
   category,
+  categories,
+  initialCourses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const fetched = {
-    data: [],
-  }
-
   const router = useRouter()
   const { query }: any = useRouter()
   const { filteredCourses, useFilter, useSearchFilter } = useFilters()
 
   const [mounted, setMounted] = useState<boolean>(false)
   const [searchValue, setSearchValue] = useState('')
-  const [courses, setCourses] = useState(category?.courses || [])
-  const [coursesBySearch, setCoursesBySearch] = useState(
-    useSearchFilter(category?.courses, searchValue)
-  )
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState<number>(10)
-  const [categories, setCategories] = useState([])
+  const [coursesBySearch, setCoursesBySearch] = useState(
+    useSearchFilter(initialCourses, searchValue)
+  )
+  const [courseCategories, setCourseCategories] = useState<string[]>([])
   const [difficulties, setDifficulties] = useState([])
   const [pricing, setPricing] = useState([])
-  const [courseCategories, setCourseCategories] = useState([])
   const [filteredCourseCategories, setFilteredCourseCategories] = useState([])
   const [filteredCourseDifficulties, setFilteredCourseDifficulties] = useState(
     []
   )
   const [filteredCoursePricing, setFilteredCoursePricing] = useState([])
 
-  const allCourses = fetched?.data
-
   useEffect(() => setMounted(true), [])
-
-  useEffect(() => setCourses(category.courses), [category])
 
   // Filter courses by inputs.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useFilter(
-      courses,
-      filteredCourseCategories || null,
-      filteredCourseDifficulties || null,
-      filteredCoursePricing || null
+      initialCourses,
+      (filteredCourseCategories.length && filteredCourseCategories) || null,
+      (filteredCourseDifficulties.length && filteredCourseDifficulties) || null,
+      (filteredCoursePricing.length && filteredCoursePricing) || null
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    courses,
+    initialCourses,
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
-    useFilter,
   ])
+
+  useEffect(() => {
+    setCoursesBySearch(() =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useSearchFilter(filteredCourses || initialCourses, searchValue)
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, filteredCourses, initialCourses])
 
   // Set filtering URL params when filters change.
   useEffect(() => {
@@ -125,13 +152,12 @@ export default function CoursesPage({
         filteredCoursePricing || null
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filteredCourseCategories,
     filteredCourseDifficulties,
     filteredCoursePricing,
     mounted,
-    query,
-    router,
   ])
 
   // Reset filters when changing overall category.
@@ -146,50 +172,45 @@ export default function CoursesPage({
       setFilteredCourseDifficulties([])
       setFilteredCoursePricing([])
     }
-  }, [
-    mounted,
-    query?.categories,
-    query?.difficulties,
-    query.id,
-    query?.pricing,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, query?.discipline])
 
   useEffect(() => {
     if (mounted && query?.categories) {
-      setFilteredCourseCategories(query?.categories?.split(','))
+      let queryCategories = capitalizeWords(
+        query?.categories?.replace('%20', ' ')
+      )
+
+      setFilteredCourseCategories(queryCategories.split(','))
     }
   }, [mounted, query?.categories])
 
   useEffect(() => {
     if (mounted && query?.difficulties) {
-      setFilteredCourseDifficulties(query?.difficulties?.split(','))
+      let queryDifficulties = capitalizeWords(
+        query?.difficulties?.replace('%20', ' ')
+      )
+      setFilteredCourseDifficulties(queryDifficulties.split(','))
     }
   }, [mounted, query?.difficulties])
 
   useEffect(() => {
-    if (mounted && query?.prices) {
-      setFilteredCoursePricing(query?.prices?.split(','))
+    if (mounted && query?.pricing) {
+      let queryPricing = capitalizeWords(query?.pricing)
+      setFilteredCoursePricing(queryPricing.split(','))
     }
-  }, [mounted, query?.prices])
-
-  useEffect(() => {
-    if (allCourses) {
-      setCategories(() =>
-        allCourses.map((courseCategory) => courseCategory.category)
-      )
-    }
-  }, [allCourses])
+  }, [mounted, query?.pricing])
 
   useEffect(() => {
     let courseCategoriesArray = []
     let difficultiesArray = []
     let pricingArray = []
 
-    if (category) {
-      category?.courses.forEach((course) => {
-        course.categories.forEach((item) => {
-          if (!courseCategoriesArray.includes(item)) {
-            courseCategoriesArray.push(item)
+    if (mounted) {
+      initialCourses.forEach((course) => {
+        course.courseCategories.forEach((category) => {
+          if (!courseCategoriesArray.includes(category.name)) {
+            courseCategoriesArray.push(category.name)
           }
         })
 
@@ -197,75 +218,54 @@ export default function CoursesPage({
           difficultiesArray.push(course.difficulty)
         }
 
-        if (course.cost > 0 && !pricingArray.includes('Paid')) {
-          pricingArray.push('Paid')
-        } else if (course.cost == 0 && !pricingArray.includes('Free')) {
-          pricingArray.push('Free')
+        if (!pricingArray.includes(course.price.toUpperCase())) {
+          if (course.price.toUpperCase() == 'FREE') pricingArray.push('Free')
+          if (course.price && course.price.toUpperCase() != 'FREE')
+            pricingArray.push('Paid')
         }
       })
-
-      setCourseCategories(courseCategoriesArray)
-      setDifficulties(difficultiesArray)
-      setPricing(pricingArray)
     }
-  }, [category])
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useFilter(
-      courses,
-      filteredCourseCategories.length && filteredCourseCategories,
-      filteredCourseDifficulties.length && filteredCourseDifficulties,
-      filteredCoursePricing.length && filteredCoursePricing
-    )
-  }, [
-    courses,
-    filteredCourseCategories,
-    filteredCourseDifficulties,
-    filteredCoursePricing,
-    useFilter,
-  ])
+    setCourseCategories(courseCategoriesArray)
+    setDifficulties(difficultiesArray)
+    setPricing(pricingArray)
+  }, [mounted, initialCourses])
 
-  useEffect(() => {
-    setCoursesBySearch(() =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useSearchFilter(filteredCourses || courses, searchValue)
-    )
-  }, [searchValue, filteredCourses, useSearchFilter, courses])
+  // const courses = useMemo(() => {
+  //   if (filteredCourseCategories.length) {
+  //     return initialCourses.filter((course) => {
+  //       for (const value of filteredCourseCategories) {
+  //         for (const category of course.courseCategories) {
+  //           if (
+  //             category.name
+  //               .toString()
+  //               .toLowerCase()
+  //               .includes(value.toLowerCase())
+  //           ) {
+  //             return course
+  //           }
+  //         }
+  //       }
+  //     })
+  //   }
 
-  useEffect(() => {
-    if (mounted) {
-      setCoursesUrlParams(
-        router,
-        query,
-        filteredCourseCategories || null,
-        filteredCourseDifficulties || null,
-        filteredCoursePricing || null
-      )
-    }
-  }, [
-    filteredCourseCategories,
-    filteredCourseDifficulties,
-    filteredCoursePricing,
-    mounted,
-    query,
-    router,
-  ])
+  //   if (filteredCourseDifficulties.length) {
+  //     return initialCourses.filter((course) => {
+  //       for (const value of filteredCourseDifficulties) {
+  //         if (
+  //           course.difficulty
+  //             .toString()
+  //             .toLowerCase()
+  //             .includes(value.toLowerCase())
+  //         ) {
+  //           return course
+  //         }
+  //       }
+  //     })
+  //   }
 
-  useEffect(() => {
-    if (mounted && query?.categories)
-      setFilteredCourseCategories(query?.categories?.split(','))
-  }, [mounted, query?.categories])
-
-  useEffect(() => {
-    if (mounted && query?.difficulties)
-      setFilteredCourseDifficulties(query?.difficulties?.split(','))
-  }, [mounted, query?.difficulties])
-
-  useEffect(() => {
-    if (mounted && query?.pricing)
-      setFilteredCoursePricing(query?.pricing?.split(','))
-  }, [mounted, query?.pricing])
+  //   return initialCourses
+  // }, [initialCourses, filteredCourseCategories, filteredCourseDifficulties])
 
   return (
     <>
@@ -287,9 +287,7 @@ export default function CoursesPage({
         <CourseFiltersShell>
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Category
-            <CategoryFilter input={categories}>
-              {category?.category || 'All Categories'}
-            </CategoryFilter>
+            <CategoryFilter input={categories}>{category.name}</CategoryFilter>
           </div>
 
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
@@ -365,7 +363,7 @@ export default function CoursesPage({
             (!searchValue && !filteredCourseDifficulties) ||
             (!searchValue && !filteredCoursePricing) ? (
             <CoursesTable
-              inputCourses={courses}
+              inputCourses={initialCourses}
               loadedCoursesAmount={loadedCoursesAmount}
             />
           ) : null}
@@ -377,7 +375,8 @@ export default function CoursesPage({
             loadedAmount={loadedCoursesAmount}
             setLoadedAmount={setLoadedCoursesAmount}
           />
-        ) : !filteredCourses.length && courses?.length > loadedCoursesAmount ? (
+        ) : !filteredCourses.length &&
+          initialCourses?.length > loadedCoursesAmount ? (
           <LoadMoreButton
             increaseBy={10}
             loadedAmount={loadedCoursesAmount}
