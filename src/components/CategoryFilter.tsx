@@ -101,7 +101,7 @@ export default function CategoryFilter({ children, input }: Props) {
               <li
                 onClick={() => router.push('/courses')}
                 className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
-                  !query?.id
+                  !query?.discipline
                     ? 'pointer-events-none text-gray-400'
                     : 'cursor-pointer'
                 }`}
@@ -115,7 +115,7 @@ export default function CategoryFilter({ children, input }: Props) {
                     key={i}
                     onClick={() => router.push(`/courses/${item.slug}`)}
                     className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
-                      query?.id == item.slug
+                      query?.discipline == item.slug
                         ? 'pointer-events-none text-gray-400'
                         : 'cursor-pointer'
                     }`}
@@ -128,7 +128,7 @@ export default function CategoryFilter({ children, input }: Props) {
                     key={i}
                     onClick={() => router.push(`/courses/${item.slug}`)}
                     className={` hover:bg-gray-100 flex items-center px-3 py-2 font-normal ${
-                      query?.id == item.slug
+                      query?.discipline == item.slug
                         ? 'pointer-events-none text-gray-400'
                         : 'cursor-pointer'
                     }`}

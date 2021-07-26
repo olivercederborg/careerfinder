@@ -25,12 +25,10 @@ export default function CheckboxFilter({
 
   const handleCheckboxes = (e) => {
     if (e.target.checked) {
-      setFilteredInput(() => [...filteredInput, e.target.value.toLowerCase()])
+      setFilteredInput(() => [...filteredInput, e.target.value])
     } else if (!e.target.checked) {
       setFilteredInput(() =>
-        filteredInput.filter(
-          (item) => item.toLowerCase() !== e.target.value.toLowerCase()
-        )
+        filteredInput.filter((item) => item !== e.target.value)
       )
     }
   }
@@ -121,7 +119,7 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={filteredInput.includes(filter.toLowerCase())}
+                    checked={filteredInput.includes(filter)}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
@@ -139,7 +137,7 @@ export default function CheckboxFilter({
                     id={filter}
                     type="checkbox"
                     value={filter}
-                    checked={filteredInput.includes(filter.toLowerCase())}
+                    checked={filteredInput.includes(filter)}
                     readOnly={true}
                     className="checked:bg-black checked:ring-black bg-transparent ring-gray-400 relative block px-2 py-2 mr-2 rounded-[4px] appearance-none outline-none border-2"
                   />
