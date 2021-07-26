@@ -232,7 +232,7 @@ const CareerPage = ({ career, categories }: Props) => {
           <div className="relative flex flex-col justify-center">
             <RiSearchLine className="absolute ml-6 text-lg text-black" />
             <input
-              type="search"
+              type="text"
               placeholder="Search for a country"
               className="rounded-xl pl-14 w-full px-6 py-4 text-sm border border-[#dedede] placeholder-gray-main focus:outline-none focus:border-1 transition-colors duration-200 ease-in-out focus:border-black shadow-slight bg-white appearance-none"
             />
