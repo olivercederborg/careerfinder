@@ -25,19 +25,19 @@ type StaticProps = {
 
 const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
   return (
-    <table className="md:table-auto w-full overflow-hidden text-left border-collapse divide-y table-fixed">
+    <table className="md:table-auto w-full overflow-x-auto text-left border-collapse divide-y table-fixed">
       <thead>
         <tr>
-          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-2/5 md:w-auto border-b">
+          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-96 md:w-auto border-b">
             Name
           </th>
-          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
+          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-56 md:w-auto border-b">
             Categories
           </th>
-          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
+          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-40 md:w-auto border-b">
             Difficulty
           </th>
-          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
+          <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-36 md:w-auto border-b">
             Price
           </th>
         </tr>
