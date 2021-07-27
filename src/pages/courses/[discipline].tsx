@@ -38,7 +38,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         discipline,
       },
     })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
@@ -87,6 +87,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async ({
       categories,
       initialCourses,
     },
+    revalidate: 600,
   }
 }
 
