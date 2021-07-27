@@ -219,7 +219,11 @@ export default function CoursesPage({
           difficultiesArray.push(course.difficulty)
         }
 
-        if (!pricingArray.includes(course.price.toUpperCase())) {
+        if (
+          !pricingArray.includes(
+            course.price[0].toUpperCase() + course.price.slice(1).toLowerCase()
+          )
+        ) {
           if (course.price.toUpperCase() == 'FREE') pricingArray.push('Free')
           if (course.price && course.price.toUpperCase() != 'FREE')
             pricingArray.push('Paid')
