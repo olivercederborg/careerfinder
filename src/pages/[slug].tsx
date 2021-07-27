@@ -68,6 +68,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async ({
       career,
       categories,
     },
+    revalidate: 600,
   }
 }
 
@@ -84,7 +85,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
         slug,
       },
     })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
@@ -178,8 +179,6 @@ const CareerPage = ({ career, categories }: Props) => {
                 <CourseCard
                   key={courseCategory.slug}
                   name={courseCategory.name}
-                  free
-                  paid
                   courses={courseCategory.courses}
                 />
               ))

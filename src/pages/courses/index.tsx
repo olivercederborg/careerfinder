@@ -60,6 +60,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       initialCourses,
       categories,
     },
+    revalidate: 600,
   }
 }
 
