@@ -1,44 +1,50 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Link from 'next/link'
 
-import CategoryFilter from 'components/CategoryFilter'
-import CourseFiltersShell from 'components/CourseFiltersShell'
+import axios from 'axios'
+import { useQuery } from 'react-query'
+
 import Navbar from 'components/Navbar'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { imageBuilder, sanity } from 'lib/sanity'
+import CourseFiltersShell from 'components/CourseFiltersShell'
+import CoursesTable from 'components/CoursesTable'
+import CategoryFilter from 'components/CategoryFilter'
+import CheckboxFilter from 'components/CheckboxFilter'
+import LoadMoreButton from 'components/LoadMoreButton'
+import SearchBar from 'components/SearchBar'
+import useFilters from 'hooks/useCourseFilter'
+import {
+  setCoursesUrlParams,
+  setSimpleCoursesUrlParams,
+} from 'helpers/setUrlParams'
 import { groq } from 'next-sanity'
-import { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { sanity } from 'lib/sanity'
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import { capitalizeWords } from 'helpers/capitalizeWords'
 
 type StaticProps = {
-  courses: {
-    name: string
-    slug: string
-    hot: boolean
-    isNew: boolean
-    publisher: string
-    publisherImage: SanityImageSource
-    link: string
-    price: string
-    courseCategories: {
-      name: string
-      slug: string
-    }[]
-    difficulty: string
-  }[]
-  categories: {
-    name: string
-    slug: string
-  }[]
+  categories: any
+  initialCourses: any
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const courses = await sanity().fetch(groq`*[_type == 'course']{
+  const categories = await sanity().fetch<{}>(
+    groq`*[_type == 'discipline']{
+      name,
+      "slug": slug.current,
+    }`
+  )
+
+  const initialCourses = await sanity().fetch<{}>(
+    groq`*[_type == 'course']{
     name,
     "slug": slug.current,
     publisher,
     publisherImage,
-    discipline,
+    discipline->{
+      name,
+      "slug": slug.current,
+    },
     price,
     link,
     courseCategories[]->{
@@ -46,16 +52,12 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       "slug": slug.current,
     },
     difficulty
-  }`)
-
-  const categories = await sanity().fetch(groq`*[_type == 'discipline']{
-    name,
-    "slug": slug.current,
-  }`)
+    }`
+  )
 
   return {
     props: {
-      courses,
+      initialCourses,
       categories,
     },
   }
@@ -63,9 +65,106 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-function CoursesPage({ courses: staticCourses, categories }: Props) {
-  const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(10)
-  const [courses, setCourses] = useState(staticCourses)
+function CoursesPage({ initialCourses, categories }: Props) {
+  const router = useRouter()
+  const { query }: any = useRouter()
+  const { filteredCourses, useFilter, useSearchFilter } = useFilters()
+
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [loadedCoursesAmount, setLoadedCoursesAmount] = useState<number>(10)
+  const [coursesBySearch, setCoursesBySearch] = useState(
+    useSearchFilter(initialCourses, searchValue)
+  )
+  const [courseCategories, setCourseCategories] = useState<string[]>([])
+  const [difficulties, setDifficulties] = useState([])
+  const [pricing, setPricing] = useState([])
+  const [filteredCourseCategories, setFilteredCourseCategories] = useState([])
+  const [filteredCourseDifficulties, setFilteredCourseDifficulties] = useState(
+    []
+  )
+  const [filteredCoursePricing, setFilteredCoursePricing] = useState([])
+
+  useEffect(() => setMounted(true), [])
+
+  // Filter courses by inputs.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useFilter(
+      initialCourses,
+      null,
+      (filteredCourseDifficulties.length && filteredCourseDifficulties) || null,
+      (filteredCoursePricing.length && filteredCoursePricing) || null
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCourses, filteredCourseDifficulties, filteredCoursePricing])
+
+  useEffect(() => {
+    setCoursesBySearch(() =>
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useSearchFilter(filteredCourses || initialCourses, searchValue)
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, filteredCourses, initialCourses])
+
+  // Set filtering URL params when filters change.
+  useEffect(() => {
+    if (mounted) {
+      setSimpleCoursesUrlParams(
+        router,
+        filteredCourseDifficulties || null,
+        filteredCoursePricing || null
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredCourseDifficulties, filteredCoursePricing, mounted])
+
+  // Reset filters when changing overall category.
+  useEffect(() => {
+    if (mounted && !query?.difficulties && !query?.pricing) {
+      setFilteredCourseDifficulties([])
+      setFilteredCoursePricing([])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, query?.discipline])
+
+  useEffect(() => {
+    if (mounted && query?.difficulties) {
+      let queryDifficulties = capitalizeWords(
+        query?.difficulties?.replace('%20', ' ')
+      )
+      setFilteredCourseDifficulties(queryDifficulties.split(','))
+    }
+  }, [mounted, query?.difficulties])
+
+  useEffect(() => {
+    if (mounted && query?.pricing) {
+      let queryPricing = capitalizeWords(query?.pricing)
+      setFilteredCoursePricing(queryPricing.split(','))
+    }
+  }, [mounted, query?.pricing])
+
+  useEffect(() => {
+    let difficultiesArray = []
+    let pricingArray = []
+
+    if (mounted) {
+      initialCourses.forEach((course) => {
+        if (!difficultiesArray.includes(course.difficulty)) {
+          difficultiesArray.push(course.difficulty)
+        }
+
+        if (!pricingArray.includes(course.price.toUpperCase())) {
+          if (course.price.toUpperCase() == 'FREE') pricingArray.push('Free')
+          if (course.price && course.price.toUpperCase() != 'FREE')
+            pricingArray.push('Paid')
+        }
+      })
+    }
+
+    setDifficulties(difficultiesArray)
+    setPricing(pricingArray)
+  }, [mounted, initialCourses])
 
   return (
     <>
@@ -93,118 +192,86 @@ function CoursesPage({ courses: staticCourses, categories }: Props) {
 
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Difficulty
-            {/* <CheckboxFilter>All Difficulties</CheckboxFilter> */}
+            <CheckboxFilter
+              input={difficulties}
+              filteredInput={filteredCourseDifficulties}
+              setFilteredInput={(input) => setFilteredCourseDifficulties(input)}
+            >
+              All Difficulties
+            </CheckboxFilter>
           </div>
+
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
-            Price
-            {/* <CheckboxFilter>All Prices</CheckboxFilter> */}
+            Pricing
+            <CheckboxFilter
+              input={pricing}
+              filteredInput={filteredCoursePricing}
+              setFilteredInput={(input) => setFilteredCoursePricing(input)}
+            >
+              Free &amp; Paid
+            </CheckboxFilter>
           </div>
         </CourseFiltersShell>
 
-        {staticCourses ? (
-          <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
-            <table className="md:table-auto w-full overflow-hidden text-left border-collapse divide-y table-fixed">
-              <thead>
-                <tr>
-                  <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-2/5 md:w-auto border-b">
-                    Name
-                  </th>
-                  <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
-                    Categories
-                  </th>
-                  <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
-                    Difficulty
-                  </th>
-                  <th className="text-gray-main px-10 py-5 text-[15px] font-medium w-1/5 md:w-auto border-b">
-                    Price
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="font-medium">
-                {courses?.length
-                  ? courses?.slice(0, loadedCoursesAmount).map((course, i) => (
-                      <Link key={course.link} href={course.link} passHref>
-                        <tr className="border-t border-b cursor-pointer">
-                          <td className="relative px-10 py-6 font-semibold">
-                            <div className="flex items-center">
-                              {course.hot || course.isNew ? (
-                                <div
-                                  className={`w-0 h-0 border-b-[40px] text-white flex items-start justify-center text-xs absolute left-0 top-0 transform -rotate-45 translate-x-[-26px] -translate-y-1.5 rounded-lg ${
-                                    course.hot
-                                      ? 'border-[#FFB931]'
-                                      : 'border-black'
-                                  }`}
-                                  style={{
-                                    borderRight: '40px solid transparent',
-                                    borderLeft: '40px solid transparent',
-                                  }}
-                                >
-                                  <span className="font-medium transform translate-y-[18px]">
-                                    {course.hot ? 'HOT' : 'NEW'}
-                                  </span>
-                                </div>
-                              ) : null}
-                              <div className="flex items-center mr-4">
-                                <img
-                                  src={imageBuilder(course.publisherImage)
-                                    .size(44, 44)
-                                    .auto('format')
-                                    .url()}
-                                  width={44}
-                                  height={44}
-                                  alt={course.publisher}
-                                  className="h-11 w-11 rounded-xl shadow-lg"
-                                />
-                              </div>
-                              <div className="flex flex-col">
-                                <p>{course.name}</p>
-                                <p className="text-gray-main text-sm font-medium">
-                                  By {course.publisher}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-10 py-6">
-                            <p className="inline-block mr-3">
-                              {course.courseCategories
-                                ?.slice(0, 2)
-                                .map((category) => category.name)
-                                .join(', ')}
-                            </p>
-                            {course.courseCategories?.length > 2 ? (
-                              <span className="inline-block px-2 py-1 text-sm text-gray-600 bg-gray-200 rounded-lg">
-                                +{course.courseCategories?.length - 2} more
-                              </span>
-                            ) : (
-                              ''
-                            )}
-                          </td>
-                          <td className="px-10 py-6">{course.difficulty}</td>
-                          <td className="px-10 py-6">
-                            <span className="w-[64px] inline-flex justify-center items-center py-1 text-sm font-medium text-white bg-black rounded-lg">
-                              {!course.price
-                                ? 'FREE'
-                                : course.price.toUpperCase()}
-                            </span>
-                          </td>
-                        </tr>
-                      </Link>
-                    ))
-                  : null}
-              </tbody>
-            </table>
-          </section>
-        ) : (
-          <h1>No Data</h1>
-        )}
-        {courses?.length > loadedCoursesAmount && (
-          <button
-            onClick={() => setLoadedCoursesAmount(loadedCoursesAmount + 10)}
-            className="rounded-xl flex px-6 py-4 mx-auto my-4 text-center text-white bg-black"
-          >
-            Load 2 more
-          </button>
-        )}
+        <section className="container mt-8">
+          <div className="md:w-72">
+            <label htmlFor="search-bar" className="block mb-2">
+              Search
+            </label>
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              placeholderText="Search courses"
+              eleId="search-bar"
+            />
+          </div>
+        </section>
+
+        <section className="rounded-xl container my-12 overflow-x-auto shadow-lg">
+          {searchValue && coursesBySearch.length ? (
+            <CoursesTable
+              inputCourses={coursesBySearch}
+              loadedCoursesAmount={loadedCoursesAmount}
+            />
+          ) : null}
+
+          {(searchValue && !coursesBySearch.length) ||
+          (!searchValue &&
+            !filteredCourses.length &&
+            (filteredCourseDifficulties.length || filteredCoursePricing)) ? (
+            <h2 className="py-8 text-xl text-center">
+              Sorry! We found no courses matching your filters.
+            </h2>
+          ) : null}
+
+          {!searchValue && filteredCourses.length ? (
+            <CoursesTable
+              inputCourses={filteredCourses}
+              loadedCoursesAmount={loadedCoursesAmount}
+            />
+          ) : (!searchValue && !filteredCourseDifficulties) ||
+            (!searchValue && !filteredCoursePricing) ? (
+            <CoursesTable
+              inputCourses={initialCourses}
+              loadedCoursesAmount={loadedCoursesAmount}
+            />
+          ) : null}
+        </section>
+
+        {filteredCourses.length > loadedCoursesAmount ? (
+          <LoadMoreButton
+            increaseBy={10}
+            loadedAmount={loadedCoursesAmount}
+            setLoadedAmount={setLoadedCoursesAmount}
+          />
+        ) : !filteredCourses.length &&
+          initialCourses?.length > loadedCoursesAmount ? (
+          <LoadMoreButton
+            increaseBy={10}
+            loadedAmount={loadedCoursesAmount}
+            setLoadedAmount={setLoadedCoursesAmount}
+          />
+        ) : null}
       </main>
     </>
   )

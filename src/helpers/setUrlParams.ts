@@ -6,14 +6,13 @@ export const setCoursesUrlParams = (
   filteredCoursePricing: string[] | null
 ) => {
   if (
-    filteredCourseCategories.length ||
-    filteredCourseDifficulties.length ||
-    filteredCoursePricing.length
+    filteredCourseCategories?.length ||
+    filteredCourseDifficulties?.length ||
+    filteredCoursePricing?.length
   ) {
-    const courseCategoryUrlParams = filteredCourseCategories
-      .join(',')
-      .replace(' ', '%20')
-      .toLowerCase()
+    const courseCategoryUrlParams =
+      filteredCourseCategories?.length &&
+      filteredCourseCategories.join(',').replace(' ', '%20').toLowerCase()
 
     const difficultyUrlParams = filteredCourseDifficulties
       .join(',')
@@ -108,10 +107,48 @@ export const setCoursesUrlParams = (
       )
     }
   } else if (
-    !filteredCourseCategories.length &&
+    !filteredCourseCategories?.length &&
+    !filteredCourseDifficulties?.length &&
+    !filteredCoursePricing?.length
+  ) {
+    router.push(query?.discipline, undefined, { shallow: true })
+  }
+}
+
+export const setSimpleCoursesUrlParams = (
+  router: any,
+  filteredCourseDifficulties: string[] | null,
+  filteredCoursePricing: string[] | null
+) => {
+  if (filteredCourseDifficulties?.length || filteredCoursePricing?.length) {
+    const difficultyUrlParams = filteredCourseDifficulties
+      .join(',')
+      .replace(' ', '%20')
+      .toLowerCase()
+
+    const pricingUrlParams = filteredCoursePricing.join(',').toLowerCase()
+
+    if (difficultyUrlParams.length && !pricingUrlParams.length) {
+      router.push(`?difficulties=${difficultyUrlParams}`, undefined, {
+        shallow: true,
+      })
+    } else if (!difficultyUrlParams.length && pricingUrlParams.length) {
+      router.push(`?pricing=${pricingUrlParams}`, undefined, {
+        shallow: true,
+      })
+    } else if (difficultyUrlParams.length && pricingUrlParams.length) {
+      router.push(
+        `?difficulties=${difficultyUrlParams}&pricing=${pricingUrlParams}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      )
+    }
+  } else if (
     !filteredCourseDifficulties.length &&
     !filteredCoursePricing.length
   ) {
-    router.push(query?.discipline, undefined, { shallow: true })
+    router.push('/courses', undefined, { shallow: true })
   }
 }

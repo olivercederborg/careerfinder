@@ -248,6 +248,7 @@ export default function CoursesPage({
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </h3>
         </section>
+
         <CourseFiltersShell>
           <div className="md:flex-auto flex flex-col items-start w-full font-medium md:max-w-[45%] lg:max-w-[232px]">
             Category
