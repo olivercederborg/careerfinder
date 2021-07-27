@@ -5,17 +5,15 @@ import { SingleCareer } from 'types'
 
 type Props = {
   name: string
-  free: unknown
-  paid: unknown
   courses: SingleCareer['courseCategories'][0]['courses']
 }
 
-export default function CourseCard({ name, free, paid, courses }: Props) {
+export default function CourseCard({ name, courses }: Props) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
-    <section className="w-full mt-4 shadow-lg rounded-xl">
-      <div className="flex items-center p-6 pb-5 space-x-4 ">
+    <section className="rounded-xl w-full mt-4 shadow-lg">
+      <div className=" flex items-center p-6 pb-5 space-x-4">
         <div
           className={`place-items-center grid text-white bg-black shadow-md ${
             isExpanded
@@ -33,9 +31,12 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
               isExpanded ? 'hidden' : 'inline-block'
             }`}
           >
-            {courses.filter((course) => parseInt(course.price) === 0).length}{' '}
-            Free &bull;{' '}
-            {courses.filter((course) => parseInt(course.price) !== 0).length}{' '}
+            {courses.filter((course) => course.price == 'free').length} Free
+            &bull;{' '}
+            {
+              courses.filter((course) => course.price && course.price != 'free')
+                .length
+            }{' '}
             Paid
           </p>
         </div>
@@ -52,7 +53,7 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
             href={course.link}
             target={'_blank'}
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-6 bg-white hover:bg-gray-50"
+            className="hover:bg-gray-50 flex items-center justify-between p-6 bg-white"
           >
             <div className="flex justify-start space-x-4">
               <img
@@ -68,7 +69,7 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
 
               <div>
                 <h4 className="text-base font-semibold">{course.name}</h4>
-                <p className="text-sm font-normal text-gray-main">
+                <p className="text-gray-main text-sm font-normal">
                   By {course.publisher}
                 </p>
               </div>
@@ -81,7 +82,7 @@ export default function CourseCard({ name, free, paid, courses }: Props) {
         ))}
       </div>
       <div
-        className="flex items-center justify-center py-3 text-sm font-medium text-black transition-colors duration-200 ease-in-out border-t cursor-pointer hover:text-opacity-50"
+        className="hover:text-opacity-50 flex items-center justify-center py-3 text-sm font-medium text-black transition-colors duration-200 ease-in-out border-t cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {isExpanded
