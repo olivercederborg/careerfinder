@@ -174,7 +174,7 @@ function CoursesPage({ initialCourses, categories }: Props) {
 
       <Navbar />
 
-      <main className="pb-12">
+      <main className="px-4 pb-12">
         <section className="flex flex-col items-center justify-center px-6 my-32 space-y-4 text-center">
           <h2 className="text-4xl font-semibold">
             Browse the best courses for your career path.
