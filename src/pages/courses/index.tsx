@@ -1,9 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-
-import axios from 'axios'
-import { useQuery } from 'react-query'
 
 import Navbar from 'components/Navbar'
 import CourseFiltersShell from 'components/CourseFiltersShell'
@@ -13,13 +10,10 @@ import CheckboxFilter from 'components/CheckboxFilter'
 import LoadMoreButton from 'components/LoadMoreButton'
 import SearchBar from 'components/SearchBar'
 import useFilters from 'hooks/useCourseFilter'
-import {
-  setCoursesUrlParams,
-  setSimpleCoursesUrlParams,
-} from 'helpers/setUrlParams'
+import { setSimpleCoursesUrlParams } from 'helpers/setUrlParams'
 import { groq } from 'next-sanity'
 import { sanity } from 'lib/sanity'
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { capitalizeWords } from 'helpers/capitalizeWords'
 
 type StaticProps = {
