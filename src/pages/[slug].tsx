@@ -15,7 +15,6 @@ import type {
 import { groq } from 'next-sanity'
 import { Category, SingleCareer } from 'types'
 import CourseCard from '../components/CourseCard'
-import CareerChart from '../components/CareerChart'
 import Navbar from '../components/Navbar'
 import { useNextSanityImage } from 'next-sanity-image'
 
@@ -43,6 +42,10 @@ const careerQuery = (
       price,
     },
   },
+  role->{
+    salary,
+    time
+  }
 }`
 
 const categoriesQuery = groq`*[_type == 'discipline']{
@@ -205,20 +208,15 @@ const CareerPage = ({ career, categories }: Props) => {
           style={{ scrollMargin: '100px 0 0 0' }}
         >
           <h3 className="mb-8 text-3xl">Earning Potential</h3>
-
-          <div className="rounded-2xl md:inline-flex md:self-start flex justify-between p-2 mb-8 space-x-2 bg-white shadow-lg">
-            <button className="px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all duration-200 ease-in-out text-sm">
-              1 year
-            </button>
-            <button className="px-4 py-[6px] bg-black text-white rounded-[10px] hover:bg-black hover:bg-opacity-40 text-sm hover:text-white transition-all duration-200 ease-in-out">
-              2 years
-            </button>
-            <button className="px-4 py-[6px] rounded-[10px] hover:bg-black hover:bg-opacity-40 hover:text-white transition-all text-sm duration-200 ease-in-out">
-              All time
-            </button>
-          </div>
-
-          <CareerChart />
+          <section className="rounded-xl flex items-center justify-between p-6 bg-white shadow-lg">
+            <div className="flex flex-col w-8/12">
+              <p className="text-gray-main text-sm font-normal">Time</p>
+              <p className="mt-1 text-xl font-semibold truncate">
+                {career.role.time}
+              </p>
+            </div>
+            <p className="text-2xl">${career.role.salary}</p>
+          </section>
         </section>
 
         <section

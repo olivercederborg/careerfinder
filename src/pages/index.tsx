@@ -13,9 +13,7 @@ import { sanity } from 'lib/sanity'
 import { groq } from 'next-sanity'
 import { FrontpageCareer, Category } from 'types'
 import Modal from 'components/Modal'
-import axios from 'axios'
 import { useQuery } from 'react-query'
-import { Button } from 'components/Button'
 import Link from 'next/link'
 
 type StaticProps = {

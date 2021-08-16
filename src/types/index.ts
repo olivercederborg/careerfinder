@@ -44,6 +44,10 @@ export type SingleCareer = {
       price: string
     }[]
   }[]
+  role: {
+    salary: number
+    time: string
+  }
 }
 
 export type Course = {

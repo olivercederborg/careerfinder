@@ -1,9 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-
-import axios from 'axios'
-import { useQuery } from 'react-query'
 
 import Navbar from 'components/Navbar'
 import CourseFiltersShell from 'components/CourseFiltersShell'
