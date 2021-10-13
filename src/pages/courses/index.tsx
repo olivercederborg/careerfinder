@@ -10,7 +10,7 @@ import CheckboxFilter from 'components/CheckboxFilter'
 import LoadMoreButton from 'components/LoadMoreButton'
 import SearchBar from 'components/SearchBar'
 import useFilters from 'hooks/useCourseFilter'
-import { setSimpleCoursesUrlParams } from 'helpers/setUrlParams'
+import { setCoursesUrlParams } from 'helpers/setUrlParams'
 import { groq } from 'next-sanity'
 import { sanity } from 'lib/sanity'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
@@ -105,8 +105,10 @@ function CoursesPage({ initialCourses, categories }: Props) {
   // Set filtering URL params when filters change.
   useEffect(() => {
     if (mounted) {
-      setSimpleCoursesUrlParams(
+      setCoursesUrlParams(
         router,
+        null,
+        null,
         filteredCourseDifficulties || null,
         filteredCoursePricing || null
       )
