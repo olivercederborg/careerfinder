@@ -10,6 +10,11 @@ import type {
   SanityImageCrop,
   SanityImageHotspot,
   SanityKeyed,
+  SanityImageAsset,
+  SanityImageMetadata,
+  SanityImageDimensions,
+  SanityImagePalette,
+  SanityImagePaletteSwatch,
 } from "sanity-codegen";
 
 export type {
@@ -24,6 +29,11 @@ export type {
   SanityImageCrop,
   SanityImageHotspot,
   SanityKeyed,
+  SanityImageAsset,
+  SanityImageMetadata,
+  SanityImageDimensions,
+  SanityImagePalette,
+  SanityImagePaletteSwatch,
 };
 
 /**
@@ -159,7 +169,7 @@ export interface Job extends SanityDocument {
    */
   banner?: {
     _type: "image";
-    asset: SanityAsset;
+    asset: SanityReference<SanityImageAsset>;
     crop?: SanityImageCrop;
     hotspot?: SanityImageHotspot;
   };
@@ -245,7 +255,7 @@ export interface Course extends SanityDocument {
    */
   publisherImage?: {
     _type: "image";
-    asset: SanityAsset;
+    asset: SanityReference<SanityImageAsset>;
     crop?: SanityImageCrop;
     hotspot?: SanityImageHotspot;
   };
@@ -290,7 +300,7 @@ export type BlockContent = Array<
   | SanityKeyed<SanityBlock>
   | SanityKeyed<{
       _type: "image";
-      asset: SanityAsset;
+      asset: SanityReference<SanityImageAsset>;
       crop?: SanityImageCrop;
       hotspot?: SanityImageHotspot;
     }>
