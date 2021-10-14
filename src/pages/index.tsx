@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { RiShuffleFill } from 'react-icons/ri'
 import { FiChevronDown } from 'react-icons/fi'
 import sample from 'lodash/sample'
+import Fuse from 'fuse.js'
 
 import Navbar from 'components/Navbar'
-import SearchBar from 'components/SearchBarOld'
+import SearchBar from 'components/SearchBar'
 import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { sanity } from 'lib/sanity'
@@ -66,13 +67,14 @@ export default function Home({ careers, categories }: Props) {
     console.log(generatedCareer)
   }
 
+  const fuse = new Fuse(careers, {
+    keys: ['name', 'discipline'],
+  })
   useEffect(() => {
     if (searchValue) {
-      setSearchResults(
-        careers.filter((career) =>
-          career.name.toLowerCase().includes(searchValue?.toLowerCase())
-        )
-      )
+      const results = fuse.search(searchValue)
+      console.log(results)
+      setSearchResults(results.map((result) => result.item))
     } else {
       setSearchResults([])
     }
@@ -144,8 +146,10 @@ export default function Home({ careers, categories }: Props) {
 
         <div className="gap-y-8 md:gap-y-0 md:gap-x-10 xl:mx-0 grid grid-cols-12 pb-8 mx-6 border-b">
           <SearchBar
+            searchValue={searchValue}
             setSearchValue={setSearchValue}
             placeholderText="Search for careers"
+            className="md:col-span-6 relative flex flex-col justify-center col-span-12"
           />
 
           <div className="md:justify-start md:col-span-6 flex items-center justify-between col-span-12">
