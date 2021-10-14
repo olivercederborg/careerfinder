@@ -15,6 +15,7 @@ import { groq } from 'next-sanity'
 import { sanity } from 'lib/sanity'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { capitalizeWords } from 'helpers/capitalizeWords'
+import Fuse from 'fuse.js'
 
 type StaticProps = {
   category: any
@@ -112,6 +113,10 @@ export default function CoursesPage({
   )
   const [filteredCoursePricing, setFilteredCoursePricing] = useState([])
 
+  const fuse = new Fuse(filteredCourses || initialCourses, {
+    keys: ['name', 'publisher'],
+  })
+
   useEffect(() => setMounted(true), [])
 
   // Filter courses by inputs.
@@ -132,10 +137,8 @@ export default function CoursesPage({
   ])
 
   useEffect(() => {
-    setCoursesBySearch(() =>
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useSearchFilter(filteredCourses || initialCourses, searchValue)
-    )
+    const results = fuse.search(searchValue)
+    setCoursesBySearch(results.map((result) => result.item))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue, filteredCourses, initialCourses])
 
