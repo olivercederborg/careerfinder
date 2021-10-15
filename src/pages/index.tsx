@@ -12,7 +12,7 @@ import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { sanity } from 'lib/sanity'
 import { groq } from 'next-sanity'
-import { FrontpageCareer, Category } from 'types'
+import { FrontpageCareer, Category, GeneratedCareer } from 'types'
 import Modal from 'components/Modal'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
@@ -58,12 +58,15 @@ export default function Home({ careers, categories }: Props) {
   const [searchValue, setSearchValue] = useState<any>(null)
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])
-  const [generatedCareer, setGeneratedCareer] = useState(null)
+  const [generatedCareer, setGeneratedCareer] =
+    useState<GeneratedCareer | null>(null)
 
-  const generatedCareers = useQuery('/api/generate-career')
+  const { data: generatedCareers }: { data: GeneratedCareer[] } = useQuery(
+    '/api/generate-career'
+  )
 
   const generateCareer = () => {
-    setGeneratedCareer(sample(generatedCareers.data))
+    setGeneratedCareer(sample(generatedCareers))
     console.log(generatedCareer)
   }
 
