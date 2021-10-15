@@ -10,7 +10,7 @@ type Props = {
 function CareerCard({ career }: Props) {
   return (
     <Link href={`/${career.slug}`}>
-      <a className="overflow-hidden transition-all duration-200 ease-in-out bg-white shadow-lg rounded-xl group hover:bg-black">
+      <a className="rounded-xl group hover:bg-black overflow-hidden transition-all duration-200 ease-in-out bg-white shadow-lg">
         <img
           src={imageBuilder(career.banner).size(385, 200).auto('format').url()}
           width={385}
@@ -19,11 +19,11 @@ function CareerCard({ career }: Props) {
           className="h-[200px] object-cover w-full transition-all duration-200 ease-in-out"
         />
 
-        <section className="px-6 pt-6 transition-all duration-200 ease-in-out pb-7 group-hover:text-white">
+        <section className="pb-7 group-hover:text-white px-6 pt-6 transition-all duration-200 ease-in-out">
           <h3 className="inline-flex items-center text-2xl font-semibold">
             {career.name}
             {career.hot && (
-              <BsFillLightningFill className="ml-2 text-2xl text-yellow-400 filter drop-shadow-lightning" />
+              <BsFillLightningFill className="filter drop-shadow-lightning ml-2 text-2xl text-yellow-400" />
             )}
           </h3>
 
@@ -37,7 +37,13 @@ function CareerCard({ career }: Props) {
             <div className="flex flex-col space-y-1">
               <p className="text-base">Avg. Salary</p>
               <p className="text-lg font-semibold">
-                ${Math.floor(career.salary / 1000)}k
+                {career.salary.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0,
+                  maximumSignificantDigits: 3,
+                  compactDisplay: 'short',
+                })}
               </p>
             </div>
             <div className="flex flex-col space-y-1">
