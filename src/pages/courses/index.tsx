@@ -154,11 +154,7 @@ function CoursesPage({ initialCourses, categories }: Props) {
           difficultiesArray.push(course.difficulty)
         }
 
-        if (
-          !pricingArray.includes(
-            course.price[0].toUpperCase() + course.price.slice(1).toLowerCase()
-          )
-        ) {
+        if (!pricingArray.includes('Free') || !pricingArray.includes('Paid')) {
           if (course.price.toUpperCase() == 'FREE') pricingArray.push('Free')
           if (course.price && course.price.toUpperCase() != 'FREE')
             pricingArray.push('Paid')
