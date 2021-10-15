@@ -12,7 +12,7 @@ import CategoryDropdown from 'components/CategoryDropdown'
 import CareerCard from 'components/CareerCard'
 import { sanity } from 'lib/sanity'
 import { groq } from 'next-sanity'
-import { FrontpageCareer, Category } from 'types'
+import { FrontpageCareer, Category, GeneratedCareer } from 'types'
 import Modal from 'components/Modal'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
@@ -58,12 +58,15 @@ export default function Home({ careers, categories }: Props) {
   const [searchValue, setSearchValue] = useState<any>(null)
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])
-  const [generatedCareer, setGeneratedCareer] = useState(null)
+  const [generatedCareer, setGeneratedCareer] =
+    useState<GeneratedCareer | null>(null)
 
-  const generatedCareers = useQuery('/api/generate-career')
+  const { data: generatedCareers }: { data: GeneratedCareer[] } = useQuery(
+    '/api/generate-career'
+  )
 
   const generateCareer = () => {
-    setGeneratedCareer(sample(generatedCareers.data))
+    setGeneratedCareer(sample(generatedCareers))
     console.log(generatedCareer)
   }
 
@@ -115,7 +118,12 @@ export default function Home({ careers, categories }: Props) {
                 <p className="mt-6">
                   Start earning{' '}
                   <span className="font-semibold">
-                    ${generatedCareer?.salary}
+                    {generatedCareer?.salary.toLocaleString('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                      compactDisplay: 'short',
+                      maximumFractionDigits: 0,
+                    })}
                   </span>{' '}
                   in{' '}
                   <span className="font-semibold">{generatedCareer?.time}</span>
@@ -129,10 +137,13 @@ export default function Home({ careers, categories }: Props) {
               </div>
             </Modal>
           </div>
-          <button className="rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out">
+          <a
+            href="#browse-careers"
+            className="rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out"
+          >
             Or Browse Careers
             <FiChevronDown className="mt-2 text-5xl transform" />
-          </button>
+          </a>
         </article>
       </header>
 
@@ -166,7 +177,10 @@ export default function Home({ careers, categories }: Props) {
           </div>
         </div>
 
-        <section className="md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8">
+        <section
+          id="browse-careers"
+          className="md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8"
+        >
           {searchResults?.map((career, i) => (
             <CareerCard career={career} key={i} />
           ))}

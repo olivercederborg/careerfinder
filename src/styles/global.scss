@@ -2,6 +2,10 @@ html,
 body {
 	font-family: "Poppins", Verdana, Geneva, Tahoma, sans-serif;
 }
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 2rem;
+}
 
 .no-scrollbar::-webkit-scrollbar {
 	display: none;

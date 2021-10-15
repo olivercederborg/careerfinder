@@ -50,6 +50,15 @@ export type SingleCareer = {
   }
 }
 
+export type GeneratedCareer = {
+  name: string
+  slug: string
+  banner: SanityImageSource
+  time: string
+  salary: number
+  discipline: string
+}
+
 export type Course = {
   name: string
   slug: string

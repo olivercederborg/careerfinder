@@ -17,7 +17,7 @@ export default function CategoryFilter({ children, input }: Props) {
   const { query } = useRouter()
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const searchBarRef = useRef(null)
+  const searchBarRef = useRef<HTMLInputElement>(null)
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
