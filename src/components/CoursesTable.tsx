@@ -45,9 +45,9 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
 
       <tbody className="font-medium">
         {inputCourses?.slice(0, loadedCoursesAmount).map((course: Course) => (
-          <Link key={course.link} href={course.link} passHref>
-            <tr className="border-t border-b cursor-pointer">
-              <td className="relative px-10 py-6 font-semibold">
+          <>
+            <tr className="relative border-t border-b">
+              <td className="px-10 py-6 font-semibold">
                 <div className="flex items-center">
                   {course.hot || course.isNew ? (
                     <div
@@ -101,8 +101,15 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
                   {course.price.toUpperCase()}
                 </span>
               </td>
+              <a
+                key={course.link}
+                href={course.link}
+                target="_blank"
+                className="absolute top-0 bottom-0 left-0 right-0 z-50"
+                rel="noreferrer"
+              />
             </tr>
-          </Link>
+          </>
         ))}
       </tbody>
     </table>
