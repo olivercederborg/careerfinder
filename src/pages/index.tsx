@@ -134,10 +134,13 @@ export default function Home({ careers, categories }: Props) {
               </div>
             </Modal>
           </div>
-          <button className="rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out">
+          <a
+            href="#browse-careers"
+            className="rounded-xl group md:w-auto bottom-5 absolute left-0 right-0 flex flex-col items-center justify-center w-full px-12 py-4 mx-auto font-medium text-white transition-all duration-200 ease-in-out"
+          >
             Or Browse Careers
             <FiChevronDown className="mt-2 text-5xl transform" />
-          </button>
+          </a>
         </article>
       </header>
 
@@ -171,7 +174,10 @@ export default function Home({ careers, categories }: Props) {
           </div>
         </div>
 
-        <section className="md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8">
+        <section
+          id="browse-careers"
+          className="md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 xl:px-0 grid grid-cols-1 gap-10 px-6 mt-8"
+        >
           {searchResults?.map((career, i) => (
             <CareerCard career={career} key={i} />
           ))}
