@@ -115,7 +115,12 @@ export default function Home({ careers, categories }: Props) {
                 <p className="mt-6">
                   Start earning{' '}
                   <span className="font-semibold">
-                    ${generatedCareer?.salary}
+                    {generatedCareer?.salary.toLocaleString('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                      compactDisplay: 'short',
+                      maximumFractionDigits: 0,
+                    })}
                   </span>{' '}
                   in{' '}
                   <span className="font-semibold">{generatedCareer?.time}</span>
