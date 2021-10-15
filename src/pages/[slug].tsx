@@ -215,7 +215,12 @@ const CareerPage = ({ career, categories }: Props) => {
                 {career.role.time}
               </p>
             </div>
-            <p className="text-2xl">${career.role.salary}</p>
+            <p className="text-2xl">
+              {career.role.salary.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </p>
           </section>
         </section>
 
