@@ -24,11 +24,13 @@ export const Course = {
       name: 'publisherImage',
       title: 'Publisher Image',
       type: 'image',
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'publisher',
       title: 'Publisher',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     },
     {
       title: 'Link',
@@ -45,12 +47,39 @@ export const Course = {
       options: {
         list: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
       },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'isFree',
+      title: 'Free?',
+      type: 'boolean',
+      description: 'Tick if the course is free.',
     },
     {
       name: 'price',
       title: 'Price',
-      type: 'string',
+      type: 'number',
+      description: 'Must be a number. Put 0 if course is free.',
       validation: (Rule) => Rule.required(),
+      hidden: ({ document }) => document?.isFree,
+    },
+    {
+      name: 'currency',
+      title: 'Currency',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'US Dollars', value: 'USD' },
+          { title: 'Euro', value: 'EUR' },
+          { title: 'Pound Sterling', value: 'GBP' },
+          { title: 'Canadian Dollars', value: 'CAD' },
+          { title: 'Danish Kroner', value: 'DKK' },
+          { title: 'Swedish Kroner', value: 'SEK' },
+          { title: 'Norwegian Kroner', value: 'NOK' },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+      hidden: ({ document }) => document?.isFree,
     },
     {
       name: 'description',
