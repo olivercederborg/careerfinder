@@ -17,6 +17,7 @@ export type FrontpageCareer = {
   banner: SanityImageSource
   time: string
   salary: number
+  currency: string
   hot: boolean
   discipline: string
 }
@@ -46,6 +47,7 @@ export type SingleCareer = {
   }[]
   role: {
     salary: number
+    currency: string
     time: string
   }
 }
@@ -56,6 +58,7 @@ export type GeneratedCareer = {
   banner: SanityImageSource
   time: string
   salary: number
+  currency: string
   discipline: string
 }
 
