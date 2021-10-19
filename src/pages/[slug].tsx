@@ -39,7 +39,9 @@ const careerQuery = (
       link,
       publisher,
       publisherImage,
+      isFree,
       price,
+      currency,
     },
   },
   role->{
@@ -95,10 +97,7 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CareerPage = ({
-  career,
-  categories,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const CareerPage = ({ career, categories }: Props) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(1)
@@ -143,7 +142,7 @@ const CareerPage = ({
         <article className="mt-7 md:mt-12 md:col-span-6 3xl:col-span-4 px-6">
           <h2 className="inline-flex items-center text-3xl font-semibold">
             {career.name}
-            {career.hot && (
+            {career.isHot && (
               <BsFillLightningFill className="filter drop-shadow-lightning ml-3 text-2xl text-yellow-400" />
             )}
           </h2>
@@ -179,7 +178,7 @@ const CareerPage = ({
         >
           <h3 className="mb-8 text-3xl">Courses</h3>
 
-          {career.courseCategories ? (
+          {career.courseCategories.length ? (
             career.courseCategories
               .slice(0, loadedCoursesAmount)
               .map((courseCategory) => (
@@ -193,7 +192,7 @@ const CareerPage = ({
             <h3>No Courses to show</h3>
           )}
 
-          {career.courseCategories &&
+          {career.courseCategories.length &&
           career.courseCategories.length > loadedCoursesAmount ? (
             <button
               className="rounded-xl md:max-w-[300px] hover:-translate-y-1 hover:shadow-lg self-center w-full px-12 py-4 mt-10 font-medium text-white transition-all duration-200 ease-in-out transform bg-black"
@@ -201,7 +200,7 @@ const CareerPage = ({
                 setLoadedCoursesAmount(career.courseCategories.length)
               }
             >
-              View all {career.courseCategories.length} courses
+              View all courses
             </button>
           ) : null}
         </section>
@@ -223,7 +222,8 @@ const CareerPage = ({
               {career.role.salary.toLocaleString('en-US', {
                 style: 'currency',
                 currency: career.role.currency,
-                compactDisplay: 'short',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
               })}
             </p>
           </section>

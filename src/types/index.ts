@@ -30,20 +30,13 @@ export type Category = {
 export type SingleCareer = {
   name: string
   slug: string
-  hot: boolean
+  isHot: boolean
   description: BlockContent
   banner: SanityImageSource
   courseCategories: {
     name: string
     slug: string
-    courses: {
-      name: string
-      slug: string
-      link: string
-      publisher: string
-      publisherImage: SanityImageSource
-      price: string
-    }[]
+    courses: Course[]
   }[]
   role: {
     salary: number
@@ -65,14 +58,18 @@ export type GeneratedCareer = {
 export type Course = {
   name: string
   slug: string
+  isHot?: boolean
+  isNew?: boolean
   discipline: string
-  description: BlockContent
+  description?: BlockContent
   link: string
   publisher: string
   publisherImage: SanityImageSource
-  price: string
+  price: number
+  currency: string
+  isFree: boolean
   difficulty: string
-  courseCategories: {
+  courseCategories?: {
     name: string
     slug: string
   }[]

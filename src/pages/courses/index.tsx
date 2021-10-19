@@ -40,7 +40,9 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       name,
       "slug": slug.current,
     },
+    isFree,
     price,
+    currency,
     link,
     courseCategories[]->{
       name,
@@ -154,11 +156,10 @@ function CoursesPage({ initialCourses, categories }: Props) {
           difficultiesArray.push(course.difficulty)
         }
 
-        if (!pricingArray.includes('Free') || !pricingArray.includes('Paid')) {
-          if (course.price.toUpperCase() == 'FREE') pricingArray.push('Free')
-          if (course.price && course.price.toUpperCase() != 'FREE')
-            pricingArray.push('Paid')
-        }
+        if (course.isFree && !pricingArray.includes('Free'))
+          pricingArray.push('Free')
+        if (!course.isFree && !pricingArray.includes('Paid'))
+          pricingArray.push('Paid')
       })
     }
 
@@ -208,7 +209,7 @@ function CoursesPage({ initialCourses, categories }: Props) {
               filteredInput={filteredCoursePricing}
               setFilteredInput={(input) => setFilteredCoursePricing(input)}
             >
-              Free &amp; Paid
+              All Pricings
             </CheckboxFilter>
           </div>
         </CourseFiltersShell>

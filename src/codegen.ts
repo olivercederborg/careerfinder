@@ -112,6 +112,13 @@ export interface Role extends SanityDocument {
   salary?: number;
 
   /**
+   * Currency — `string`
+   *
+   *
+   */
+  currency?: "USD" | "EUR" | "GBP" | "CAD" | "DKK" | "SEK" | "NOK";
+
+  /**
    * Time — `string`
    *
    *
@@ -282,11 +289,25 @@ export interface Course extends SanityDocument {
   difficulty?: "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
   /**
-   * Price — `string`
+   * Free? — `boolean`
+   *
+   * Tick if the course is free.
+   */
+  isFree?: boolean;
+
+  /**
+   * Price — `number`
+   *
+   * Must be a number. Put 0 if course is free.
+   */
+  price?: number;
+
+  /**
+   * Currency — `string`
    *
    *
    */
-  price?: string;
+  currency?: "USD" | "EUR" | "GBP" | "CAD" | "DKK" | "SEK" | "NOK";
 
   /**
    * Description — `blockContent`

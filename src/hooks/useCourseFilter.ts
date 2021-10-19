@@ -31,11 +31,10 @@ const filterByPrice = (coursesInput: any[], priceValues) => {
     for (const value of priceValues) {
       switch (value) {
         case 'Free':
-          if (course.price.toLowerCase() == 'free') return course
+          if (course.isFree) return course
           break
         case 'Paid':
-          if (course.price && course.price.toLowerCase() != 'free')
-            return course
+          if (!course.isFree) return course
           break
       }
     }
