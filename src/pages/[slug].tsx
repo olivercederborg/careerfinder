@@ -44,7 +44,8 @@ const careerQuery = (
   },
   role->{
     salary,
-    time
+    currency,
+    time,
   }
 }`
 
@@ -218,7 +219,9 @@ const CareerPage = ({ career, categories }: Props) => {
             <p className="text-2xl">
               {career.role.salary.toLocaleString('en-US', {
                 style: 'currency',
-                currency: 'USD',
+                currency: career.role.currency,
+                compactDisplay: 'short',
+                maximumFractionDigits: 0,
               })}
             </p>
           </section>
