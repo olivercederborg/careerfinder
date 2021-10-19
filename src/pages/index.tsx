@@ -124,8 +124,6 @@ export default function Home({
                     {generatedCareer?.salary.toLocaleString('en-US', {
                       style: 'currency',
                       currency: generatedCareer.currency,
-                      compactDisplay: 'short',
-                      maximumFractionDigits: 0,
                     })}
                   </span>{' '}
                   in{' '}

@@ -95,7 +95,10 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CareerPage = ({ career, categories }: Props) => {
+const CareerPage = ({
+  career,
+  categories,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(1)
@@ -221,7 +224,6 @@ const CareerPage = ({ career, categories }: Props) => {
                 style: 'currency',
                 currency: career.role.currency,
                 compactDisplay: 'short',
-                maximumFractionDigits: 0,
               })}
             </p>
           </section>
