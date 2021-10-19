@@ -44,7 +44,8 @@ const careerQuery = (
   },
   role->{
     salary,
-    time
+    currency,
+    time,
   }
 }`
 
@@ -94,7 +95,10 @@ export const getStaticPaths: GetStaticPaths = async ({}) => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const CareerPage = ({ career, categories }: Props) => {
+const CareerPage = ({
+  career,
+  categories,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const sectionNav = useRef(null)
   const [sectionNavIsTop, setSectionNavIsTop] = useState(false)
   const [loadedCoursesAmount, setLoadedCoursesAmount] = useState(1)
@@ -218,7 +222,8 @@ const CareerPage = ({ career, categories }: Props) => {
             <p className="text-2xl">
               {career.role.salary.toLocaleString('en-US', {
                 style: 'currency',
-                currency: 'USD',
+                currency: career.role.currency,
+                compactDisplay: 'short',
               })}
             </p>
           </section>

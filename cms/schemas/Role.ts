@@ -13,6 +13,22 @@ export const Role = {
       type: 'number',
     },
     {
+      name: 'currency',
+      title: 'Currency',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'US Dollars', value: 'USD' },
+          { title: 'Euro', value: 'EUR' },
+          { title: 'Pound Sterling', value: 'GBP' },
+          { title: 'Canadian Dollars', value: 'CAD' },
+          { title: 'Danish Kroner', value: 'DKK' },
+          { title: 'Swedish Kroner', value: 'SEK' },
+          { title: 'Norwegian Kroner', value: 'NOK' },
+        ],
+      },
+    },
+    {
       name: 'time',
       title: 'Time',
       type: 'string',
