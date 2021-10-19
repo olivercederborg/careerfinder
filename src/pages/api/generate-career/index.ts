@@ -7,6 +7,7 @@ const careersQuery = groq`*[_type == 'job']{
   "slug": slug.current,
   "time": role->time,
   "salary": role->salary,
+  "currency": role->currency,
   "discipline": discipline->name,
 }`
 

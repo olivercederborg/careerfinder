@@ -39,7 +39,7 @@ function CareerCard({ career }: Props) {
               <p className="text-lg font-semibold">
                 {career.salary.toLocaleString('en-US', {
                   style: 'currency',
-                  currency: 'USD',
+                  currency: career.currency,
                   maximumFractionDigits: 0,
                   maximumSignificantDigits: 3,
                   compactDisplay: 'short',
