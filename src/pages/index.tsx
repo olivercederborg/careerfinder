@@ -16,6 +16,7 @@ import { FrontpageCareer, Category, GeneratedCareer } from 'types'
 import Modal from 'components/Modal'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
+import { formatCurrency } from 'helpers/formatCurrency'
 
 type StaticProps = {
   careers: FrontpageCareer[]
@@ -28,6 +29,7 @@ const careersQuery = groq`*[_type == 'job']{
   banner,
   "time": role->time,
   "salary": role->salary,
+  "currency": role->currency,
   "discipline": discipline->name,
 }`
 
@@ -54,8 +56,11 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-export default function Home({ careers, categories }: Props) {
-  const [searchValue, setSearchValue] = useState<any>(null)
+export default function Home({
+  careers,
+  categories,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const [searchValue, setSearchValue] = useState<any>('')
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])
   const [generatedCareer, setGeneratedCareer] =
@@ -67,7 +72,6 @@ export default function Home({ careers, categories }: Props) {
 
   const generateCareer = () => {
     setGeneratedCareer(sample(generatedCareers))
-    console.log(generatedCareer)
   }
 
   const fuse = new Fuse(careers, {
@@ -118,12 +122,11 @@ export default function Home({ careers, categories }: Props) {
                 <p className="mt-6">
                   Start earning{' '}
                   <span className="font-semibold">
-                    {generatedCareer?.salary.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                      compactDisplay: 'short',
-                      maximumFractionDigits: 0,
-                    })}
+                    {!!generatedCareer &&
+                      formatCurrency(
+                        generatedCareer?.salary,
+                        generatedCareer?.currency
+                      )}
                   </span>{' '}
                   in{' '}
                   <span className="font-semibold">{generatedCareer?.time}</span>

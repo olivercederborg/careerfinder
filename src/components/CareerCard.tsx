@@ -1,3 +1,4 @@
+import { formatCurrency } from 'helpers/formatCurrency'
 import { imageBuilder } from 'lib/sanity'
 import Link from 'next/link'
 import { BsFillLightningFill } from 'react-icons/bs'
@@ -37,13 +38,7 @@ function CareerCard({ career }: Props) {
             <div className="flex flex-col space-y-1">
               <p className="text-base">Avg. Salary</p>
               <p className="text-lg font-semibold">
-                {career.salary.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  maximumFractionDigits: 0,
-                  maximumSignificantDigits: 3,
-                  compactDisplay: 'short',
-                })}
+                {formatCurrency(career.salary, career.currency)}
               </p>
             </div>
             <div className="flex flex-col space-y-1">

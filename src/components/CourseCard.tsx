@@ -1,3 +1,4 @@
+import { formatCurrency } from 'helpers/formatCurrency'
 import { imageBuilder } from 'lib/sanity'
 import { useState } from 'react'
 import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
@@ -31,13 +32,8 @@ export default function CourseCard({ name, courses }: Props) {
               isExpanded ? 'hidden' : 'inline-block'
             }`}
           >
-            {courses.filter((course) => course.price == 'free').length} Free
-            &bull;{' '}
-            {
-              courses.filter((course) => course.price && course.price != 'free')
-                .length
-            }{' '}
-            Paid
+            {courses.filter((course) => course.isFree).length} Free &bull;{' '}
+            {courses.filter((course) => !course.isFree).length} Paid
           </p>
         </div>
       </div>
@@ -47,7 +43,7 @@ export default function CourseCard({ name, courses }: Props) {
           isExpanded ? 'flex' : 'hidden'
         }`}
       >
-        {courses.map((course, i) => (
+        {courses.map((course) => (
           <a
             key={course.slug}
             href={course.link}
@@ -76,7 +72,9 @@ export default function CourseCard({ name, courses }: Props) {
             </div>
 
             <p className="py-1 uppercase min-w-[60px] bg-black rounded-lg text-[13px] text-white text-center font-semibold">
-              {parseInt(course.price) === 0 ? 'FREE' : course.price}
+              {course.isFree
+                ? 'FREE'
+                : formatCurrency(course.price, course.currency)}
             </p>
           </a>
         ))}
