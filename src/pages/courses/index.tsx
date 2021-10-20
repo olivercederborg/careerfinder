@@ -16,13 +16,14 @@ import { sanity } from 'lib/sanity'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { capitalizeWords } from 'helpers/capitalizeWords'
 import Fuse from 'fuse.js'
+import { Category, Course } from 'types'
 
 type StaticProps = {
-  categories: any
-  initialCourses: any
+  categories: Category[]
+  initialCourses: Course[]
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const categories = await sanity().fetch<{}>(
     groq`*[_type == 'discipline']{
       name,
@@ -40,6 +41,8 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       name,
       "slug": slug.current,
     },
+    isHot,
+    isNew,
     isFree,
     price,
     currency,
@@ -61,9 +64,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   }
 }
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>
-
-function CoursesPage({ initialCourses, categories }: Props) {
+function CoursesPage({ initialCourses, categories }: StaticProps) {
   const router = useRouter()
   const { query }: any = useRouter()
   const { filteredCourses, useFilter, useSearchFilter } = useFilters()

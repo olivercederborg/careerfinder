@@ -50,6 +50,18 @@ export const Course = {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: 'isHot',
+      title: 'Hot?',
+      type: 'boolean',
+      description: 'Tick if the course is hot.',
+    },
+    {
+      name: 'isNew',
+      title: 'New?',
+      type: 'boolean',
+      description: 'Tick if the course is new.',
+    },
+    {
       name: 'isFree',
       title: 'Free?',
       type: 'boolean',
