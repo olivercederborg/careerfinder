@@ -16,6 +16,7 @@ import { FrontpageCareer, Category, GeneratedCareer } from 'types'
 import Modal from 'components/Modal'
 import { useQuery } from 'react-query'
 import Link from 'next/link'
+import { formatCurrency } from 'helpers/formatCurrency'
 
 type StaticProps = {
   careers: FrontpageCareer[]
@@ -56,9 +57,9 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 export default function Home({
-      careers,
-      categories,
-    }: InferGetStaticPropsType<typeof getStaticProps>) {
+  careers,
+  categories,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const [searchValue, setSearchValue] = useState<any>('')
   const [searchResults, setSearchResults] = useState([])
   const [careersFiltered, setCareersFiltered] = useState([])
@@ -121,10 +122,11 @@ export default function Home({
                 <p className="mt-6">
                   Start earning{' '}
                   <span className="font-semibold">
-                    {generatedCareer?.salary.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: generatedCareer.currency,
-                    })}
+                    {!!generatedCareer &&
+                      formatCurrency(
+                        generatedCareer?.salary,
+                        generatedCareer?.currency
+                      )}
                   </span>{' '}
                   in{' '}
                   <span className="font-semibold">{generatedCareer?.time}</span>

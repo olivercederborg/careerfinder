@@ -1,3 +1,4 @@
+import { formatCurrency } from 'helpers/formatCurrency'
 import { imageBuilder } from 'lib/sanity'
 import { useState } from 'react'
 import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
@@ -73,12 +74,7 @@ export default function CourseCard({ name, courses }: Props) {
             <p className="py-1 uppercase min-w-[60px] bg-black rounded-lg text-[13px] text-white text-center font-semibold">
               {course.isFree
                 ? 'FREE'
-                : course.price.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: course.currency,
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })}
+                : formatCurrency(course.price, course.currency)}
             </p>
           </a>
         ))}

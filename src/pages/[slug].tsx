@@ -17,6 +17,7 @@ import { Category, SingleCareer } from 'types'
 import CourseCard from '../components/CourseCard'
 import Navbar from '../components/Navbar'
 import { useNextSanityImage } from 'next-sanity-image'
+import { formatCurrency } from 'helpers/formatCurrency'
 
 type StaticProps = {
   career: SingleCareer
@@ -219,12 +220,7 @@ const CareerPage = ({ career, categories }: Props) => {
               </p>
             </div>
             <p className="text-2xl">
-              {career.role.salary.toLocaleString('en-US', {
-                style: 'currency',
-                currency: career.role.currency,
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
+              {formatCurrency(career.role.salary, career.role.currency)}
             </p>
           </section>
         </section>
