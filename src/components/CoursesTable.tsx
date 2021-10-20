@@ -1,3 +1,4 @@
+import { formatCurrency } from 'helpers/formatCurrency'
 import { imageBuilder } from 'lib/sanity'
 import { Course } from 'types'
 
@@ -89,12 +90,7 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
               <span className="w-[64px] inline-flex justify-center items-center py-1 text-sm font-medium text-white bg-black rounded-lg">
                 {course.isFree
                   ? 'FREE'
-                  : course.price.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: course.currency,
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                    })}
+                  : formatCurrency(course.price, course.currency)}
               </span>
             </td>
           </tr>
