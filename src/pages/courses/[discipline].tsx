@@ -68,6 +68,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       name,
       "slug": slug.current,
     },
+    isNew,
+    isHot,
     isFree,
     price,
     currency,
