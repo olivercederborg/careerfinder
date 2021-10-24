@@ -1,10 +1,25 @@
-import { NAME_FIELD, slugField } from './primitives'
+import { NAME_FIELD, SEO_DESCRIPTION, SEO_TITLE, slugField } from './primitives'
 
 export const Discipline = {
   title: 'Discipline',
   name: 'discipline',
   type: 'document',
-  fields: [NAME_FIELD, slugField('name')],
+  fields: [
+    NAME_FIELD,
+    slugField('name'),
+    {
+      title: 'Hero Title',
+      name: 'heroTitle',
+      type: 'string',
+    },
+    {
+      title: 'Hero Subtitle',
+      name: 'heroSubtitle',
+      type: 'string',
+    },
+    SEO_TITLE,
+    SEO_DESCRIPTION,
+  ],
 }
 
 export const ReferenceDiscipline = {
