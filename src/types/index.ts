@@ -47,6 +47,15 @@ export type SingleCareer = {
   seoDescription?: string
 }
 
+export type Discipline = {
+  name: string
+  slug: string
+  heroTitle?: string
+  heroSubtitle?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
 export type GeneratedCareer = {
   name: string
   slug: string
@@ -62,7 +71,7 @@ export type Course = {
   slug: string
   isHot?: boolean
   isNew?: boolean
-  discipline: string
+  discipline: Discipline
   description?: BlockContent
   link: string
   publisher: string
