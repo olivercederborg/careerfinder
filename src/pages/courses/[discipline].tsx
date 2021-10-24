@@ -16,10 +16,10 @@ import { sanity } from 'lib/sanity'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { capitalizeWords } from 'helpers/capitalizeWords'
 import Fuse from 'fuse.js'
-import { Course, SingleCareer } from 'types'
+import { Course, Discipline, SingleCareer } from 'types'
 
 type StaticProps = {
-  category: any
+  category: Discipline
   categories: any
   initialCourses: Course[]
 }
@@ -48,6 +48,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     groq`*[_type == 'discipline' && defined(slug.current) && slug.current == '${discipline}'][0]{
       name,
       "slug": slug.current,
+      heroTitle,
+      heroSubtitle,
+      seoTitle,
+      seoDescription
     }`
   )
 
@@ -237,7 +241,41 @@ export default function CoursesPage({
   return (
     <>
       <Head>
-        <title>Courses - CareerFinder</title>
+        <title>
+          {category.seoTitle ?? `${category.name} Courses`} - Workish
+        </title>
+        <meta name="description" content={category.seoDescription} />
+
+        {/* Facebook */}
+        <meta
+          property="og:url"
+          content={`https://workish.io/${category.slug}`}
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={`${
+            category?.seoTitle ?? `${category.name} Courses`
+          } - Workish`}
+        />
+        <meta property="og:description" content={category?.seoDescription} />
+        {/* <meta property="og:image" content={`${bannerImageProps?.src}`} /> */}
+
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="workish.io" />
+        <meta
+          property="twitter:url"
+          content={`https://workish.io/${category.slug}`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${
+            category?.seoTitle ?? `${category.name} Courses`
+          } - Workish`}
+        />
+        <meta name="twitter:description" content={category?.seoDescription} />
+        {/* <meta name="twitter:image" content={`${bannerImageProps.src}`} /> */}
       </Head>
 
       <Navbar />
@@ -245,10 +283,12 @@ export default function CoursesPage({
       <main className="px-4 pb-12">
         <section className="flex flex-col items-center justify-center px-6 my-32 space-y-4 text-center">
           <h2 className="text-4xl font-semibold">
-            Browse the best courses for your career path.
+            {category.heroTitle ??
+              'Browse the best courses for your career path.'}
           </h2>
           <h3 className="text-gray-main text-2xl font-medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            {category.heroTitle ??
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
           </h3>
         </section>
 
