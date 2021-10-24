@@ -287,7 +287,7 @@ export default function CoursesPage({
               'Browse the best courses for your career path.'}
           </h2>
           <h3 className="text-gray-main text-2xl font-medium">
-            {category.heroTitle ??
+            {category.heroSubtitle ??
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
           </h3>
         </section>
