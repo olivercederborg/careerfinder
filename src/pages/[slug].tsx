@@ -49,7 +49,9 @@ const careerQuery = (
     salary,
     currency,
     time,
-  }
+  },
+  seoTitle,
+  seoDescription
 }`
 
 const categoriesQuery = groq`*[_type == 'discipline']{
@@ -126,7 +128,32 @@ const CareerPage = ({ career, categories }: Props) => {
   return (
     <>
       <Head>
-        <title>{career.name} - Workish</title>
+        <title>{career?.seoTitle ?? career.name} - Workish</title>
+        <meta name="description" content={career.seoDescription} />
+
+        {/* Facebook */}
+        <meta property="og:url" content={`https://workish.io/${career.slug}`} />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={`${career?.seoTitle ?? career.name} - Workish`}
+        />
+        <meta property="og:description" content={career?.seoDescription} />
+        <meta property="og:image" content={`${bannerImageProps?.src}`} />
+
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="workish.io" />
+        <meta
+          property="twitter:url"
+          content={`https://workish.io/${career.slug}`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${career?.seoTitle ?? career.name} - Workish`}
+        />
+        <meta name="twitter:description" content={career?.seoDescription} />
+        <meta name="twitter:image" content={`${bannerImageProps.src}`} />
       </Head>
 
       <Navbar />

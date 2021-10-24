@@ -1,4 +1,4 @@
-import { NAME_FIELD, slugField } from './primitives'
+import { NAME_FIELD, SEO_DESCRIPTION, SEO_TITLE, slugField } from './primitives'
 
 export const CourseCategory = {
   title: 'Course Category',
