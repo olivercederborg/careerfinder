@@ -43,6 +43,8 @@ export type SingleCareer = {
     currency: string
     time: string
   }
+  seoTitle?: string
+  seoDescription?: string
 }
 
 export type GeneratedCareer = {
