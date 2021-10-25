@@ -58,7 +58,7 @@ export default function CategoryFilter({ children, input }: Props) {
           setSearchResults([])
           setSearchValue('')
         }}
-        className="inline-flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
+        className="inline-flex items-center w-full justify-between px-6 py-4 h-14 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2"
         id="menu-button"
       >
         {children}
