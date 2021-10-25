@@ -57,6 +57,34 @@ export interface Discipline extends SanityDocument {
    *
    */
   slug?: { _type: "slug"; current: string };
+
+  /**
+   * Hero Title — `string`
+   *
+   * Hero Title for course category page tied to this discipline.
+   */
+  heroTitle?: string;
+
+  /**
+   * Hero Subtitle — `string`
+   *
+   * Hero Subtitle for course category page tied to this discipline.
+   */
+  heroSubtitle?: string;
+
+  /**
+   * SEO Title — `string`
+   *
+   * SEO Title for course category page tied to this discipline.
+   */
+  seoTitle?: string;
+
+  /**
+   * SEO Description — `text`
+   *
+   * SEO Description for course category page tied to this discipline.
+   */
+  seoDescription?: string;
 }
 
 /**
@@ -194,6 +222,20 @@ export interface Job extends SanityDocument {
    *
    */
   courseCategories?: Array<SanityKeyedReference<CourseCategory>>;
+
+  /**
+   * SEO Title — `string`
+   *
+   *
+   */
+  seoTitle?: string;
+
+  /**
+   * SEO Description — `text`
+   *
+   *
+   */
+  seoDescription?: string;
 }
 
 /**
@@ -287,6 +329,20 @@ export interface Course extends SanityDocument {
    *
    */
   difficulty?: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+
+  /**
+   * Hot? — `boolean`
+   *
+   * Tick if the course is hot.
+   */
+  isHot?: boolean;
+
+  /**
+   * New? — `boolean`
+   *
+   * Tick if the course is new.
+   */
+  isNew?: boolean;
 
   /**
    * Free? — `boolean`

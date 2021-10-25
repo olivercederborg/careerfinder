@@ -49,8 +49,23 @@ export default function CourseCard({ name, courses }: Props) {
             href={course.link}
             target={'_blank'}
             rel="noopener noreferrer"
-            className="hover:bg-gray-50 flex items-center justify-between p-6 bg-white"
+            className="hover:bg-gray-50 relative flex items-center justify-between p-6 bg-white"
           >
+            {course.isHot || course.isNew ? (
+              <div
+                className={`w-0 h-0 border-b-[40px] text-white flex items-start justify-center text-xs absolute left-0 top-0 transform -rotate-45 translate-x-[-26px] -translate-y-1.5 rounded-lg ${
+                  course.isHot ? 'border-[#FFB931]' : 'border-black'
+                }`}
+                style={{
+                  borderRight: '40px solid transparent',
+                  borderLeft: '40px solid transparent',
+                }}
+              >
+                <span className="font-medium transform translate-y-[18px]">
+                  {course.isHot ? 'HOT' : 'NEW'}
+                </span>
+              </div>
+            ) : null}
             <div className="flex justify-start space-x-4">
               <img
                 src={imageBuilder(course.publisherImage)
