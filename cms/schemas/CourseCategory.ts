@@ -6,3 +6,10 @@ export const CourseCategory = {
   type: 'document',
   fields: [NAME_FIELD, slugField('name')],
 }
+
+export const ReferenceCourseCategory = {
+  title: 'Course Category',
+  name: 'courseCategory',
+  type: 'reference',
+  to: [{ type: 'courseCategory' }],
+}
