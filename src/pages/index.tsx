@@ -27,9 +27,9 @@ const careersQuery = groq`*[_type == 'job']{
   name,
   "slug": slug.current,
   banner,
-  "time": role->time,
-  "salary": role->salary,
-  "currency": role->currency,
+  time,
+  salary,
+  currency,
   "discipline": discipline->name,
 }`
 
