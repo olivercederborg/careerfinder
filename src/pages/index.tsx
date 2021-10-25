@@ -24,6 +24,7 @@ type StaticProps = {
 }
 
 const careersQuery = groq`*[_type == 'job']{
+  "createdAt": _createdAt,
   name,
   "slug": slug.current,
   banner,
@@ -73,6 +74,8 @@ export default function Home({
   const generateCareer = () => {
     setGeneratedCareer(sample(generatedCareers))
   }
+
+  console.log(careers)
 
   const fuse = new Fuse(careers, {
     keys: ['name', 'discipline'],
