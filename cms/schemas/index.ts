@@ -9,7 +9,6 @@ import { BlockContent } from './BlockContent'
 // Models
 import { Discipline } from './Discipline'
 import { Area } from './Area'
-import { Role } from './Role'
 import { Job } from './Job'
 import { CourseCategory } from './CourseCategory'
 import { Course } from './Course'
@@ -24,7 +23,6 @@ export default createSchema({
     // Models
     Discipline,
     Area,
-    Role,
     Job,
     CourseCategory,
     Course,
