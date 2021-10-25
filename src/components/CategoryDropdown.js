@@ -112,7 +112,7 @@ export default function CategoryDropdown({
 
       {isOpen && (
         <div
-          className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg"
+          className="ring-1 ring-black ring-opacity-5 focus:outline-none absolute right-0 w-72 mt-2 origin-top-right bg-white rounded-[10px] shadow-lg z-10"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
