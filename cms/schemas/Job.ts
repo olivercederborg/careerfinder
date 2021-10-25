@@ -11,6 +11,12 @@ export const Job = {
     NAME_FIELD,
     slugField('name'),
     {
+      name: 'isHot',
+      title: 'Hot?',
+      type: 'boolean',
+      description: 'Tick if the career is hot.',
+    },
+    {
       name: 'salary',
       title: 'Salary',
       type: 'number',
