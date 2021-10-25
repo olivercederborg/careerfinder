@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 
 import { BsCaretDownFill } from 'react-icons/bs'
+import { IoClose } from 'react-icons/io5'
 import { RiSearchLine } from 'react-icons/ri'
 
 interface Props {
@@ -62,28 +63,45 @@ export default function CheckboxFilter({
 
   return (
     <div className="relative inline-block w-full" ref={containerRef}>
-      <button
-        type="button"
-        onClick={() => {
-          setIsOpen(!isOpen)
-          setSearchResults([])
-          setSearchValue('')
-        }}
-        className="flex items-center w-full justify-between px-6 py-4 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 mt-2 truncate"
-        id="menu-button"
-      >
-        {filteredInput.length && filteredInput.length <= 1
-          ? `${filteredInput[0]
-              .slice(0, 1)
-              .toUpperCase()}${filteredInput[0].slice(1)}`
-          : filteredInput.length > 1
-          ? `${
-              filteredInput[0].slice(0, 1).toUpperCase() +
-              filteredInput[0].slice(1)
-            } +${filteredInput.slice(1).length}`
-          : `${children}`}
-        <BsCaretDownFill className="right-3 absolute" />
-      </button>
+      <div className="flex items-center justify-center mt-2">
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(!isOpen)
+            setSearchResults([])
+            setSearchValue('')
+          }}
+          className="flex items-center w-full justify-between px-6 py-4 h-14 text-sm text-white transition-all duration-200 ease-in-out bg-black rounded-[10px] focus:outline-none focus:ring-2 ring-gray-400 ring-offset-white ring-offset-1 truncate relative"
+          id="menu-button"
+        >
+          <div className="flex items-center">
+            {!!filteredInput.length && (
+              <div className="place-items-center grid p-1 mr-2 bg-white rounded-full shadow-md cursor-pointer">
+                <IoClose
+                  className="text-lg text-black"
+                  onClick={() => setFilteredInput([])}
+                />
+              </div>
+            )}
+            <p>
+              {filteredInput.length && filteredInput.length <= 1
+                ? `${filteredInput[0]
+                    .slice(0, 1)
+                    .toUpperCase()}${filteredInput[0].slice(1)}`
+                : filteredInput.length > 1
+                ? `${
+                    filteredInput[0].slice(0, 1).toUpperCase() +
+                    filteredInput[0].slice(1)
+                  } +${filteredInput.slice(1).length}`
+                : `${children}`}
+            </p>
+          </div>
+          <div className="absolute right-0 bg-black">
+            {' '}
+            <BsCaretDownFill className="mx-3" />
+          </div>
+        </button>
+      </div>
 
       {isOpen && (
         <div
@@ -97,8 +115,9 @@ export default function CheckboxFilter({
             <input
               ref={searchBarRef}
               type="text"
-              onChange={() => setSearchValue(searchBarRef.current.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Search"
+              value={searchValue}
               className="rounded-lg pl-9 px-2 py-2.5 text-sm border border-[#dedede] placeholder-gray-main outline-none focus:border transition-colors duration-200 ease-in-out focus:border-black bg-white appearance-none"
             />
           </div>
