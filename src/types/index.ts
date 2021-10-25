@@ -12,13 +12,14 @@ export type RecursivePartial<T> = {
 }
 
 export type FrontpageCareer = {
+  createdAt?: string
   name: string
   slug: string
   banner: SanityImageSource
   time: string
   salary: number
   currency: string
-  hot: boolean
+  isHot: boolean
   discipline: string
 }
 
@@ -31,13 +32,14 @@ export type SingleCareer = {
   createdAt?: string
   name: string
   slug: string
+  banner: SanityImageSource
   salary: number
   currency: string
   time: string
   isHot: boolean
-  description: BlockContent
-  banner: SanityImageSource
-  courseCategories: {
+  discipline?: string
+  description?: BlockContent
+  courseCategories?: {
     name: string
     slug: string
     courses: Course[]
