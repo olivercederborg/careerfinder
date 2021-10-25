@@ -30,6 +30,7 @@ const careersQuery = groq`*[_type == 'job']{
   banner,
   time,
   salary,
+  isHot,
   currency,
   "discipline": discipline->name,
 }`
@@ -75,8 +76,6 @@ export default function Home({
     setGeneratedCareer(sample(generatedCareers))
   }
 
-  console.log(careers)
-
   const fuse = new Fuse(careers, {
     keys: ['name', 'discipline'],
     threshold: 0.4,
@@ -84,7 +83,6 @@ export default function Home({
   useEffect(() => {
     if (searchValue) {
       const results = fuse.search(searchValue)
-      console.log(results)
       setSearchResults(results.map((result) => result.item))
     } else {
       setSearchResults([])
