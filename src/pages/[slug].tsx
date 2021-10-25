@@ -40,6 +40,8 @@ const careerQuery = (
       link,
       publisher,
       publisherImage,
+      isNew,
+      isHot,
       isFree,
       price,
       currency,
