@@ -2,10 +2,10 @@ import { formatCurrency } from 'helpers/formatCurrency'
 import { imageBuilder } from 'lib/sanity'
 import Link from 'next/link'
 import { BsFillLightningFill } from 'react-icons/bs'
-import { FrontpageCareer } from 'types'
+import { SingleCareer } from 'types'
 
 type Props = {
-  career: FrontpageCareer
+  career: SingleCareer
 }
 
 function CareerCard({ career }: Props) {
@@ -23,7 +23,7 @@ function CareerCard({ career }: Props) {
         <section className="pb-7 group-hover:text-white px-6 pt-6 transition-all duration-200 ease-in-out">
           <h3 className="inline-flex items-center text-2xl font-semibold">
             {career.name}
-            {career.hot && (
+            {career.isHot && (
               <BsFillLightningFill className="filter drop-shadow-lightning ml-2 text-2xl text-yellow-400" />
             )}
           </h3>
