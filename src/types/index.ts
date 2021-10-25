@@ -28,6 +28,7 @@ export type Category = {
 }
 
 export type SingleCareer = {
+  createdAt?: string
   name: string
   slug: string
   salary: number
@@ -55,6 +56,7 @@ export type Discipline = {
 }
 
 export type GeneratedCareer = {
+  createdAt?: string
   name: string
   slug: string
   banner: SanityImageSource
@@ -65,6 +67,7 @@ export type GeneratedCareer = {
 }
 
 export type Course = {
+  createdAt?: string
   name: string
   slug: string
   isHot?: boolean
