@@ -76,6 +76,7 @@ export default function Home({
 
   const fuse = new Fuse(careers, {
     keys: ['name', 'discipline'],
+    threshold: 0.4,
   })
   useEffect(() => {
     if (searchValue) {
