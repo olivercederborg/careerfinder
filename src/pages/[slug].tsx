@@ -29,6 +29,9 @@ const careerQuery = (
 ) => groq`*[_type == 'job' && defined(slug.current) && slug.current == '${slug}'][0]{
   name,
   "slug": slug.current,
+  salary,
+  currency,
+  time,
   banner,
   description,
   courseCategories[]->{
@@ -46,11 +49,6 @@ const careerQuery = (
       price,
       currency,
     },
-  },
-  role->{
-    salary,
-    currency,
-    time,
   },
   seoTitle,
   seoDescription
@@ -245,11 +243,11 @@ const CareerPage = ({ career, categories }: Props) => {
             <div className="flex flex-col w-8/12">
               <p className="text-gray-main text-sm font-normal">Time</p>
               <p className="mt-1 text-xl font-semibold truncate">
-                {career.role.time}
+                {career.time}
               </p>
             </div>
             <p className="text-2xl">
-              {formatCurrency(career.role.salary, career.role.currency)}
+              {formatCurrency(career.salary, career.currency)}
             </p>
           </section>
         </section>

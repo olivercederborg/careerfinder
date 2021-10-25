@@ -30,6 +30,9 @@ export type Category = {
 export type SingleCareer = {
   name: string
   slug: string
+  salary: number
+  currency: string
+  time: string
   isHot: boolean
   description: BlockContent
   banner: SanityImageSource
@@ -38,11 +41,6 @@ export type SingleCareer = {
     slug: string
     courses: Course[]
   }[]
-  role: {
-    salary: number
-    currency: string
-    time: string
-  }
   seoTitle?: string
   seoDescription?: string
 }
