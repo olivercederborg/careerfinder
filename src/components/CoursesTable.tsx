@@ -29,8 +29,8 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
 
       <tbody className="font-medium">
         {inputCourses?.slice(0, loadedCoursesAmount).map((course: Course) => (
-          <tr key={course.slug} className="relative border-t border-b">
-            <td className="px-10 py-6 font-semibold">
+          <tr key={course.slug} className="border-t border-b">
+            <td className="relative px-10 py-6 font-semibold">
               <a
                 key={course.link}
                 href={course.link}
@@ -38,22 +38,22 @@ const CoursesTable = ({ inputCourses, loadedCoursesAmount }: StaticProps) => {
                 className="absolute top-0 bottom-0 left-0 right-0 z-50"
                 rel="noreferrer"
               />
+              {course.isHot || course.isNew ? (
+                <div
+                  className={`w-0 h-0 border-b-[40px] text-white flex items-start justify-center text-xs absolute left-0 top-0 transform -rotate-45 translate-x-[-26px] -translate-y-1.5 rounded-lg ${
+                    course.isHot ? 'border-[#FFB931]' : 'border-black'
+                  }`}
+                  style={{
+                    borderRight: '40px solid transparent',
+                    borderLeft: '40px solid transparent',
+                  }}
+                >
+                  <span className="font-medium transform translate-y-[18px]">
+                    {course.isHot ? 'HOT' : 'NEW'}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-center">
-                {course.isHot || course.isNew ? (
-                  <div
-                    className={`w-0 h-0 border-b-[40px] text-white flex items-start justify-center text-xs absolute left-0 top-0 transform -rotate-45 translate-x-[-26px] -translate-y-1.5 rounded-lg ${
-                      course.isHot ? 'border-[#FFB931]' : 'border-black'
-                    }`}
-                    style={{
-                      borderRight: '40px solid transparent',
-                      borderLeft: '40px solid transparent',
-                    }}
-                  >
-                    <span className="font-medium transform translate-y-[18px]">
-                      {course.isHot ? 'HOT' : 'NEW'}
-                    </span>
-                  </div>
-                ) : null}
                 <img
                   src={imageBuilder(course.publisherImage)
                     .size(44, 44)
