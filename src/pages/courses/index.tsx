@@ -86,6 +86,7 @@ function CoursesPage({ initialCourses, categories }: StaticProps) {
 
   const fuse = new Fuse(filteredCourses || initialCourses, {
     keys: ['name', 'publisher'],
+    threshold: 0.4,
   })
 
   useEffect(() => setMounted(true), [])

@@ -24,11 +24,13 @@ type StaticProps = {
 }
 
 const careersQuery = groq`*[_type == 'job']{
+  "createdAt": _createdAt,
   name,
   "slug": slug.current,
   banner,
   time,
   salary,
+  isHot,
   currency,
   "discipline": discipline->name,
 }`
@@ -76,11 +78,11 @@ export default function Home({
 
   const fuse = new Fuse(careers, {
     keys: ['name', 'discipline'],
+    threshold: 0.4,
   })
   useEffect(() => {
     if (searchValue) {
       const results = fuse.search(searchValue)
-      console.log(results)
       setSearchResults(results.map((result) => result.item))
     } else {
       setSearchResults([])

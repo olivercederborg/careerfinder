@@ -34,6 +34,7 @@ const careerQuery = (
   time,
   banner,
   description,
+  isHot,
   courseCategories[]->{
     name,
     "slug": slug.current,

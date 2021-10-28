@@ -1,6 +1,7 @@
 import { ReferenceDiscipline } from './Discipline'
 import { ReferenceArea } from './Area'
 import { NAME_FIELD, SEO_DESCRIPTION, SEO_TITLE, slugField } from './primitives'
+import { ReferenceCourseCategory } from './CourseCategory'
 
 export const Job = {
   title: 'Job',
@@ -9,6 +10,12 @@ export const Job = {
   fields: [
     NAME_FIELD,
     slugField('name'),
+    {
+      name: 'isHot',
+      title: 'Hot?',
+      type: 'boolean',
+      description: 'Tick if the career is hot.',
+    },
     {
       name: 'salary',
       title: 'Salary',
@@ -51,14 +58,7 @@ export const Job = {
       title: 'Course categories',
       name: 'courseCategories',
       type: 'array',
-      of: [
-        {
-          title: 'Course category',
-          name: 'courseCategory',
-          type: 'reference',
-          to: [{ type: 'courseCategory' }],
-        },
-      ],
+      of: [ReferenceCourseCategory],
     },
     SEO_TITLE,
     SEO_DESCRIPTION,

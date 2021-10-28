@@ -111,50 +111,6 @@ export interface Area extends SanityDocument {
 }
 
 /**
- * Role
- *
- *
- */
-export interface Role extends SanityDocument {
-  _type: "role";
-
-  /**
-   * name — `string`
-   *
-   *
-   */
-  name?: string;
-
-  /**
-   * Slug — `slug`
-   *
-   *
-   */
-  slug?: { _type: "slug"; current: string };
-
-  /**
-   * Salary — `number`
-   *
-   *
-   */
-  salary?: number;
-
-  /**
-   * Currency — `string`
-   *
-   *
-   */
-  currency?: "USD" | "EUR" | "GBP" | "CAD" | "DKK" | "SEK" | "NOK";
-
-  /**
-   * Time — `string`
-   *
-   *
-   */
-  time?: string;
-}
-
-/**
  * Job
  *
  *
@@ -177,6 +133,34 @@ export interface Job extends SanityDocument {
   slug?: { _type: "slug"; current: string };
 
   /**
+   * Hot? — `boolean`
+   *
+   * Tick if the career is hot.
+   */
+  isHot?: boolean;
+
+  /**
+   * Salary — `number`
+   *
+   *
+   */
+  salary?: number;
+
+  /**
+   * Currency — `string`
+   *
+   *
+   */
+  currency?: "USD" | "EUR" | "GBP" | "CAD" | "DKK" | "SEK" | "NOK";
+
+  /**
+   * Time — `string`
+   *
+   *
+   */
+  time?: string;
+
+  /**
    * Discipline — `reference`
    *
    *
@@ -189,13 +173,6 @@ export interface Job extends SanityDocument {
    *
    */
   area?: SanityReference<Area>;
-
-  /**
-   * Role — `reference`
-   *
-   *
-   */
-  role?: SanityReference<Role>;
 
   /**
    * Banner — `image`
@@ -383,10 +360,4 @@ export type BlockContent = Array<
     }>
 >;
 
-export type Documents =
-  | Discipline
-  | Area
-  | Role
-  | Job
-  | CourseCategory
-  | Course;
+export type Documents = Discipline | Area | Job | CourseCategory | Course;

@@ -122,6 +122,7 @@ export default function CoursesPage({
 
   const fuse = new Fuse(filteredCourses || initialCourses, {
     keys: ['name', 'publisher'],
+    threshold: 0.4,
   })
 
   useEffect(() => setMounted(true), [])
